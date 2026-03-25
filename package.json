@@ -1,0 +1,78 @@
+{
+  "name": "ngx-streaming-player",
+  "version": "0.0.0",
+  "private": true,
+  "author": "Jhonsferg",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jhonsferg/ngx-streaming-player.git"
+  },
+  "homepage": "https://codesoftlabs.com/projects/ngx-streaming-player",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "packageManager": "npm@10.9.4",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve showcase",
+    "build": "ng build",
+    "build:lib": "ng build ngx-streaming-player",
+    "build:lib:prod": "ng build ngx-streaming-player --configuration production",
+    "watch:lib": "ng build ngx-streaming-player --watch --configuration development",
+    "build:showcase": "ng build showcase",
+    "start:showcase": "ng serve showcase",
+    "dev": "concurrently \"npm run watch:lib\" \"npm run start:showcase\"",
+    "lint": "eslint \"projects/**/*.{ts,html}\"",
+    "lint:fix": "eslint \"projects/**/*.{ts,html}\" --fix",
+    "format": "prettier --write \"projects/**/*.{ts,html,scss,css,json}\"",
+    "format:check": "prettier --check \"projects/**/*.{ts,html,scss,css,json}\"",
+    "type-check": "tsc --noEmit",
+    "test": "ng test",
+    "publish:lib": "npm run build:lib:prod && cd dist/ngx-streaming-player && npm publish",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "@angular/common": "^21.0.0",
+    "@angular/compiler": "^21.0.0",
+    "@angular/core": "^21.0.0",
+    "@angular/forms": "^21.0.0",
+    "@angular/platform-browser": "^21.0.0",
+    "@angular/router": "^21.0.0",
+    "dashjs": "^5.1.1",
+    "gsap": "^3.14.2",
+    "highlight.js": "^11.11.1",
+    "hls.js": "^1.6.15",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0"
+  },
+  "lint-staged": {
+    "projects/**/*.{ts,html}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "projects/**/*.{scss,css,json}": [
+      "prettier --write"
+    ]
+  },
+  "devDependencies": {
+    "@angular/build": "^21.0.4",
+    "@angular/cli": "^21.0.4",
+    "@angular/compiler-cli": "^21.0.0",
+    "@commitlint/cli": "^20.5.0",
+    "@commitlint/config-conventional": "^20.5.0",
+    "angular-eslint": "^21.3.1",
+    "concurrently": "^9.2.1",
+    "eslint": "^9.39.4",
+    "eslint-config-prettier": "^10.1.8",
+    "husky": "^9.1.7",
+    "jsdom": "^27.1.0",
+    "lint-staged": "^16.4.0",
+    "ng-packagr": "^21.0.0",
+    "prettier": "^3.8.1",
+    "typescript": "~5.9.2",
+    "typescript-eslint": "^8.57.2",
+    "vitest": "^4.0.8"
+  }
+}
