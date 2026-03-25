@@ -1,0 +1,25 @@
+# Enforce LF line endings for all text files
+* text=auto eol=lf
+
+# Explicitly declare binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+*.svg binary
+
+# Angular build artifacts: treat as text but never modify
+*.json text eol=lf
+*.ts text eol=lf
+*.html text eol=lf
+*.scss text eol=lf
+*.css text eol=lf
+*.md text eol=lf
+*.mjs text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
