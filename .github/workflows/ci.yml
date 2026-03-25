@@ -1,0 +1,65 @@
+name: CI / Deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    name: Build & Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Type check
+        run: npm run type-check
+
+      - name: Build library
+        run: npm run build:lib
+
+      - name: Build showcase
+        run: npm run build:showcase
+
+      - name: Prepare GitHub Pages (SPA routing)
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+          touch dist/showcase/browser/.nojekyll
+          cp dist/showcase/browser/index.html dist/showcase/browser/404.html
+
+      - name: Upload Pages artifact
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/showcase/browser
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: ci
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
