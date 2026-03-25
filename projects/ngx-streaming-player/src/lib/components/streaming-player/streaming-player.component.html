@@ -1,0 +1,110 @@
+<div
+  #playerContainer
+  class="ngx-sp"
+  [class.ngx-sp--fullscreen]="stateService.isFullscreen()"
+  (mousemove)="onMouseMove()"
+  (mouseleave)="onMouseLeave()">
+
+  <!-- Video Element (Native / HLS / DASH) -->
+  <video
+    #videoElement
+    class="ngx-sp__video"
+    [style.display]="stateService.isYouTube() ? 'none' : 'block'"
+    [class.ngx-sp__video--pointer]="!stateService.isPlaying()"
+    (click)="onVideoClick()"
+    (dblclick)="onVideoDoubleClick($event)"
+    playsinline
+    webkit-playsinline>
+  </video>
+
+  <!-- YouTube IFrame Container -->
+  <div
+    #youtubeContainer
+    class="ngx-sp__youtube-container"
+    [style.display]="stateService.isYouTube() ? 'block' : 'none'"
+    [style.pointer-events]="'none'">
+  </div>
+
+  <!-- YouTube Interaction Overlay -->
+  @if (stateService.isYouTube()) {
+    <div class="ngx-sp__youtube-overlay"
+         (click)="onVideoClick()"
+         (dblclick)="onVideoDoubleClick($event)">
+    </div>
+  }
+
+  <!-- Seek Ripple Feedback -->
+  @if (showRipple().active) {
+    <div
+      class="ngx-sp__ripple-overlay"
+      [class.ngx-sp__ripple-overlay--left]="showRipple().side === 'left'"
+      [class.ngx-sp__ripple-overlay--right]="showRipple().side === 'right'">
+      <div class="ripple-circle">
+        @if (showRipple().side === 'left') {
+          <svg viewBox="0 0 24 24" fill="currentColor" class="ripple-icon">
+            <path d="M11.99 5V1l-5 5 5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6h-2c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/>
+          </svg>
+          <span class="ripple-text">−10s</span>
+        } @else {
+          <svg viewBox="0 0 24 24" fill="currentColor" class="ripple-icon">
+            <path d="M12.01 5V1l5 5-5 5V7c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6h2c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8z"/>
+          </svg>
+          <span class="ripple-text">+10s</span>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- Poster -->
+  @if (resolvedConfig().poster && !stateService.isPlaying() && stateService.currentTime() === 0) {
+    <div class="ngx-sp__poster">
+      <img [src]="resolvedConfig().poster" alt="Video thumbnail" />
+    </div>
+  }
+
+  <!-- Buffering Spinner -->
+  @if (stateService.isBuffering()) {
+    <div class="ngx-sp__loading">
+      <div class="spinner">
+        <div class="spinner-ring"></div>
+        <div class="spinner-ring"></div>
+        <div class="spinner-ring"></div>
+      </div>
+    </div>
+  }
+
+  <!-- Play Overlay (paused state) -->
+  @if (!stateService.isPlaying() && !stateService.isBuffering() && stateService.error() === null) {
+    <div class="ngx-sp__play-overlay" (click)="onVideoClick()">
+      <button class="play-button" aria-label="Play">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M8 5v14l11-7z"/>
+        </svg>
+      </button>
+    </div>
+  }
+
+  <!-- Error State -->
+  @if (stateService.error() !== null) {
+    <div class="ngx-sp__error">
+      <div class="error-card">
+        <div class="error-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+          </svg>
+        </div>
+        <h3 class="error-title">Error de Reproducción</h3>
+        <p class="error-message">{{ stateService.error()?.message || stateService.error() }}</p>
+      </div>
+    </div>
+  }
+
+  <!-- Controls -->
+  @if (stateService.error() === null) {
+    <ngx-sp-player-controls
+      [config]="resolvedConfig()"
+      class="ngx-sp__controls-wrapper"
+      [class.ngx-sp__controls-wrapper--visible]="showControls()">
+    </ngx-sp-player-controls>
+  }
+</div>

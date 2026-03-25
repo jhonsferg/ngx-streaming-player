@@ -1,0 +1,516 @@
+/* Import distinctive fonts */
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;700&family=Roboto+Mono:wght@400;500&display=swap");
+
+/* --- CSS Custom Properties ------------------------------------ */
+:host {
+  display: block;
+  width: 100%;
+  position: relative;
+  font-family: var(--ngx-sp-font-body);
+
+  --ngx-sp-primary: #e76f51;
+  --ngx-sp-secondary: #2a9d8f;
+  --ngx-sp-accent: #f4a261;
+  --ngx-sp-bg-dark: #264653;
+  --ngx-sp-text-light: #f4f1de;
+  --ngx-sp-text-dark: #1a1a1a;
+  --ngx-sp-overlay-bg: rgba(22, 22, 24, 0.9);
+  --ngx-sp-control-size: 44px;
+  --ngx-sp-radius: 10px;
+  --ngx-sp-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --ngx-sp-font-display: "Cormorant Garamond", serif;
+  --ngx-sp-font-body: "DM Sans", sans-serif;
+  --ngx-sp-font-mono: "Roboto Mono", monospace;
+  --ngx-sp-primary-shadow: rgba(231, 111, 81, 0.4);
+  --ngx-sp-primary-glow: rgba(231, 111, 81, 0.6);
+}
+
+/* --- Player shell --------------------------------------------- */
+.ngx-sp {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  overflow: hidden;
+  border-radius: var(--ngx-sp-radius);
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.06);
+
+  /* smooth controls reveal cursor */
+  cursor: default;
+
+  &--fullscreen {
+    border-radius: 0;
+    aspect-ratio: unset;
+    width: 100vw;
+    height: 100vh;
+  }
+
+  /* -- Video -- */
+  &__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: #000;
+
+    &--pointer {
+      cursor: pointer;
+    }
+  }
+
+  /* -- YouTube iframe container -- */
+  &__youtube-container {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+
+    ::ng-deep iframe {
+      width: 100% !important;
+      height: 100% !important;
+      border: none;
+      display: block;
+    }
+  }
+
+  /* -- YouTube interaction overlay -- */
+  &__youtube-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    cursor: pointer;
+  }
+
+  /* -- Poster -- */
+  &__poster {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    animation: spFadeIn 0.4s var(--ngx-sp-ease);
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Soft vignette over poster */
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.55) 0%, transparent 50%);
+    }
+  }
+
+  /* -- Loading spinner -- */
+  &__loading {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(2px);
+    z-index: 10;
+    animation: spFadeIn 0.2s var(--ngx-sp-ease);
+
+    .spinner {
+      position: relative;
+      width: 52px;
+      height: 52px;
+
+      &-ring {
+        position: absolute;
+        inset: 0;
+        border: 2.5px solid transparent;
+        border-radius: 50%;
+
+        &:nth-child(1) {
+          animation: spinCW 1.1s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+          border-top-color: var(--ngx-sp-primary);
+          box-shadow: 0 0 12px var(--ngx-sp-primary-shadow);
+        }
+
+        &:nth-child(2) {
+          inset: 6px;
+          animation: spinCCW 1.4s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+          border-bottom-color: var(--ngx-sp-secondary);
+          box-shadow: 0 0 8px rgba(42, 157, 143, 0.35);
+        }
+
+        &:nth-child(3) {
+          inset: 12px;
+          animation: spinCW 0.9s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+          border-top-color: var(--ngx-sp-accent);
+          box-shadow: 0 0 8px rgba(244, 162, 97, 0.35);
+        }
+      }
+    }
+  }
+
+  /* -- Centre play overlay (paused state) -- */
+  &__play-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.28);
+    backdrop-filter: blur(6px) brightness(0.85);
+    -webkit-backdrop-filter: blur(6px) brightness(0.85);
+    cursor: pointer;
+    z-index: 5;
+    animation: spFadeIn 0.3s var(--ngx-sp-ease);
+
+    .play-button {
+      position: relative;
+      width: 76px;
+      height: 76px;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      background: linear-gradient(135deg, var(--ngx-sp-primary) 0%, var(--ngx-sp-accent) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition:
+        transform 0.25s var(--ngx-sp-ease),
+        box-shadow 0.25s var(--ngx-sp-ease);
+      box-shadow:
+        0 8px 32px var(--ngx-sp-primary-shadow),
+        0 0 0 0 var(--ngx-sp-primary-glow),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      animation: playPulse 2.5s ease-in-out infinite;
+
+      /* Outer glow ring */
+      &::before {
+        content: "";
+        position: absolute;
+        inset: -8px;
+        border-radius: 50%;
+        border: 2px solid rgba(231, 111, 81, 0.25);
+        animation: ringExpand 2.5s ease-in-out infinite;
+      }
+
+      /* Second ring for depth */
+      &::after {
+        content: "";
+        position: absolute;
+        inset: -20px;
+        border-radius: 50%;
+        border: 1.5px solid rgba(231, 111, 81, 0.1);
+        animation: ringExpand 2.5s ease-in-out infinite 0.3s;
+      }
+
+      &:hover {
+        transform: scale(1.12);
+        box-shadow:
+          0 14px 44px rgba(231, 111, 81, 0.55),
+          0 0 0 12px rgba(231, 111, 81, 0.12),
+          inset 0 1px 0 rgba(255, 255, 255, 0.25);
+        animation-play-state: paused;
+
+        &::before,
+        &::after {
+          animation-play-state: paused;
+        }
+      }
+
+      &:active {
+        transform: scale(0.97);
+      }
+
+      svg {
+        width: 32px;
+        height: 32px;
+        color: #fff;
+        margin-left: 3px; /* optical centering for triangle */
+        filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+      }
+    }
+  }
+
+  /* -- Error state -- */
+  &__error {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(
+      ellipse at center,
+      rgba(38, 70, 83, 0.9) 0%,
+      rgba(10, 10, 12, 0.97) 100%
+    );
+    backdrop-filter: blur(12px);
+    z-index: 20;
+    animation: spFadeIn 0.3s var(--ngx-sp-ease);
+
+    .error-card {
+      text-align: center;
+      padding: 2.5rem 2rem;
+      max-width: 380px;
+      animation: spSlideUp 0.4s var(--ngx-sp-ease);
+    }
+
+    .error-icon-wrap {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: rgba(231, 111, 81, 0.12);
+      border: 1.5px solid rgba(231, 111, 81, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.25rem;
+      animation: errorShake 0.5s ease-in-out 0.2s both;
+
+      svg {
+        width: 32px;
+        height: 32px;
+        color: var(--ngx-sp-primary);
+      }
+    }
+
+    .error-title {
+      font-family: var(--ngx-sp-font-display);
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--ngx-sp-text-light);
+      margin: 0 0 0.6rem;
+      letter-spacing: 0.01em;
+    }
+
+    .error-message {
+      font-family: var(--ngx-sp-font-body);
+      font-size: 0.9rem;
+      font-weight: 300;
+      color: rgba(244, 241, 222, 0.6);
+      margin: 0;
+      line-height: 1.65;
+    }
+  }
+
+  /* -- Controls wrapper -- */
+  &__controls-wrapper {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 15;
+    opacity: 0;
+    transform: translateY(12px);
+    transition:
+      opacity 0.28s var(--ngx-sp-ease),
+      transform 0.28s var(--ngx-sp-ease);
+    pointer-events: none;
+
+    &--visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+  }
+
+  /* -- Double-click ripple overlay -- */
+  &__ripple-overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 40%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 12;
+    overflow: hidden;
+
+    &--left {
+      left: 0;
+    }
+    &--right {
+      right: 0;
+    }
+
+    .ripple-circle {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(4px);
+      border: 1.5px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      animation: rippleAppear 0.5s var(--ngx-sp-ease) forwards;
+    }
+
+    .ripple-icon {
+      width: 32px;
+      height: 32px;
+      margin-bottom: 4px;
+    }
+
+    .ripple-text {
+      font-family: var(--ngx-sp-font-body);
+      font-weight: 600;
+      font-size: 0.8rem;
+      letter-spacing: 0.03em;
+    }
+  }
+}
+
+/* --- Keyframes ------------------------------------------------ */
+@keyframes spFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes spSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spinCW {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spinCCW {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes playPulse {
+  0%,
+  100% {
+    box-shadow:
+      0 8px 32px var(--ngx-sp-primary-shadow),
+      0 0 0 0 rgba(231, 111, 81, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+  50% {
+    box-shadow:
+      0 10px 36px rgba(231, 111, 81, 0.5),
+      0 0 0 14px rgba(231, 111, 81, 0),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+}
+
+@keyframes ringExpand {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.2;
+  }
+}
+
+@keyframes rippleAppear {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  25% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+@keyframes errorShake {
+  0%,
+  100% {
+    transform: translateX(0) rotate(0deg);
+  }
+  20% {
+    transform: translateX(-6px) rotate(-3deg);
+  }
+  40% {
+    transform: translateX(6px) rotate(3deg);
+  }
+  60% {
+    transform: translateX(-4px) rotate(-2deg);
+  }
+  80% {
+    transform: translateX(4px) rotate(2deg);
+  }
+}
+
+/* --- Responsive ----------------------------------------------- */
+@media (max-width: 768px) {
+  .ngx-sp {
+    border-radius: 8px;
+
+    &__play-overlay .play-button {
+      width: 60px;
+      height: 60px;
+
+      svg {
+        width: 26px;
+        height: 26px;
+      }
+    }
+
+    &__ripple-overlay .ripple-circle {
+      width: 72px;
+      height: 72px;
+    }
+
+    &__loading .spinner {
+      width: 40px;
+      height: 40px;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .ngx-sp {
+    border-radius: 6px;
+
+    &__play-overlay .play-button {
+      width: 52px;
+      height: 52px;
+
+      svg {
+        width: 22px;
+        height: 22px;
+      }
+    }
+
+    &__error .error-title {
+      font-size: 1.3rem;
+    }
+  }
+}
