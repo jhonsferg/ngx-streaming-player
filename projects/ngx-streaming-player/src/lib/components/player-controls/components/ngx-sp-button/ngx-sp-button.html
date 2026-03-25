@@ -1,0 +1,27 @@
+<button
+  class="sp-btn"
+  [class]="modifierClass()"
+  (click)="handleClick($event)">
+
+  <!-- Ripple effect -->
+  @if (rippleActive()) {
+    <span
+      class="sp-btn__ripple"
+      [style.left.px]="ripplePos().x"
+      [style.top.px]="ripplePos().y">
+    </span>
+  }
+
+  <!-- Icon content slot -->
+  <span class="sp-btn__icon">
+    <ng-content></ng-content>
+  </span>
+
+  <!-- Tooltip -->
+  @if (tooltipText()) {
+    <span class="sp-btn__tooltip">
+      {{ tooltipText() }}
+      <span class="sp-btn__tooltip-arrow"></span>
+    </span>
+  }
+</button>

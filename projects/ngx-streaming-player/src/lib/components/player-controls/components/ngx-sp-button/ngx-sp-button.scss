@@ -1,0 +1,211 @@
+:host {
+  display: inline-flex;
+}
+
+/* --- Base Button ---------------------------------------------- */
+.sp-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: rgba(244, 241, 222, 0.85);
+  cursor: pointer;
+  padding: 8px;
+  outline: none;
+  overflow: hidden;
+  transition:
+    color 0.2s var(--ngx-sp-ease),
+    background 0.2s var(--ngx-sp-ease),
+    transform 0.15s var(--ngx-sp-ease);
+  -webkit-tap-highlight-color: transparent;
+
+  /* -- Icon sizing -- */
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+
+    ::ng-deep svg {
+      width: 22px;
+      height: 22px;
+      display: block;
+      transition: transform 0.2s var(--ngx-sp-ease);
+    }
+  }
+
+  /* -- Hover -- */
+  &:hover {
+    color: var(--ngx-sp-text-light);
+    background: rgba(255, 255, 255, 0.1);
+    transform: scale(1.08);
+
+    .sp-btn__icon ::ng-deep svg {
+      transform: scale(1.05);
+    }
+
+    .sp-btn__tooltip {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+      pointer-events: none;
+    }
+  }
+
+  /* -- Active / pressed -- */
+  &:active {
+    transform: scale(0.93);
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  /* -- Modifier: Play/Pause -- */
+  &.sp-btn--play-pause {
+    padding: 9px;
+    border-radius: 50%;
+
+    .sp-btn__icon ::ng-deep svg {
+      width: 26px;
+      height: 26px;
+    }
+
+    &:hover {
+      background: rgba(var(--ngx-sp-primary), 0.15);
+      background: rgba(231, 111, 81, 0.15);
+    }
+  }
+
+  /* -- Modifier: Skip -- */
+  &.sp-btn--skip .sp-btn__icon ::ng-deep svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* -- Modifier: Active state (subtitles on, etc.) -- */
+  &.sp-btn--active {
+    color: var(--ngx-sp-accent);
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 4px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--ngx-sp-accent);
+      box-shadow: 0 0 6px var(--ngx-sp-accent);
+    }
+
+    &:hover {
+      background: rgba(244, 162, 97, 0.15);
+    }
+  }
+
+  /* -- Modifier: PiP active -- */
+  &.sp-btn--pip-active {
+    color: var(--ngx-sp-secondary);
+
+    &:hover {
+      background: rgba(42, 157, 143, 0.15);
+    }
+  }
+
+  /* --- Ripple ----------------------------------------------- */
+  &__ripple {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.35);
+    transform: translate(-50%, -50%) scale(0);
+    animation: btnRipple 0.6s var(--ngx-sp-ease) forwards;
+    pointer-events: none;
+  }
+
+  /* --- Tooltip ---------------------------------------------- */
+  &__tooltip {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%) translateY(6px);
+    background: rgba(10, 10, 10, 0.9);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: var(--ngx-sp-text-light);
+    font-family: var(--ngx-sp-font-body);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    padding: 5px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      opacity 0.18s var(--ngx-sp-ease),
+      transform 0.18s var(--ngx-sp-ease);
+    box-shadow:
+      0 4px 14px rgba(0, 0, 0, 0.5),
+      0 0 0 1px rgba(255, 255, 255, 0.07);
+    z-index: 50;
+  }
+
+  &__tooltip-arrow {
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid rgba(10, 10, 10, 0.9);
+  }
+}
+
+/* --- Ripple keyframes ----------------------------------------- */
+@keyframes btnRipple {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(10);
+    opacity: 0;
+  }
+}
+
+/* --- Responsive ----------------------------------------------- */
+@media (max-width: 768px) {
+  .sp-btn {
+    padding: 6px;
+    border-radius: 6px;
+
+    .sp-btn__icon ::ng-deep svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    &.sp-btn--play-pause .sp-btn__icon ::ng-deep svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    &.sp-btn--skip {
+      display: none;
+    }
+
+    &__tooltip {
+      display: none;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .sp-btn {
+    padding: 5px;
+  }
+}
