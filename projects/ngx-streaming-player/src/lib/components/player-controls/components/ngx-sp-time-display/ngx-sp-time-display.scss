@@ -1,0 +1,39 @@
+:host {
+  display: inline-flex;
+  align-items: center;
+}
+
+.time-display {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-family: var(--ngx-sp-font-mono);
+  font-size: 0.82rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  user-select: none;
+  white-space: nowrap;
+
+  .time-current {
+    color: var(--ngx-sp-text-light);
+    font-weight: 600;
+  }
+
+  .time-sep {
+    color: rgba(244, 241, 222, 0.3);
+    font-weight: 400;
+    margin: 0 1px;
+  }
+
+  .time-total {
+    color: rgba(244, 241, 222, 0.45);
+    font-weight: 400;
+  }
+}
+
+@media (max-width: 768px) {
+  .time-display {
+    font-size: 0.75rem;
+  }
+}
