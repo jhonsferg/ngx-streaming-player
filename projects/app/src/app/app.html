@@ -1,0 +1,1609 @@
+<main class="demo-container" [class.light]="!isDark()">
+  <!-- ═══════════════════════════════════════════════════════════ TOP NAV -->
+  <nav class="top-nav">
+    <div class="nav-left">
+      <button class="nav-hamburger" (click)="sidebarOpen.update(v => !v)" aria-label="Toggle menu">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+        >
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
+      </button>
+      <a class="nav-logo" href="#">ngx-streaming-player</a>
+    </div>
+    <div class="nav-links">
+      <a class="nav-link" href="#playground">Playground</a>
+      <a class="nav-link" href="#demo">Demo</a>
+      <a class="nav-link" href="#features">Features</a>
+      <a class="nav-link" href="#getting-started">Getting Started</a>
+      <a class="nav-link" href="#api">API</a>
+    </div>
+    <div class="nav-right">
+      <a
+        class="nav-link nav-link--github"
+        href="https://github.com/jhonsferg/ngx-streaming-player"
+        target="_blank"
+        rel="noopener"
+        title="GitHub"
+      >
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"
+          />
+        </svg>
+      </a>
+      <button
+        class="theme-toggle"
+        (click)="toggleTheme()"
+        [title]="isDark() ? 'Switch to light mode' : 'Switch to dark mode'"
+      >
+        @if (isDark()) {
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="12" cy="12" r="5" />
+            <line x1="12" y1="1" x2="12" y2="3" />
+            <line x1="12" y1="21" x2="12" y2="23" />
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+            <line x1="1" y1="12" x2="3" y2="12" />
+            <line x1="21" y1="12" x2="23" y2="12" />
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+          </svg>
+        } @else {
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+          </svg>
+        }
+      </button>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════════════════════════════════ BODY WRAP -->
+  <div class="demo-body">
+    <!-- ═══════════════════════════════════════════════════════════ SIDEBAR -->
+    <aside class="sidebar" [class.sidebar--open]="sidebarOpen()">
+      <div class="sidebar__overlay" (click)="closeSidebar()"></div>
+      <div class="sidebar__panel">
+        <nav class="sidebar-nav">
+          <div class="sidebar-nav__group">
+            <span class="sidebar-nav__label">Try it</span>
+            <a
+              class="sidebar-nav__link"
+              href="#playground"
+              [class.active]="activeSection() === 'playground'"
+              (click)="closeSidebar()"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <polygon points="5 3 19 12 5 21 5 3" />
+              </svg>
+              Playground
+            </a>
+            <a
+              class="sidebar-nav__link"
+              href="#demo"
+              [class.active]="activeSection() === 'demo'"
+              (click)="closeSidebar()"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <rect x="2" y="3" width="20" height="14" rx="2" />
+                <line x1="8" y1="21" x2="16" y2="21" />
+                <line x1="12" y1="17" x2="12" y2="21" />
+              </svg>
+              Demo Player
+            </a>
+          </div>
+
+          <div class="sidebar-nav__group">
+            <span class="sidebar-nav__label">Overview</span>
+            <a
+              class="sidebar-nav__link"
+              href="#features"
+              [class.active]="activeSection() === 'features'"
+              (click)="closeSidebar()"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+              </svg>
+              Features
+            </a>
+            <a
+              class="sidebar-nav__link"
+              href="#getting-started"
+              [class.active]="activeSection() === 'getting-started'"
+              (click)="closeSidebar()"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+              </svg>
+              Getting Started
+            </a>
+          </div>
+
+          <div class="sidebar-nav__group">
+            <span class="sidebar-nav__label">Examples</span>
+            <a
+              class="sidebar-nav__link"
+              href="#example-live"
+              [class.active]="activeSection() === 'example-live'"
+              (click)="closeSidebar()"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <circle cx="12" cy="12" r="10" />
+                <circle cx="12" cy="12" r="3" fill="currentColor" />
+              </svg>
+              Live Streaming
+            </a>
+            <a
+              class="sidebar-nav__link"
+              href="#example-hotswap"
+              [class.active]="activeSection() === 'example-hotswap'"
+              (click)="closeSidebar()"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M17 1l4 4-4 4" />
+                <path d="M3 11V9a4 4 0 0 1 4-4h14" />
+                <path d="M7 23l-4-4 4-4" />
+                <path d="M21 13v2a4 4 0 0 1-4 4H3" />
+              </svg>
+              Hot-swap
+            </a>
+            <a
+              class="sidebar-nav__link"
+              href="#example-multi"
+              [class.active]="activeSection() === 'example-multi'"
+              (click)="closeSidebar()"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <rect x="2" y="3" width="9" height="7" rx="1" />
+                <rect x="13" y="3" width="9" height="7" rx="1" />
+                <rect x="2" y="14" width="9" height="7" rx="1" />
+                <rect x="13" y="14" width="9" height="7" rx="1" />
+              </svg>
+              Multi-player
+            </a>
+            <a
+              class="sidebar-nav__link"
+              href="#example-service"
+              [class.active]="activeSection() === 'example-service'"
+              (click)="closeSidebar()"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <polyline points="16 18 22 12 16 6" />
+                <polyline points="8 6 2 12 8 18" />
+              </svg>
+              Programmatic Control
+            </a>
+            <a
+              class="sidebar-nav__link"
+              href="#example-theme"
+              [class.active]="activeSection() === 'example-theme'"
+              (click)="closeSidebar()"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <circle cx="13.5" cy="6.5" r="2.5" />
+                <circle cx="17.5" cy="10.5" r="2.5" />
+                <circle cx="8.5" cy="7.5" r="2.5" />
+                <circle cx="6.5" cy="12.5" r="2.5" />
+                <path
+                  d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.47-1.125a1.647 1.647 0 0 1-.425-1.125c0-.926.75-1.687 1.672-1.687H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8z"
+                />
+              </svg>
+              Theming
+            </a>
+            <a
+              class="sidebar-nav__link"
+              href="#example-youtube"
+              [class.active]="activeSection() === 'example-youtube'"
+              (click)="closeSidebar()"
+            >
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M21.58 7.19c-.23-.86-.91-1.54-1.77-1.77C18.25 5 12 5 12 5s-6.25 0-7.81.42c-.86.23-1.54.91-1.77 1.77C2 8.75 2 12 2 12s0 3.25.42 4.81c.23.86.91 1.54 1.77 1.77C5.75 19 12 19 12 19s6.25 0 7.81-.42c.86-.23 1.54-.91 1.77-1.77C22 15.25 22 12 22 12s0-3.25-.42-4.81zM10 15V9l5.2 3-5.2 3z"
+                />
+              </svg>
+              YouTube
+            </a>
+            <a
+              class="sidebar-nav__link"
+              href="#example-events"
+              [class.active]="activeSection() === 'example-events'"
+              (click)="closeSidebar()"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M18 20V10" />
+                <path d="M12 20V4" />
+                <path d="M6 20v-6" />
+              </svg>
+              Events &amp; State
+            </a>
+          </div>
+
+          <div class="sidebar-nav__group">
+            <span class="sidebar-nav__label">Reference</span>
+            <a
+              class="sidebar-nav__link"
+              href="#api"
+              [class.active]="activeSection() === 'api'"
+              (click)="closeSidebar()"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+              </svg>
+              API Reference
+            </a>
+          </div>
+        </nav>
+      </div>
+    </aside>
+
+    <!-- ═══════════════════════════════════════════════════ MAIN CONTENT -->
+    <div class="demo-content">
+      <!-- ═════════════════════════════════════════════════════════ HERO -->
+      <header class="hero">
+        <div class="hero__badge">Angular 17+ · Signals · Standalone</div>
+        <h1 class="hero__title">ngx-streaming-player</h1>
+        <p class="hero__subtitle">
+          Professional streaming player for Angular 17+.<br />
+          HLS · DASH · MP4 · YouTube - with hot-swap source switching.
+        </p>
+        <div class="hero__pills">
+          <span class="pill">HLS.js</span>
+          <span class="pill">Dash.js</span>
+          <span class="pill">Live Streams</span>
+          <span class="pill">Multi-player</span>
+          <span class="pill">PiP</span>
+          <span class="pill">Signal API</span>
+          <span class="pill">Subtitles</span>
+          <span class="pill">Keyboard Shortcuts</span>
+        </div>
+        <div class="hero__actions">
+          <a href="#getting-started" class="hero-btn hero-btn--primary">Get Started</a>
+          <a href="#playground" class="hero-btn hero-btn--ghost">Try Playground</a>
+        </div>
+      </header>
+
+      <!-- ═══════════════════════════════════════════════════ PLAYGROUND -->
+      <section class="section playground-section" id="playground">
+        <div class="section__header">
+          <h2 class="section__title">Playground</h2>
+          <p class="section__sub">
+            Paste any URL - the player appears instantly. Add more to see them arranged in an
+            adaptive gallery grid.
+          </p>
+        </div>
+
+        <div class="url-input-area">
+          <div class="url-input-wrapper">
+            <svg
+              class="url-input-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+            </svg>
+            <input
+              class="url-input"
+              type="url"
+              placeholder="Paste a URL here · .m3u8 · .mpd · .mp4 · youtube.com · …"
+              [(ngModel)]="urlInput"
+              (keyup.enter)="addPlayer()"
+              autocomplete="off"
+              spellcheck="false"
+            />
+            <button class="url-add-btn" (click)="addPlayer()" [disabled]="!urlInput.trim()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+              Add
+            </button>
+          </div>
+
+          <div class="preset-row">
+            <span class="preset-label">Quick examples:</span>
+            <button class="preset-btn preset-btn--hls" (click)="addPreset('hls')">
+              <span class="preset-dot"></span> HLS Live
+            </button>
+            <button class="preset-btn preset-btn--dash" (click)="addPreset('dash')">
+              <span class="preset-dot"></span> DASH VOD
+            </button>
+            <button class="preset-btn preset-btn--mp4" (click)="addPreset('mp4')">
+              <span class="preset-dot"></span> MP4 Video
+            </button>
+          </div>
+        </div>
+
+        @if (hasPlayers()) {
+          <div class="playground-toolbar">
+            <span class="toolbar-count"
+              >{{ players().length }} player{{ players().length !== 1 ? 's' : '' }}</span
+            >
+            <button class="clear-btn" (click)="clearAll()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="3 6 5 6 21 6" />
+                <path d="M19 6l-1 14H6L5 6" />
+                <path d="M10 11v6" />
+                <path d="M14 11v6" />
+              </svg>
+              Clear all
+            </button>
+          </div>
+
+          <div class="players-grid" [style.--n]="players().length">
+            @for (entry of players(); track trackById($index, entry)) {
+              <div class="player-card" appLazyPlayer #lp="appLazyPlayer">
+                <div class="player-card__header">
+                  <span class="player-card__id">{{ entry.id }}</span>
+                  <span class="player-card__url" [title]="entry.src">{{ entry.src }}</span>
+                  <button
+                    class="player-card__remove"
+                    (click)="removePlayer(entry.id)"
+                    title="Remove"
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                      <line x1="18" y1="6" x2="6" y2="18" />
+                      <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                  </button>
+                </div>
+                @if (lp.isVisible()) {
+                  <ngx-sp-player [config]="entry.config" [playerId]="entry.id"> </ngx-sp-player>
+                } @else {
+                  <div class="player-offscreen">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                      <circle cx="12" cy="12" r="10" />
+                      <polygon points="10 8 16 12 10 16 10 8" />
+                    </svg>
+                    <span>Scroll into view to play</span>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="playground-empty">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="12" r="10" />
+              <polygon points="10 8 16 12 10 16 10 8" />
+            </svg>
+            <p>Add a URL to see the player in action</p>
+          </div>
+        }
+      </section>
+
+      <!-- ══════════════════════════════════════════════ DEMO SINGLE PLAYER -->
+      <section class="section" id="demo">
+        <div class="section__header">
+          <h2 class="section__title">Demo - Single Player</h2>
+          <p class="section__sub">
+            Switch the source on the fly with <code>NgxPlayerControlService.load()</code> - no
+            component recreation needed.
+          </p>
+        </div>
+
+        <div class="demo-layout">
+          <div class="demo-player-wrap">
+            <ngx-sp-player
+              [config]="currentConfig"
+              playerId="demo-main"
+              (ready)="onPlayerReady()"
+              (stateChange)="onStateChange($event)"
+              (error)="onError($event)"
+            >
+            </ngx-sp-player>
+          </div>
+          <div class="demo-controls">
+            <p class="demo-controls__label">Switch source</p>
+            <div class="source-btns">
+              <button
+                class="source-btn"
+                [class.source-btn--active]="currentConfig === hlsConfig"
+                (click)="switchToHLS()"
+              >
+                <span class="source-btn__badge live">LIVE</span>
+                HLS Stream
+              </button>
+              <button
+                class="source-btn"
+                [class.source-btn--active]="currentConfig === dashConfig"
+                (click)="switchToDASH()"
+              >
+                <span class="source-btn__badge dash">DASH</span>
+                DASH VOD
+              </button>
+              <button
+                class="source-btn"
+                [class.source-btn--active]="currentConfig === mp4Config"
+                (click)="switchToMP4()"
+              >
+                <span class="source-btn__badge mp4">MP4</span>
+                MP4 Video
+              </button>
+            </div>
+            <p class="demo-hint">
+              Try switching between protocols - volume and mute state are preserved.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════════════════════════════════════════════ FEATURES -->
+      <section class="section" id="features">
+        <div class="section__header">
+          <h2 class="section__title">Features</h2>
+        </div>
+        <div class="features-grid">
+          <div class="feat-card">
+            <div class="feat-card__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path
+                  d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.82a16 16 0 0 0 6 6l.98-.98a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"
+                />
+              </svg>
+            </div>
+            <h3>HLS &amp; DASH</h3>
+            <p>
+              Adaptive streaming via hls.js and dash.js. Supports live streams and VOD. Automatic
+              protocol detection by URL extension.
+            </p>
+          </div>
+          <div class="feat-card">
+            <div class="feat-card__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <circle cx="12" cy="12" r="10" />
+                <circle cx="12" cy="12" r="3" fill="currentColor" stroke="none" />
+              </svg>
+            </div>
+            <h3>Live Detection</h3>
+            <p>
+              Automatically detects live streams via <code>LEVEL_LOADED</code> (HLS),
+              <code>isDynamic()</code> (DASH). Shows animated LIVE badge and hides irrelevant
+              controls.
+            </p>
+          </div>
+          <div class="feat-card">
+            <div class="feat-card__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M23 7l-7 5 7 5V7z" />
+                <rect x="1" y="5" width="15" height="14" rx="2" />
+              </svg>
+            </div>
+            <h3>Picture-in-Picture</h3>
+            <p>
+              Native browser PiP support. Automatically disabled for YouTube (iframe API
+              restriction). Guards <code>readyState >= 1</code> before requesting PiP.
+            </p>
+          </div>
+          <div class="feat-card">
+            <div class="feat-card__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M17 1l4 4-4 4" />
+                <path d="M3 11V9a4 4 0 0 1 4-4h14" />
+                <path d="M7 23l-4-4 4-4" />
+                <path d="M21 13v2a4 4 0 0 1-4 4H3" />
+              </svg>
+            </div>
+            <h3>Hot-swap Source</h3>
+            <p>
+              Change <code>src</code> binding or call <code>NgxPlayerControlService.load()</code> to
+              swap the source live. Prior state is cleared; volume and mute are preserved.
+            </p>
+          </div>
+          <div class="feat-card">
+            <div class="feat-card__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M12 20h9" />
+                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+              </svg>
+            </div>
+            <h3>CSS Theming</h3>
+            <p>
+              CSS custom properties with <code>--ngx-sp-*</code> prefix. Change colors, radius, and
+              control size via the <code>theme</code> input or directly in CSS.
+            </p>
+          </div>
+          <div class="feat-card">
+            <div class="feat-card__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+              </svg>
+            </div>
+            <h3>Angular Signals</h3>
+            <p>
+              Fully reactive API with <code>input()</code>, <code>output()</code>,
+              <code>computed()</code> and <code>effect()</code> from Angular 17+. OnPush change
+              detection throughout.
+            </p>
+          </div>
+          <div class="feat-card">
+            <div class="feat-card__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <rect x="2" y="3" width="9" height="7" rx="1" />
+                <rect x="13" y="3" width="9" height="7" rx="1" />
+                <rect x="2" y="14" width="9" height="7" rx="1" />
+                <rect x="13" y="14" width="9" height="7" rx="1" />
+              </svg>
+            </div>
+            <h3>Multi-player</h3>
+            <p>
+              Multiple simultaneous instances via unique <code>playerId</code>. Each instance gets
+              its own isolated <code>PlayerService</code> and <code>PlayerStateService</code>.
+            </p>
+          </div>
+          <div class="feat-card">
+            <div class="feat-card__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+              </svg>
+            </div>
+            <h3>Subtitles</h3>
+            <p>
+              Subtitle support for HLS, DASH and native MP4. Automatic track detection. Language
+              selector in the settings menu.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════════════════════════════════════════ GETTING STARTED -->
+      <section class="section" id="getting-started">
+        <div class="section__header">
+          <h2 class="section__title">Getting Started</h2>
+        </div>
+
+        <div class="doc-steps">
+          <div class="doc-step">
+            <div class="doc-step__num">1</div>
+            <div class="doc-step__body">
+              <h3>Install dependencies</h3>
+              <div class="code-block">
+                <div class="code-block__lang">bash</div>
+                <pre><code class="language-bash">npm install ngx-streaming-player hls.js dashjs</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="doc-step">
+            <div class="doc-step__num">2</div>
+            <div class="doc-step__body">
+              <h3>Import the component</h3>
+              <div class="code-block">
+                <div class="code-block__lang">typescript</div>
+                <pre><code class="language-typescript">import &#123; StreamingPlayerComponent &#125; from 'ngx-streaming-player';
+
+&#64;Component(&#123;
+  standalone: true,
+  imports: [StreamingPlayerComponent],
+  // ...
+&#125;)
+export class MyComponent &#123; &#125;</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="doc-step">
+            <div class="doc-step__num">3</div>
+            <div class="doc-step__body">
+              <h3>Use it in your template</h3>
+              <p class="doc-step__desc">
+                Three ways to configure - pick the one that fits your use case:
+              </p>
+
+              <div class="code-tabs">
+                <div class="code-tab">
+                  <div class="code-tab__label">Config object (full control)</div>
+                  <div class="code-block">
+                    <div class="code-block__lang">typescript</div>
+                    <pre><code class="language-typescript">playerConfig: PlayerConfig = &#123;
+  src: 'https://example.com/stream.m3u8',
+  autoplay: false,
+  muted: false,
+  volume: 1.0,
+  enablePiP: true,
+  enableKeyboard: true,
+  playbackRates: [0.5, 1, 1.5, 2],
+  controlsLayout: &#123; autoHide: true, autoHideDelay: 3000 &#125;,
+  theme: &#123; primaryColor: '#E76F51' &#125;,
+&#125;;</code></pre>
+                  </div>
+                  <div class="code-block">
+                    <div class="code-block__lang">html</div>
+                    <pre><code class="language-html">&lt;ngx-sp-player [config]="playerConfig"&gt;&lt;/ngx-sp-player&gt;</code></pre>
+                  </div>
+                </div>
+
+                <div class="code-tab">
+                  <div class="code-tab__label">Individual inputs (simple)</div>
+                  <div class="code-block">
+                    <div class="code-block__lang">html</div>
+                    <pre><code class="language-html">&lt;ngx-sp-player
+  [src]="streamUrl"
+  [autoplay]="true"
+  [muted]="false"
+  [volume]="0.8"&gt;
+&lt;/ngx-sp-player&gt;</code></pre>
+                  </div>
+                </div>
+
+                <div class="code-tab">
+                  <div class="code-tab__label">Mixed - hot-swap via binding</div>
+                  <div class="code-block">
+                    <div class="code-block__lang">html</div>
+                    <pre><code class="language-html">&lt;!-- Changing currentSrc triggers automatic hot-swap --&gt;
+&lt;ngx-sp-player
+  [config]="baseConfig"
+  [src]="currentSrc"&gt;
+&lt;/ngx-sp-player&gt;</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════ EXAMPLE: LIVE STREAMING -->
+      <section class="section example-section" id="example-live">
+        <div class="section__header">
+          <h2 class="section__title">Live Streaming</h2>
+          <p class="section__sub">
+            The player auto-detects live streams. When detected, the progress bar and skip buttons
+            disappear, the speed control is hidden, and an animated
+            <span class="inline-badge live-badge">LIVE</span> badge appears.
+          </p>
+        </div>
+
+        <div class="example-callout example-callout--info">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="12" />
+            <line x1="12" y1="16" x2="12.01" y2="16" />
+          </svg>
+          <div>
+            <strong>Auto-detection method by protocol</strong>
+            <p>
+              <strong>HLS</strong> - <code>LEVEL_LOADED</code> event with
+              <code>details.live === true</code>.<br />
+              <strong>DASH</strong> - <code>isDynamic()</code> on the manifest.<br />
+              <strong>Native MP4</strong> - infinite/very large duration fallback.
+            </p>
+          </div>
+        </div>
+
+        <div class="example-grid example-grid--2col">
+          <div>
+            <div class="example-block-label">Minimal live stream config</div>
+            <div class="code-block">
+              <div class="code-block__lang">typescript</div>
+              <pre><code class="language-typescript">liveConfig: PlayerConfig = &#123;
+  src: 'https://live-stream.m3u8',
+  // Live is auto-detected - no extra config needed
+  autoplay: true,
+  muted: true,        // required for autoplay in most browsers
+  enablePiP: true,
+&#125;;</code></pre>
+            </div>
+          </div>
+          <div>
+            <div class="example-block-label">Reading the live state</div>
+            <div class="code-block">
+              <div class="code-block__lang">typescript</div>
+              <pre><code class="language-typescript">&#64;Component(&#123; ... &#125;)
+export class MyComponent &#123;
+  private ctrl = inject(NgxPlayerControlService);
+
+  get isLive(): boolean &#123;
+    return this.ctrl.getState()?.isLive() ?? false;
+  &#125;
+
+  get liveText(): string &#123;
+    return this.isLive ? '🔴 Live' : 'VOD';
+  &#125;
+&#125;</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="example-callout example-callout--tip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 12l2 2 4-4" />
+            <circle cx="12" cy="12" r="10" />
+          </svg>
+          <div>
+            <strong>Speed control automatically hidden for live streams</strong>
+            <p>
+              When <code>isLive()</code> is <code>true</code>, the playback speed option is removed
+              from the settings menu - changing speed has no effect on a live buffer.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════════════════════════════════════════ EXAMPLE: HOT-SWAP -->
+      <section class="section example-section" id="example-hotswap">
+        <div class="section__header">
+          <h2 class="section__title">Hot-swap Protocol</h2>
+          <p class="section__sub">
+            Switch between HLS, DASH, MP4, and YouTube at runtime without re-creating the component.
+            The Demo Player section above demonstrates this live.
+          </p>
+        </div>
+
+        <div class="example-grid example-grid--2col">
+          <div>
+            <div class="example-block-label">Via NgxPlayerControlService</div>
+            <div class="code-block">
+              <div class="code-block__lang">typescript</div>
+              <pre><code class="language-typescript">&#64;Component(&#123; ... &#125;)
+export class ChannelSwitcher &#123;
+  private ctrl = inject(NgxPlayerControlService);
+
+  switchTo(url: string): void &#123;
+    // Destroys current adapter, resets state,
+    // preserves volume + mute, starts new adapter
+    this.ctrl.load(url, &#123; autoplay: true &#125;, 'my-player');
+  &#125;
+&#125;</code></pre>
+            </div>
+          </div>
+          <div>
+            <div class="example-block-label">Via reactive binding</div>
+            <div class="code-block">
+              <div class="code-block__lang">typescript</div>
+              <pre><code class="language-typescript">// Changing [src] or [config] triggers hot-swap automatically
+currentSrc = signal('https://stream1.m3u8');
+
+switch(url: string): void &#123;
+  this.currentSrc.set(url); // hot-swap fires
+&#125;</code></pre>
+            </div>
+            <div class="code-block">
+              <div class="code-block__lang">html</div>
+              <pre><code class="language-html">&lt;ngx-sp-player
+  [src]="currentSrc()"
+  [config]="baseConfig"
+  playerId="channel-player"&gt;
+&lt;/ngx-sp-player&gt;</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="example-callout example-callout--warning">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path
+              d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
+            />
+            <line x1="12" y1="9" x2="12" y2="13" />
+            <line x1="12" y1="17" x2="12.01" y2="17" />
+          </svg>
+          <div>
+            <strong>What resets on hot-swap</strong>
+            <p>
+              Playback position, buffer, quality levels, live state, subtitles - all reset. What is
+              <strong>preserved</strong>: volume level and mute state.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════ EXAMPLE: MULTI-PLAYER -->
+      <section class="section example-section" id="example-multi">
+        <div class="section__header">
+          <h2 class="section__title">Multi-player Grid</h2>
+          <p class="section__sub">
+            Render any number of players simultaneously using unique <code>playerId</code> values.
+            Each instance gets its own isolated service scope. Use the Playground above to see this
+            live.
+          </p>
+        </div>
+
+        <div class="code-block">
+          <div class="code-block__lang">typescript</div>
+          <pre><code class="language-typescript">cameras = [
+  &#123; id: 'cam1', src: 'https://stream1.m3u8', label: 'Camera 1' &#125;,
+  &#123; id: 'cam2', src: 'https://stream2.m3u8', label: 'Camera 2' &#125;,
+  &#123; id: 'cam3', src: 'https://stream3.m3u8', label: 'Camera 3' &#125;,
+  &#123; id: 'cam4', src: 'https://stream4.m3u8', label: 'Camera 4' &#125;,
+];</code></pre>
+        </div>
+
+        <div class="example-grid example-grid--2col">
+          <div>
+            <div class="example-block-label">Template - dynamic grid</div>
+            <div class="code-block">
+              <div class="code-block__lang">html</div>
+              <pre ngNonBindable><code class="language-html">&lt;div class="cam-grid"&gt;
+  &#64;for (cam of cameras; track cam.id) &#123;
+    &lt;div class="cam-card"&gt;
+      &lt;h4&gt;&#123;&#123; cam.label &#125;&#125;&lt;/h4&gt;
+      &lt;ngx-sp-player
+        [playerId]="cam.id"
+        [src]="cam.src"
+        [config]="&#123; autoplay: true, muted: true &#125;"&gt;
+      &lt;/ngx-sp-player&gt;
+    &lt;/div&gt;
+  &#125;
+&lt;/div&gt;</code></pre>
+            </div>
+          </div>
+          <div>
+            <div class="example-block-label">Control each player by ID</div>
+            <div class="code-block">
+              <div class="code-block__lang">typescript</div>
+              <pre><code class="language-typescript">&#64;Component(&#123; ... &#125;)
+export class WallComponent &#123;
+  private ctrl = inject(NgxPlayerControlService);
+
+  muteAll(): void &#123;
+    this.cameras.forEach(c =>
+      this.ctrl.setMuted(true, c.id)
+    );
+  &#125;
+
+  pauseAll(): void &#123;
+    this.cameras.forEach(c =>
+      this.ctrl.pause(c.id)
+    );
+  &#125;
+
+  focusOn(id: string): void &#123;
+    // Pause all except the focused one
+    this.cameras.forEach(c => &#123;
+      if (c.id !== id) this.ctrl.pause(c.id);
+    &#125;);
+    this.ctrl.play(id);
+  &#125;
+&#125;</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="example-callout example-callout--tip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 12l2 2 4-4" />
+            <circle cx="12" cy="12" r="10" />
+          </svg>
+          <div>
+            <strong>Performance tip: lazy mounting</strong>
+            <p>
+              For large grids, use an <code>IntersectionObserver</code> to only mount players when
+              they enter the viewport. The Playground already does this - players outside the scroll
+              area are replaced with a lightweight placeholder.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════════════════════════ EXAMPLE: PROGRAMMATIC CONTROL -->
+      <section class="section example-section" id="example-service">
+        <div class="section__header">
+          <h2 class="section__title">Programmatic Control</h2>
+          <p class="section__sub">
+            <code>NgxPlayerControlService</code> lets you control any player from anywhere in your
+            app - a parent component, a shared service, a keyboard shortcut handler.
+          </p>
+        </div>
+
+        <div class="example-grid example-grid--2col">
+          <div>
+            <div class="example-block-label">Inject and control</div>
+            <div class="code-block">
+              <div class="code-block__lang">typescript</div>
+              <pre><code class="language-typescript">import &#123;
+  NgxPlayerControlService
+&#125; from 'ngx-streaming-player';
+
+&#64;Component(&#123; ... &#125;)
+export class VideoController &#123;
+  private ctrl = inject(NgxPlayerControlService);
+
+  // Playback control
+  play()   &#123; this.ctrl.play();   &#125;
+  pause()  &#123; this.ctrl.pause();  &#125;
+  toggle() &#123;
+    const state = this.ctrl.getState();
+    state?.isPlaying()
+      ? this.ctrl.pause()
+      : this.ctrl.play();
+  &#125;
+
+  // Navigation
+  jumpTo(seconds: number): void &#123;
+    this.ctrl.seek(seconds);
+  &#125;
+  skipForward(): void &#123;
+    const t = this.ctrl.getState()?.currentTime() ?? 0;
+    this.ctrl.seek(t + 10);
+  &#125;
+
+  // Audio
+  mute()   &#123; this.ctrl.setMuted(true);  &#125;
+  unmute() &#123; this.ctrl.setMuted(false); &#125;
+  volume(v: number) &#123; this.ctrl.setVolume(v); &#125;
+
+  // Quality / Speed
+  setHD()  &#123; this.ctrl.setQuality('1080p'); &#125;
+  halfSpeed() &#123; this.ctrl.setPlaybackRate(0.5); &#125;
+&#125;</code></pre>
+            </div>
+          </div>
+          <div>
+            <div class="example-block-label">Read reactive state</div>
+            <div class="code-block">
+              <div class="code-block__lang">typescript</div>
+              <pre ngNonBindable><code class="language-typescript">&#64;Component(&#123;
+  template: `
+    &lt;p&gt;Playing: &#123;&#123; isPlaying() &#125;&#125;&lt;/p&gt;
+    &lt;p&gt;Progress: &#123;&#123; progress() | number:'1.0-0' &#125;&#125;%&lt;/p&gt;
+    &lt;p&gt;Buffered: &#123;&#123; buffered() | number:'1.0-0' &#125;&#125;%&lt;/p&gt;
+    &lt;p&gt;Duration: &#123;&#123; duration() &#125;&#125;s&lt;/p&gt;
+    &lt;p&gt;Live: &#123;&#123; isLive() &#125;&#125;&lt;/p&gt;
+  `
+&#125;)
+export class PlayerInfo &#123;
+  private ctrl = inject(NgxPlayerControlService);
+  private state = this.ctrl.getState();
+
+  // All signals - update automatically
+  isPlaying  = this.state?.isPlaying;
+  progress   = this.state?.progress;
+  buffered   = this.state?.bufferedPercentage;
+  duration   = this.state?.duration;
+  isLive     = this.state?.isLive;
+  isBuffering= this.state?.isBuffering;
+  volume     = this.state?.volume;
+&#125;</code></pre>
+            </div>
+            <div class="example-block-label" style="margin-top: 1rem">Hot-swap with options</div>
+            <div class="code-block">
+              <div class="code-block__lang">typescript</div>
+              <pre><code class="language-typescript">// load(src, overrides?, playerId?)
+this.ctrl.load(
+  'https://new-stream.m3u8',
+  &#123; autoplay: true, muted: false &#125;,
+  'my-player'
+);
+
+// Check if a player is registered
+if (this.ctrl.isRegistered('my-player')) &#123;
+  this.ctrl.play('my-player');
+&#125;</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════════════════════════════════════════ EXAMPLE: THEMING -->
+      <section class="section example-section" id="example-theme">
+        <div class="section__header">
+          <h2 class="section__title">Custom Theming</h2>
+          <p class="section__sub">
+            Customize every color, border radius, and control size using the
+            <code>theme</code> input or directly with <code>--ngx-sp-*</code> CSS custom properties.
+          </p>
+        </div>
+
+        <div class="example-grid example-grid--2col">
+          <div>
+            <div class="example-block-label">Using the theme input</div>
+            <div class="code-block">
+              <div class="code-block__lang">typescript</div>
+              <pre><code class="language-typescript">playerConfig: PlayerConfig = &#123;
+  src: 'https://example.com/video.m3u8',
+  theme: &#123;
+    primaryColor:    '#7C3AED', // progress bar, active states
+    secondaryColor:  '#06B6D4', // secondary accents
+    accentColor:     '#A78BFA', // highlights, ripples
+    backgroundColor: '#1e1b4b', // player background
+    textColor:       '#EDE9FE', // text & icons
+    borderRadius:    '6px',     // --ngx-sp-radius
+    controlSize:     '40px',    // button hit area
+  &#125;,
+&#125;;</code></pre>
+            </div>
+          </div>
+          <div>
+            <div class="example-block-label">Using CSS custom properties</div>
+            <div class="code-block">
+              <div class="code-block__lang">css</div>
+              <pre><code class="language-css">/* Scope to a specific player instance */
+ngx-sp-player#my-player &#123;
+  --ngx-sp-primary:   #7C3AED;
+  --ngx-sp-secondary: #06B6D4;
+  --ngx-sp-accent:    #A78BFA;
+  --ngx-sp-bg-dark:   #1e1b4b;
+  --ngx-sp-radius:    6px;
+  --ngx-sp-control-size: 40px;
+&#125;
+
+/* Or globally for all players */
+:root &#123;
+  --ngx-sp-primary: #7C3AED;
+&#125;</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="theme-token-grid">
+          <div class="theme-token">
+            <code>--ngx-sp-primary</code><span>Progress bar, active buttons, seek thumb</span>
+          </div>
+          <div class="theme-token">
+            <code>--ngx-sp-secondary</code><span>Secondary accent color</span>
+          </div>
+          <div class="theme-token">
+            <code>--ngx-sp-accent</code><span>Highlights, ripple effect, hover states</span>
+          </div>
+          <div class="theme-token">
+            <code>--ngx-sp-bg-dark</code><span>Player container background</span>
+          </div>
+          <div class="theme-token">
+            <code>--ngx-sp-text-light</code><span>Primary text &amp; icon color</span>
+          </div>
+          <div class="theme-token">
+            <code>--ngx-sp-overlay-bg</code><span>Controls overlay gradient</span>
+          </div>
+          <div class="theme-token">
+            <code>--ngx-sp-radius</code><span>Container border radius</span>
+          </div>
+          <div class="theme-token">
+            <code>--ngx-sp-control-size</code><span>Button hit area size</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════ EXAMPLE: YOUTUBE -->
+      <section class="section example-section" id="example-youtube">
+        <div class="section__header">
+          <h2 class="section__title">YouTube Integration</h2>
+          <p class="section__sub">
+            Pass any YouTube URL - the player detects it automatically and loads the IFrame API. No
+            API key required.
+          </p>
+        </div>
+
+        <div class="example-grid example-grid--2col">
+          <div>
+            <div class="example-block-label">Auto-detected by URL</div>
+            <div class="code-block">
+              <div class="code-block__lang">typescript</div>
+              <pre><code class="language-typescript">// All of these are auto-detected as YouTube:
+// https://www.youtube.com/watch?v=dQw4w9WgXcQ
+// https://youtu.be/dQw4w9WgXcQ
+// https://www.youtube.com/embed/dQw4w9WgXcQ
+
+ytConfig: PlayerConfig = &#123;
+  src: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+  autoplay: false,
+  muted: false,
+&#125;;</code></pre>
+            </div>
+          </div>
+          <div>
+            <div class="example-block-label">Force YouTube protocol</div>
+            <div class="code-block">
+              <div class="code-block__lang">typescript</div>
+              <pre><code class="language-typescript">// Use protocol: 'youtube' to force it (e.g. for IDs)
+ytConfig: PlayerConfig = &#123;
+  src: 'dQw4w9WgXcQ', // video ID only
+  protocol: 'youtube',
+  autoplay: false,
+&#125;;</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="example-callout example-callout--warning">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path
+              d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
+            />
+            <line x1="12" y1="9" x2="12" y2="13" />
+            <line x1="12" y1="17" x2="12.01" y2="17" />
+          </svg>
+          <div>
+            <strong>YouTube API limitations</strong>
+            <p>
+              <strong>No PiP</strong> - the IFrame API prevents browser Picture-in-Picture. The PiP
+              button is hidden automatically.<br />
+              <strong>Quality</strong> - quality levels reported by the IFrame API are suggestions,
+              not guarantees.<br />
+              <strong>Autoplay</strong> - YouTube enforces muted autoplay in most browser contexts.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════ EXAMPLE: EVENTS & STATE -->
+      <section class="section example-section" id="example-events">
+        <div class="section__header">
+          <h2 class="section__title">Events &amp; State</h2>
+          <p class="section__sub">
+            React to player events via <code>(ready)</code>, <code>(stateChange)</code>,
+            <code>(error)</code> outputs, or read reactive signals directly via
+            <code>NgxPlayerControlService</code>.
+          </p>
+        </div>
+
+        <div class="example-grid example-grid--2col">
+          <div>
+            <div class="example-block-label">Output events</div>
+            <div class="code-block">
+              <div class="code-block__lang">html</div>
+              <pre><code class="language-html">&lt;ngx-sp-player
+  [config]="playerConfig"
+  playerId="my-player"
+  (ready)="onReady()"
+  (stateChange)="onState($event)"
+  (error)="onError($event)"&gt;
+&lt;/ngx-sp-player&gt;</code></pre>
+            </div>
+            <div class="code-block">
+              <div class="code-block__lang">typescript</div>
+              <pre><code class="language-typescript">onReady(): void &#123;
+  console.log('Player ready');
+  this.ctrl.play();
+&#125;
+
+onState(state: PlayerState): void &#123;
+  if (state.isBuffering) &#123;
+    this.showSpinner = true;
+  &#125;
+  if (state.isLive) &#123;
+    this.showLiveBadge = true;
+  &#125;
+&#125;
+
+onError(error: unknown): void &#123;
+  console.error('Playback error:', error);
+  this.showFallback = true;
+&#125;</code></pre>
+            </div>
+          </div>
+          <div>
+            <div class="example-block-label">Reactive state signals</div>
+            <div class="code-block">
+              <div class="code-block__lang">typescript</div>
+              <pre><code class="language-typescript">&#64;Component(&#123;
+  // All state updates trigger change detection
+  // automatically - no manual subscribe() needed
+&#125;)
+export class MyComp &#123;
+  private ctrl = inject(NgxPlayerControlService);
+  readonly state = this.ctrl.getState('my-player');
+
+  // Use directly in template
+  // state?.isPlaying()        → boolean
+  // state?.isLive()           → boolean
+  // state?.isBuffering()      → boolean
+  // state?.currentTime()      → number (seconds)
+  // state?.duration()         → number (seconds, Infinity if live)
+  // state?.progress()         → number (0–100)
+  // state?.bufferedPercentage()→ number (0–100)
+  // state?.volume()           → number (0–1)
+  // state?.muted()            → boolean
+  // state?.playbackRate()     → number
+  // state?.currentQuality()   → string
+  // state?.availableQualities()→ QualityLevel[]
+  // state?.supportsPiP()      → boolean
+  // state?.isPiP()            → boolean
+  // state?.isFullscreen()     → boolean
+
+  readonly watchProgress = computed(() =&gt; &#123;
+    const p = this.state?.progress() ?? 0;
+    return `$&#123;p.toFixed(0)&#125;% watched`;
+  &#125;);
+&#125;</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════════════════════════════════════════════ API DOCS -->
+      <section class="section" id="api">
+        <div class="section__header">
+          <h2 class="section__title">API Reference</h2>
+        </div>
+
+        <!-- Component inputs -->
+        <div class="api-group">
+          <h3 class="api-group__title">
+            <span class="api-tag api-tag--input">&#64;input</span>
+            Component Inputs
+          </h3>
+          <div class="api-table-wrap">
+            <table class="api-table">
+              <thead>
+                <tr>
+                  <th>Input</th>
+                  <th>Type</th>
+                  <th>Default</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>config</code></td>
+                  <td><code>PlayerConfig</code></td>
+                  <td>-</td>
+                  <td>Full configuration object. Optional when using individual inputs.</td>
+                </tr>
+                <tr>
+                  <td><code>src</code></td>
+                  <td><code>string</code></td>
+                  <td>-</td>
+                  <td>
+                    Media URL. Overrides <code>config.src</code>. Changing this input triggers
+                    automatic hot-swap.
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>autoplay</code></td>
+                  <td><code>boolean</code></td>
+                  <td><code>false</code></td>
+                  <td>Start playing automatically on load.</td>
+                </tr>
+                <tr>
+                  <td><code>muted</code></td>
+                  <td><code>boolean</code></td>
+                  <td><code>false</code></td>
+                  <td>Start with audio muted.</td>
+                </tr>
+                <tr>
+                  <td><code>volume</code></td>
+                  <td><code>number</code></td>
+                  <td><code>1.0</code></td>
+                  <td>Initial volume level (0.0 – 1.0).</td>
+                </tr>
+                <tr>
+                  <td><code>poster</code></td>
+                  <td><code>string</code></td>
+                  <td>-</td>
+                  <td>Poster image URL shown before playback starts.</td>
+                </tr>
+                <tr>
+                  <td><code>theme</code></td>
+                  <td><code>PlayerTheme</code></td>
+                  <td>-</td>
+                  <td>Custom colors and dimensions. Overrides <code>config.theme</code>.</td>
+                </tr>
+                <tr>
+                  <td><code>playerId</code></td>
+                  <td><code>string</code></td>
+                  <td><code>'default'</code></td>
+                  <td>Unique player ID. Required only when using multiple instances.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Component outputs -->
+        <div class="api-group">
+          <h3 class="api-group__title">
+            <span class="api-tag api-tag--output">&#64;output</span>
+            Component Outputs
+          </h3>
+          <div class="api-table-wrap">
+            <table class="api-table">
+              <thead>
+                <tr>
+                  <th>Output</th>
+                  <th>Payload</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>ready</code></td>
+                  <td><code>void</code></td>
+                  <td>Player finished initializing and is ready to play.</td>
+                </tr>
+                <tr>
+                  <td><code>stateChange</code></td>
+                  <td><code>PlayerState</code></td>
+                  <td>
+                    Emits the full state snapshot on every change (play, pause, buffering, etc.).
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>error</code></td>
+                  <td><code>unknown</code></td>
+                  <td>Fatal playback error from the adapter.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- PlayerConfig -->
+        <div class="api-group">
+          <h3 class="api-group__title">
+            <span class="api-tag api-tag--type">interface</span>
+            PlayerConfig
+          </h3>
+          <div class="api-table-wrap">
+            <table class="api-table">
+              <thead>
+                <tr>
+                  <th>Property</th>
+                  <th>Type</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>src</code> *</td>
+                  <td><code>string</code></td>
+                  <td>
+                    Media URL. Auto-detected: <code>.m3u8</code> → HLS, <code>.mpd</code> → DASH,
+                    youtube → YouTube, other → native.
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>protocol</code></td>
+                  <td><code>'hls'|'dash'|'native'|'youtube'</code></td>
+                  <td>Force a protocol, bypassing auto-detection.</td>
+                </tr>
+                <tr>
+                  <td><code>autoplay</code></td>
+                  <td><code>boolean</code></td>
+                  <td>Start playback automatically on load.</td>
+                </tr>
+                <tr>
+                  <td><code>muted</code></td>
+                  <td><code>boolean</code></td>
+                  <td>Start muted (required by some browsers for autoplay).</td>
+                </tr>
+                <tr>
+                  <td><code>volume</code></td>
+                  <td><code>number</code></td>
+                  <td>Initial volume 0.0–1.0.</td>
+                </tr>
+                <tr>
+                  <td><code>poster</code></td>
+                  <td><code>string</code></td>
+                  <td>Image shown before play (when currentTime === 0).</td>
+                </tr>
+                <tr>
+                  <td><code>playbackRates</code></td>
+                  <td><code>number[]</code></td>
+                  <td>
+                    Speed options in the menu. E.g. <code>[0.5, 1, 1.5, 2]</code>. Hidden
+                    automatically for live streams.
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>enablePiP</code></td>
+                  <td><code>boolean</code></td>
+                  <td>Enable Picture-in-Picture. Auto-disabled for YouTube.</td>
+                </tr>
+                <tr>
+                  <td><code>enableKeyboard</code></td>
+                  <td><code>boolean</code></td>
+                  <td>Keyboard shortcuts: Space, ←→ seek, ↑↓ volume, F fullscreen, M mute.</td>
+                </tr>
+                <tr>
+                  <td><code>controlsLayout</code></td>
+                  <td><code>PlayerControlsLayout</code></td>
+                  <td>Controls visibility and auto-hide behavior.</td>
+                </tr>
+                <tr>
+                  <td><code>theme</code></td>
+                  <td><code>PlayerTheme</code></td>
+                  <td>Color and dimension customization.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- NgxPlayerControlService -->
+        <div class="api-group">
+          <h3 class="api-group__title">
+            <span class="api-tag api-tag--service">service</span>
+            NgxPlayerControlService
+          </h3>
+          <p class="api-group__desc">
+            Injectable into any component or service. Controls any player instance at runtime by its
+            <code>playerId</code>.
+          </p>
+          <div class="api-table-wrap">
+            <table class="api-table">
+              <thead>
+                <tr>
+                  <th>Method</th>
+                  <th>Signature</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>load()</code></td>
+                  <td><code>(src, config?, id?)</code></td>
+                  <td>
+                    Hot-swap the source. Destroys current adapter, resets state, initializes new
+                    one.
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>play()</code></td>
+                  <td><code>(id?)</code></td>
+                  <td>Start playback.</td>
+                </tr>
+                <tr>
+                  <td><code>pause()</code></td>
+                  <td><code>(id?)</code></td>
+                  <td>Pause playback.</td>
+                </tr>
+                <tr>
+                  <td><code>seek()</code></td>
+                  <td><code>(time, id?)</code></td>
+                  <td>Jump to the given time in seconds.</td>
+                </tr>
+                <tr>
+                  <td><code>setVolume()</code></td>
+                  <td><code>(vol, id?)</code></td>
+                  <td>Set volume (0.0–1.0).</td>
+                </tr>
+                <tr>
+                  <td><code>setMuted()</code></td>
+                  <td><code>(muted, id?)</code></td>
+                  <td>Mute or unmute audio.</td>
+                </tr>
+                <tr>
+                  <td><code>setPlaybackRate()</code></td>
+                  <td><code>(rate, id?)</code></td>
+                  <td>Change playback speed (ignored on live streams).</td>
+                </tr>
+                <tr>
+                  <td><code>setQuality()</code></td>
+                  <td><code>(quality, id?)</code></td>
+                  <td>Force a quality level (e.g. <code>'720p'</code>) or <code>'auto'</code>.</td>
+                </tr>
+                <tr>
+                  <td><code>getState()</code></td>
+                  <td><code>(id?)</code></td>
+                  <td>Returns the <code>PlayerStateService</code> with all state signals.</td>
+                </tr>
+                <tr>
+                  <td><code>isRegistered()</code></td>
+                  <td><code>(id?)</code></td>
+                  <td>Check if a player is registered and active.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Theming reference -->
+        <div class="api-group">
+          <h3 class="api-group__title">
+            <span class="api-tag api-tag--type">interface</span>
+            PlayerTheme - CSS Variables
+          </h3>
+          <div class="code-block">
+            <div class="code-block__lang">typescript</div>
+            <pre><code class="language-typescript">theme: PlayerTheme = &#123;
+  primaryColor:    '#E76F51', // --ngx-sp-primary
+  secondaryColor:  '#2A9D8F', // --ngx-sp-secondary
+  accentColor:     '#F4A261', // --ngx-sp-accent
+  backgroundColor: '#264653', // --ngx-sp-bg-dark
+  textColor:       '#F4F1DE', // --ngx-sp-text-light
+  borderRadius:    '10px',    // --ngx-sp-radius
+  controlSize:     '44px',    // --ngx-sp-control-size
+&#125;;</code></pre>
+          </div>
+          <p class="api-group__desc" style="margin-top: 0.75rem">
+            You can also override the variables directly in your CSS:
+          </p>
+          <div class="code-block">
+            <div class="code-block__lang">css</div>
+            <pre><code class="language-css">ngx-sp-player &#123;
+  --ngx-sp-primary: #7C3AED;
+  --ngx-sp-accent:  #A78BFA;
+  --ngx-sp-radius:  4px;
+&#125;</code></pre>
+          </div>
+        </div>
+
+        <!-- Keyboard shortcuts -->
+        <div class="api-group">
+          <h3 class="api-group__title">
+            <span class="api-tag api-tag--example">keyboard</span>
+            Keyboard Shortcuts
+          </h3>
+          <p class="api-group__desc">
+            Enable with <code>enableKeyboard: true</code> in config. Shortcuts are scoped to the
+            focused player.
+          </p>
+          <div class="api-table-wrap">
+            <table class="api-table">
+              <thead>
+                <tr>
+                  <th>Key</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>Space</code> / <code>K</code></td>
+                  <td>Toggle play / pause</td>
+                </tr>
+                <tr>
+                  <td><code>←</code> / <code>→</code></td>
+                  <td>Seek backward / forward 5 s</td>
+                </tr>
+                <tr>
+                  <td><code>J</code> / <code>L</code></td>
+                  <td>Seek backward / forward 10 s</td>
+                </tr>
+                <tr>
+                  <td><code>↑</code> / <code>↓</code></td>
+                  <td>Volume up / down 10%</td>
+                </tr>
+                <tr>
+                  <td><code>M</code></td>
+                  <td>Toggle mute</td>
+                </tr>
+                <tr>
+                  <td><code>F</code></td>
+                  <td>Toggle fullscreen</td>
+                </tr>
+                <tr>
+                  <td><code>I</code></td>
+                  <td>Toggle Picture-in-Picture</td>
+                </tr>
+                <tr>
+                  <td><code>C</code></td>
+                  <td>Toggle subtitles</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </div>
+    <!-- /.demo-content -->
+  </div>
+  <!-- /.demo-body -->
+
+  <!-- ═════════════════════════════════════════════════════════ FOOTER -->
+  <footer class="demo-footer">
+    <div class="footer-links">
+      <a href="#playground">Playground</a>
+      <a href="#demo">Demo</a>
+      <a href="#features">Features</a>
+      <a href="#getting-started">Getting Started</a>
+      <a href="#example-live">Live Streaming</a>
+      <a href="#example-hotswap">Hot-swap</a>
+      <a href="#api">API Reference</a>
+    </div>
+    <p class="footer-credits">Built with Angular · hls.js · dash.js · GSAP</p>
+  </footer>
+</main>
