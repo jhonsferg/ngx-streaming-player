@@ -1,0 +1,7 @@
+{
+  "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../dist/ngx-streaming-player",
+  "lib": {
+    "entryFile": "src/public-api.ts"
+  }
+}

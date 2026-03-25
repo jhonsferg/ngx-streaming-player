@@ -1,0 +1,50 @@
+{
+  "name": "ngx-streaming-player",
+  "version": "0.0.1",
+  "description": "Feature-rich Angular video player supporting HLS, DASH, MP4 and YouTube with a polished customisable UI built on Angular Signals.",
+  "author": "Jhonsferg",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jhonsferg/ngx-streaming-player.git"
+  },
+  "homepage": "https://jhonsferg.github.io/ngx-streaming-player",
+  "bugs": {
+    "url": "https://github.com/jhonsferg/ngx-streaming-player/issues"
+  },
+  "keywords": [
+    "angular",
+    "video-player",
+    "streaming",
+    "hls",
+    "dash",
+    "youtube",
+    "media",
+    "player",
+    "ngx",
+    "angular-signals",
+    "angular-component",
+    "adaptive-streaming"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "peerDependencies": {
+    "@angular/common": ">=17.0.0",
+    "@angular/core": ">=17.0.0",
+    "hls.js": "^1.0.0",
+    "dashjs": "^4.0.0"
+  },
+  "peerDependenciesMeta": {
+    "hls.js": {
+      "optional": true
+    },
+    "dashjs": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false
+}
