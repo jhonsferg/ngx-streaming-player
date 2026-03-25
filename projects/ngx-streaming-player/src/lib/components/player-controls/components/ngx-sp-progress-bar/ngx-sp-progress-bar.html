@@ -1,0 +1,41 @@
+<div class="progress-wrapper">
+  <!-- Hover time tooltip -->
+  @if (hoverPercent() !== null && (isHovering() || isDragging())) {
+    <div
+      class="progress-tooltip"
+      [style.left.%]="hoverPercent()! * 100">
+      <span>{{ hoverTime() }}</span>
+      <div class="progress-tooltip__arrow"></div>
+    </div>
+  }
+
+  <!-- Scrubber bar -->
+  <div
+    class="progress-bar"
+    #progressBar
+    [class.progress-bar--dragging]="isDragging()"
+    [class.progress-bar--hovering]="isHovering()"
+    (click)="onSeek($event)"
+    (dblclick)="onDoubleClick()"
+    (mousedown)="onMouseDown($event)"
+    (mousemove)="onMouseMove($event)"
+    (mouseenter)="onMouseEnter()"
+    (mouseleave)="onMouseLeave()">
+
+    <!-- Buffered layer -->
+    <div class="progress-bar__buffered" [style.width.%]="bufferedPercentage()"></div>
+
+    <!-- Played layer -->
+    <div class="progress-bar__played" [style.width.%]="progressPercentage()">
+      <!-- Scrubber handle -->
+      <div class="progress-bar__handle"
+           [class.progress-bar__handle--active]="isDragging()"></div>
+    </div>
+
+    <!-- Hover ghost indicator -->
+    @if (hoverPercent() !== null && (isHovering() || isDragging())) {
+      <div class="progress-bar__ghost"
+           [style.width.%]="hoverPercent()! * 100"></div>
+    }
+  </div>
+</div>
