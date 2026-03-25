@@ -1,0 +1,315 @@
+:host {
+  display: block;
+  position: relative;
+}
+
+/* --- Trigger button ------------------------------------------- */
+.settings-wrap {
+  position: relative;
+
+  &__trigger {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    color: rgba(244, 241, 222, 0.8);
+    cursor: pointer;
+    padding: 8px;
+    outline: none;
+    transition:
+      color 0.2s var(--ngx-sp-ease),
+      background 0.2s var(--ngx-sp-ease),
+      transform 0.15s var(--ngx-sp-ease);
+    -webkit-tap-highlight-color: transparent;
+
+    &:hover {
+      color: var(--ngx-sp-text-light);
+      background: rgba(255, 255, 255, 0.1);
+      transform: scale(1.08);
+    }
+
+    &:active {
+      transform: scale(0.93);
+    }
+
+    &--open {
+      color: var(--ngx-sp-accent);
+      background: rgba(244, 162, 97, 0.12);
+
+      .settings-wrap__gear {
+        animation: gearSpin 0.4s var(--ngx-sp-ease);
+      }
+    }
+  }
+
+  &__gear {
+    width: 22px;
+    height: 22px;
+    display: block;
+    transform-origin: center;
+    transition: color 0.2s;
+  }
+}
+
+/* --- Panel ---------------------------------------------------- */
+.settings-panel {
+  position: absolute;
+  bottom: calc(100% + 12px);
+  right: -4px;
+  width: 236px;
+  background: rgba(18, 18, 20, 0.94);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 16px 48px rgba(0, 0, 0, 0.6),
+    0 4px 16px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+  overflow: hidden;
+  z-index: 100;
+  animation: panelSlideUp 0.22s var(--ngx-sp-ease) both;
+
+  /* -- View container -- */
+  &__view {
+    animation: viewFade 0.18s var(--ngx-sp-ease) both;
+  }
+
+  /* -- Header label -- */
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 14px 10px;
+    font-family: var(--ngx-sp-font-body);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(244, 241, 222, 0.45);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+
+    svg {
+      flex-shrink: 0;
+      opacity: 0.5;
+    }
+  }
+
+  /* -- Nav row (quality / speed) -- */
+  &__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 13px 14px;
+    background: none;
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--ngx-sp-text-light);
+    font-family: var(--ngx-sp-font-body);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s var(--ngx-sp-ease);
+    text-align: left;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.07);
+    }
+
+    &-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    &-icon {
+      width: 17px;
+      height: 17px;
+      opacity: 0.65;
+      flex-shrink: 0;
+    }
+
+    &-value {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.8rem;
+      color: rgba(244, 241, 222, 0.5);
+    }
+  }
+
+  &__chevron {
+    width: 16px;
+    height: 16px;
+    opacity: 0.5;
+  }
+
+  /* -- Back button -- */
+  &__back {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 12px 14px 10px;
+    background: none;
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    color: rgba(244, 241, 222, 0.55);
+    font-family: var(--ngx-sp-font-body);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-align: left;
+    transition: color 0.15s;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    &:hover {
+      color: rgba(244, 241, 222, 0.8);
+    }
+  }
+
+  /* -- Options list -- */
+  &__options {
+    display: flex;
+    flex-direction: column;
+    padding: 6px;
+    gap: 2px;
+    max-height: 200px;
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 2px;
+    }
+  }
+
+  /* -- Option item -- */
+  &__option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px 12px;
+    background: none;
+    border: none;
+    border-radius: 8px;
+    color: rgba(244, 241, 222, 0.75);
+    font-family: var(--ngx-sp-font-body);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition:
+      background 0.15s var(--ngx-sp-ease),
+      color 0.15s,
+      transform 0.12s var(--ngx-sp-ease);
+    text-align: left;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--ngx-sp-text-light);
+      transform: translateX(2px);
+    }
+
+    &--active {
+      background: linear-gradient(
+        90deg,
+        rgba(231, 111, 81, 0.22) 0%,
+        rgba(244, 162, 97, 0.12) 100%
+      );
+      color: var(--ngx-sp-accent);
+      font-weight: 600;
+
+      &:hover {
+        background: linear-gradient(
+          90deg,
+          rgba(231, 111, 81, 0.3) 0%,
+          rgba(244, 162, 97, 0.18) 100%
+        );
+        transform: translateX(2px);
+      }
+    }
+  }
+
+  &__check {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    color: var(--ngx-sp-accent);
+  }
+
+  /* Subtitle track label + language tag */
+  &__subtitle-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1px;
+  }
+
+  &__subtitle-lang {
+    font-size: 0.72rem;
+    font-weight: 400;
+    color: rgba(244, 241, 222, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+}
+
+/* --- Animations ----------------------------------------------- */
+@keyframes panelSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes viewFade {
+  from {
+    opacity: 0;
+    transform: translateX(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes gearSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(90deg);
+  }
+}
+
+/* --- Responsive ----------------------------------------------- */
+@media (max-width: 480px) {
+  .settings-panel {
+    width: 200px;
+    right: -8px;
+  }
+}
