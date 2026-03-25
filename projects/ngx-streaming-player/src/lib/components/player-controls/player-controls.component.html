@@ -1,0 +1,182 @@
+<div class="controls">
+  <!-- -- Progress bar (hidden for live streams) -- -->
+  @if (!stateService.isLive()) {
+    <div class="controls__scrubber">
+      <ngx-sp-progress-bar
+        [progressPercentage]="stateService.progress()"
+        [bufferedPercentage]="stateService.bufferedPercentage()"
+        [duration]="stateService.duration()"
+        (seek)="onSeek($event)"
+        (doubleClick)="onDoubleClick()"
+      >
+      </ngx-sp-progress-bar>
+    </div>
+  }
+
+  <!-- -- Control bar -- -->
+  <div class="controls__bar">
+    <!-- LEFT GROUP -->
+    <div class="controls__group controls__group--left">
+      <!-- Play / Pause -->
+      <ngx-sp-button
+        modifierClass="sp-btn--play-pause"
+        [tooltipText]="stateService.isPlaying() ? 'Pausar (k)' : 'Reproducir (k)'"
+        (clicked)="togglePlay()"
+      >
+        @if (stateService.isPlaying()) {
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+          </svg>
+        } @else {
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M8 5v14l11-7z" />
+          </svg>
+        }
+      </ngx-sp-button>
+
+      <!-- Skip Backward -->
+      @if (!stateService.isLive()) {
+        <ngx-sp-button modifierClass="sp-btn--skip" tooltipText="-10s" (clicked)="skipBackward(10)">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M11.99 5V1l-5 5 5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6h-2c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"
+            />
+            <text
+              x="12"
+              y="14"
+              text-anchor="middle"
+              font-size="6"
+              fill="currentColor"
+              font-family="sans-serif"
+              font-weight="700"
+            >
+              10
+            </text>
+          </svg>
+        </ngx-sp-button>
+
+        <!-- Skip Forward -->
+        <ngx-sp-button modifierClass="sp-btn--skip" tooltipText="+10s" (clicked)="skipForward(10)">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M12.01 5V1l5 5-5 5V7c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6h2c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8z"
+            />
+            <text
+              x="12"
+              y="14"
+              text-anchor="middle"
+              font-size="6"
+              fill="currentColor"
+              font-family="sans-serif"
+              font-weight="700"
+            >
+              10
+            </text>
+          </svg>
+        </ngx-sp-button>
+      }
+
+      <!-- Volume -->
+      <ngx-sp-volume-control
+        [volume]="stateService.volume()"
+        [isMuted]="stateService.muted()"
+        (volumeChange)="setVolume($event)"
+        (toggleMute)="toggleMute()"
+      >
+      </ngx-sp-volume-control>
+
+      <!-- Separator -->
+      <div class="controls__sep"></div>
+
+      <!-- Time display or LIVE badge -->
+      @if (stateService.isLive()) {
+        <div class="controls__live-badge">
+          <span class="controls__live-dot"></span>
+          LIVE
+        </div>
+      } @else {
+        <ngx-sp-time-display
+          [currentTime]="stateService.formattedCurrentTime()"
+          [duration]="stateService.formattedDuration()"
+        >
+        </ngx-sp-time-display>
+      }
+    </div>
+
+    <!-- RIGHT GROUP -->
+    <div class="controls__group controls__group--right">
+      <!-- YouTube link -->
+      @if (stateService.isYouTube()) {
+        <a [href]="config().src" target="_blank" class="controls__yt-link" title="Ver en YouTube" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M21.58 7.19c-.23-.86-.91-1.54-1.77-1.77C18.25 5 12 5 12 5s-6.25 0-7.81.42c-.86.23-1.54.91-1.77 1.77C2 8.75 2 12 2 12s0 3.25.42 4.81c.23.86.91 1.54 1.77 1.77C5.75 19 12 19 12 19s6.25 0 7.81-.42c.86-.23 1.54-.91 1.77-1.77C22 15.25 22 12 22 12s0-3.25-.42-4.81zM10 15V9l5.2 3-5.2 3z"
+            />
+          </svg>
+        </a>
+      }
+
+      <!-- Subtitles (shown only when adapter reports subtitle support) -->
+      @if (stateService.supportsSubtitles()) {
+        <ngx-sp-button
+          [modifierClass]="stateService.subtitlesEnabled() ? 'sp-btn--active' : ''"
+          tooltipText="Subtítulos (c)"
+          (clicked)="toggleSubtitles()"
+        >
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M19 4H5c-1.11 0-2 .9-2 2v12c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 7H9.5v-.5h-2v3h2V13H11v1.5c0 .28-.22.5-.5.5h-3c-.28 0-.5-.22-.5-.5v-4c0-.28.22-.5.5-.5h3c.28 0 .5.22.5.5V11zm7 0h-1.5v-.5h-2v3h2V13H18v1.5c0 .28-.22.5-.5.5h-3c-.28 0-.5-.22-.5-.5v-4c0-.28.22-.5.5-.5h3c.28 0 .5.22.5.5V11z"
+            />
+          </svg>
+        </ngx-sp-button>
+      }
+
+      <!-- Settings -->
+      <ngx-sp-settings-menu
+        [showSettingsMenu]="showSettingsMenu()"
+        [activeMenu]="activeSettingsTab()"
+        [playbackRate]="stateService.playbackRate()"
+        [currentQuality]="currentQuality"
+        [qualityLevels]="stateService.availableQualities()"
+        [supportsSubtitles]="stateService.supportsSubtitles()"
+        [availableSubtitles]="stateService.availableSubtitles()"
+        [activeSubtitleId]="stateService.activeSubtitleId()"
+        [isLive]="stateService.isLive()"
+        (setMenuVisibility)="showSettingsMenu.set($event)"
+        (navigateMenu)="activeSettingsTab.set($event)"
+        (setSpeed)="setPlaybackRate($event)"
+        (setQuality)="setQuality($event)"
+        (setSubtitle)="setSubtitle($event)"
+      >
+      </ngx-sp-settings-menu>
+
+      <!-- PiP (hidden when not supported by current adapter) -->
+      @if (stateService.supportsPiP()) {
+        <ngx-sp-button
+          [modifierClass]="stateService.isPiP() ? 'sp-btn--pip-active' : ''"
+          tooltipText="Mini reproductor (i)"
+          (clicked)="togglePiP()"
+        >
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M19 7h-8v6h8V7zm2-4H3c-1.1 0-2 .9-2 2v14c0 1.1.9 1.98 2 1.98h18c1.1 0 2-.88 2-1.98V5c0-1.1-.9-2-2-2zm0 16.01H3V4.98h18v14.03z"
+            />
+          </svg>
+        </ngx-sp-button>
+      }
+
+      <!-- Fullscreen -->
+      <ngx-sp-button tooltipText="Pantalla completa (f)" (clicked)="toggleFullscreen()">
+        @if (stateService.isFullscreen()) {
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z" />
+          </svg>
+        } @else {
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z" />
+          </svg>
+        }
+      </ngx-sp-button>
+    </div>
+  </div>
+</div>

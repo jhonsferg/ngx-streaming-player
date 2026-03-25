@@ -1,0 +1,155 @@
+:host {
+  display: block;
+  pointer-events: none; /* host passthrough; inner elements re-enable */
+}
+
+/* --- Controls shell ------------------------------------------- */
+.controls {
+  pointer-events: auto;
+  padding: 0 16px 14px;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.92) 0%,
+    rgba(0, 0, 0, 0.72) 40%,
+    rgba(0, 0, 0, 0.24) 72%,
+    transparent 100%
+  );
+
+  /* -- Scrubber zone -- */
+  &__scrubber {
+    /* Padding handled inside the progress bar component */
+  }
+
+  /* -- Bottom bar -- */
+  &__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    margin-top: 2px;
+  }
+
+  /* -- Groups -- */
+  &__group {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+
+    &--left {
+      flex: 1;
+    }
+    &--right {
+      flex-shrink: 0;
+    }
+  }
+
+  /* -- Thin separator between volume and time -- */
+  &__sep {
+    width: 1px;
+    height: 18px;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 1px;
+    margin: 0 6px;
+    flex-shrink: 0;
+  }
+
+  /* -- LIVE badge -- */
+  &__live-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px 4px 8px;
+    border-radius: 4px;
+    background: rgba(220, 30, 30, 0.18);
+    border: 1px solid rgba(220, 30, 30, 0.35);
+    font-family: var(--ngx-sp-font-body);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: #ff4444;
+    user-select: none;
+    margin-left: 4px;
+  }
+
+  &__live-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #ff3333;
+    box-shadow: 0 0 6px #ff3333;
+    animation: livePulse 1.6s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+
+  /* -- YouTube link -- */
+  &__yt-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 8px;
+    color: rgba(244, 241, 222, 0.65);
+    text-decoration: none;
+    transition:
+      color 0.2s var(--ngx-sp-ease),
+      background 0.2s var(--ngx-sp-ease),
+      transform 0.15s var(--ngx-sp-ease);
+
+    svg {
+      width: 22px;
+      height: 22px;
+      display: block;
+    }
+
+    &:hover {
+      color: #ff0000;
+      background: rgba(255, 0, 0, 0.12);
+      transform: scale(1.08);
+    }
+
+    &:active {
+      transform: scale(0.93);
+    }
+  }
+}
+
+/* --- Animations ----------------------------------------------- */
+@keyframes livePulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.85);
+  }
+}
+
+/* --- Responsive ----------------------------------------------- */
+@media (max-width: 768px) {
+  .controls {
+    padding: 0 12px 10px;
+
+    &__bar {
+      gap: 4px;
+    }
+    &__group {
+      gap: 1px;
+    }
+    &__sep {
+      margin: 0 4px;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .controls {
+    padding: 0 8px 8px;
+
+    &__live-badge {
+      font-size: 0.65rem;
+      padding: 3px 7px 3px 6px;
+    }
+  }
+}
