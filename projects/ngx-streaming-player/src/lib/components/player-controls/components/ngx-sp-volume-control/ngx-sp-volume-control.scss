@@ -1,0 +1,254 @@
+:host {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* --- Volume wrapper ------------------------------------------- */
+.volume-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  border-radius: 24px;
+  transition: background 0.2s var(--ngx-sp-ease);
+
+  &:hover,
+  &:focus-within {
+    .volume-wrap__slider-area {
+      width: 88px;
+      opacity: 1;
+      margin-left: 6px;
+    }
+
+    .volume-wrap__icon-btn {
+      color: var(--ngx-sp-text-light);
+    }
+  }
+
+  /* Muted: icon fades to red-ish tint */
+  &--muted .icon--muted {
+    color: rgba(231, 111, 81, 0.85);
+    filter: drop-shadow(0 0 4px rgba(231, 111, 81, 0.4));
+  }
+
+  /* -- Icon button -- */
+  &__icon-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    border-radius: 8px;
+    color: rgba(244, 241, 222, 0.8);
+    cursor: pointer;
+    padding: 8px;
+    overflow: hidden;
+    transition:
+      color 0.2s var(--ngx-sp-ease),
+      background 0.2s var(--ngx-sp-ease),
+      transform 0.15s var(--ngx-sp-ease);
+    -webkit-tap-highlight-color: transparent;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: scale(1.08);
+    }
+
+    &:active {
+      transform: scale(0.92);
+    }
+
+    .icon {
+      width: 22px;
+      height: 22px;
+      display: block;
+      transition:
+        transform 0.2s var(--ngx-sp-ease),
+        color 0.2s;
+    }
+  }
+
+  /* -- Ripple on icon button -- */
+  &__icon-btn-ripple {
+    position: absolute;
+    inset: 0;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.18);
+    transform: scale(0);
+    opacity: 0;
+    pointer-events: none;
+    transition: none;
+
+    &.active {
+      animation: volRipple 0.5s var(--ngx-sp-ease) forwards;
+    }
+  }
+
+  /* -- Slider area (collapses when not hovering) -- */
+  &__slider-area {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 0;
+    opacity: 0;
+    height: 20px;
+    transition:
+      width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 0.25s var(--ngx-sp-ease),
+      margin-left 0.3s var(--ngx-sp-ease);
+    overflow: visible;
+  }
+
+  /* -- Custom visual track -- */
+  &__track {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 4px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.18);
+    overflow: hidden;
+    pointer-events: none;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+  }
+
+  &__track-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    /* Fill percentage driven by CSS custom prop --vol set via [style.--vol] */
+    width: calc(var(--vol, 1) * 100%);
+    border-radius: 4px;
+    background: linear-gradient(
+      90deg,
+      var(--ngx-sp-secondary) 0%,
+      var(--ngx-sp-primary) 50%,
+      var(--ngx-sp-accent) 100%
+    );
+    transition: width 0.08s linear;
+    box-shadow: 0 0 6px rgba(231, 111, 81, 0.35);
+  }
+
+  /* -- Volume % badge (shows on hover/drag) -- */
+  &__pct {
+    position: absolute;
+    top: -30px;
+    left: calc(var(--vol, 1) * 100%);
+    transform: translateX(-50%);
+    background: rgba(10, 10, 10, 0.88);
+    backdrop-filter: blur(8px);
+    color: var(--ngx-sp-text-light);
+    font-family: var(--ngx-sp-font-mono);
+    font-size: 0.68rem;
+    font-weight: 600;
+    padding: 3px 7px;
+    border-radius: 4px;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  }
+
+  /* -- Range input (transparent overlay for interaction) -- */
+  &__range {
+    position: relative;
+    width: 88px;
+    height: 20px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    cursor: pointer;
+    outline: none;
+    z-index: 2;
+
+    &::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #ffffff;
+      box-shadow:
+        0 0 0 2px rgba(255, 255, 255, 0.2),
+        0 2px 6px rgba(0, 0, 0, 0.5),
+        0 0 10px rgba(231, 111, 81, 0.4);
+      cursor: pointer;
+      margin-top: -5px;
+      transition:
+        transform 0.15s var(--ngx-sp-ease),
+        box-shadow 0.15s;
+    }
+
+    &::-moz-range-thumb {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: none;
+      background: #ffffff;
+      box-shadow:
+        0 0 0 2px rgba(255, 255, 255, 0.2),
+        0 2px 6px rgba(0, 0, 0, 0.5),
+        0 0 10px rgba(231, 111, 81, 0.4);
+      cursor: pointer;
+      transition:
+        transform 0.15s var(--ngx-sp-ease),
+        box-shadow 0.15s;
+    }
+
+    &::-webkit-slider-runnable-track {
+      height: 4px;
+      background: transparent;
+      border-radius: 4px;
+    }
+
+    &::-moz-range-track {
+      height: 4px;
+      background: transparent;
+      border-radius: 4px;
+    }
+
+    &:hover,
+    &:active {
+      &::-webkit-slider-thumb {
+        transform: scale(1.25);
+        box-shadow:
+          0 0 0 3px rgba(255, 255, 255, 0.15),
+          0 2px 8px rgba(0, 0, 0, 0.5),
+          0 0 16px rgba(231, 111, 81, 0.55);
+      }
+
+      &::-moz-range-thumb {
+        transform: scale(1.25);
+        box-shadow:
+          0 0 0 3px rgba(255, 255, 255, 0.15),
+          0 2px 8px rgba(0, 0, 0, 0.5),
+          0 0 16px rgba(231, 111, 81, 0.55);
+      }
+
+      ~ .volume-wrap__pct {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+/* --- Keyframes ------------------------------------------------ */
+@keyframes volRipple {
+  0% {
+    transform: scale(0);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+/* --- Responsive ----------------------------------------------- */
+@media (max-width: 480px) {
+  :host {
+    display: none;
+  }
+}
