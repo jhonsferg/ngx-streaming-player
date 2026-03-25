@@ -6,6 +6,12 @@ on:
   pull_request:
     branches: [main]
 
+# Cancel any in-progress run for the same ref so rapid pushes
+# don't queue multiple simultaneous deployments.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
