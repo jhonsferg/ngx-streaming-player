@@ -1,0 +1,54 @@
+<section class="section" id="demo">
+  <div class="section__header">
+    <h2 class="section__title">Demo - Single Player</h2>
+    <p class="section__sub">
+      Switch the source on the fly with <code>NgxPlayerControlService.load()</code> - no
+      component recreation needed.
+    </p>
+  </div>
+
+  <div class="demo-layout">
+    <div class="demo-player-wrap">
+      <ngx-sp-player
+        [config]="currentConfig"
+        playerId="demo-main"
+        (ready)="onPlayerReady()"
+        (stateChange)="onStateChange($event)"
+        (error)="onError($event)"
+      >
+      </ngx-sp-player>
+    </div>
+    <div class="demo-controls">
+      <p class="demo-controls__label">Switch source</p>
+      <div class="source-btns">
+        <button
+          class="source-btn"
+          [class.source-btn--active]="currentConfig === hlsConfig"
+          (click)="switchToHLS()"
+        >
+          <span class="source-btn__badge live">LIVE</span>
+          HLS Stream
+        </button>
+        <button
+          class="source-btn"
+          [class.source-btn--active]="currentConfig === dashConfig"
+          (click)="switchToDASH()"
+        >
+          <span class="source-btn__badge dash">DASH</span>
+          DASH VOD
+        </button>
+        <button
+          class="source-btn"
+          [class.source-btn--active]="currentConfig === mp4Config"
+          (click)="switchToMP4()"
+        >
+          <span class="source-btn__badge mp4">MP4</span>
+          MP4 Video
+        </button>
+      </div>
+      <p class="demo-hint">
+        Try switching between protocols - volume and mute state are preserved.
+      </p>
+    </div>
+  </div>
+</section>
