@@ -61,6 +61,7 @@ export class PlayerStateService {
   /** @internal */ private readonly _availableSubtitles = signal<SubtitleTrack[]>([]);
   /** @internal */ private readonly _activeSubtitleId = signal<string | number | null>(null);
   /** @internal */ private readonly _supportsPiP = signal(false);
+  /** @internal */ private readonly _isEnded = signal(false);
   /** @internal */ private readonly _error = signal<any | null>(null);
   /** @internal */ private readonly _bufferedPercentage = signal(0);
 
@@ -138,6 +139,9 @@ export class PlayerStateService {
   /** Last error thrown by the active adapter, or `null` when healthy. */
   readonly error = this._error.asReadonly();
 
+  /** `true` when the media has reached its natural end. */
+  readonly isEnded = this._isEnded.asReadonly();
+
   /** Percentage of the media that has been buffered, in the range `[0, 100]`. */
   readonly bufferedPercentage = this._bufferedPercentage.asReadonly();
 
@@ -170,6 +174,7 @@ export class PlayerStateService {
     isYouTube: this._isYouTube(),
     isLive: this._isLive(),
     subtitlesEnabled: this._subtitlesEnabled(),
+    isEnded: this._isEnded(),
     error: this._error(),
   }));
 
@@ -388,6 +393,15 @@ export class PlayerStateService {
   }
 
   /**
+   * Marks whether the media has reached its natural end.
+   * Automatically reset to `false` by {@link reset} on every source change.
+   * @param ended - `true` when the video ends, `false` to clear.
+   */
+  setEnded(ended: boolean): void {
+    this._isEnded.set(ended);
+  }
+
+  /**
    * Resets all playback-related signals to their initial values.
    *
    * **Volume and muted state are intentionally preserved** so that the user's
@@ -412,6 +426,7 @@ export class PlayerStateService {
     this._availableSubtitles.set([]);
     this._activeSubtitleId.set(null);
     this._supportsPiP.set(false);
+    this._isEnded.set(false);
     this._error.set(null);
     this._bufferedPercentage.set(0);
   }
