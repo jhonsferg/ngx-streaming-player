@@ -1,0 +1,95 @@
+<section class="section" id="getting-started">
+  <div class="section__header">
+    <h2 class="section__title">Getting Started</h2>
+  </div>
+
+  <div class="doc-steps">
+    <div class="doc-step">
+      <div class="doc-step__num">1</div>
+      <div class="doc-step__body">
+        <h3>Install dependencies</h3>
+        <div class="code-block">
+          <div class="code-block__lang">bash</div>
+          <pre><code class="language-bash">npm install ngx-streaming-player hls.js dashjs</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="doc-step">
+      <div class="doc-step__num">2</div>
+      <div class="doc-step__body">
+        <h3>Import the component</h3>
+        <div class="code-block">
+          <div class="code-block__lang">typescript</div>
+          <pre><code class="language-typescript">import &#123; StreamingPlayerComponent &#125; from 'ngx-streaming-player';
+
+&#64;Component(&#123;
+  standalone: true,
+  imports: [StreamingPlayerComponent],
+  // ...
+&#125;)
+export class MyComponent &#123; &#125;</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="doc-step">
+      <div class="doc-step__num">3</div>
+      <div class="doc-step__body">
+        <h3>Use it in your template</h3>
+        <p class="doc-step__desc">
+          Three ways to configure - pick the one that fits your use case:
+        </p>
+
+        <div class="code-tabs">
+          <div class="code-tab">
+            <div class="code-tab__label">Config object (full control)</div>
+            <div class="code-block">
+              <div class="code-block__lang">typescript</div>
+              <pre><code class="language-typescript">playerConfig: PlayerConfig = &#123;
+  src: 'https://example.com/stream.m3u8',
+  autoplay: false,
+  muted: false,
+  volume: 1.0,
+  enablePiP: true,
+  enableKeyboard: true,
+  playbackRates: [0.5, 1, 1.5, 2],
+  controlsLayout: &#123; autoHide: true, autoHideDelay: 3000 &#125;,
+  theme: &#123; primaryColor: '#E76F51' &#125;,
+&#125;;</code></pre>
+            </div>
+            <div class="code-block">
+              <div class="code-block__lang">html</div>
+              <pre><code class="language-html">&lt;ngx-sp-player [config]="playerConfig"&gt;&lt;/ngx-sp-player&gt;</code></pre>
+            </div>
+          </div>
+
+          <div class="code-tab">
+            <div class="code-tab__label">Individual inputs (simple)</div>
+            <div class="code-block">
+              <div class="code-block__lang">html</div>
+              <pre><code class="language-html">&lt;ngx-sp-player
+  [src]="streamUrl"
+  [autoplay]="true"
+  [muted]="false"
+  [volume]="0.8"&gt;
+&lt;/ngx-sp-player&gt;</code></pre>
+            </div>
+          </div>
+
+          <div class="code-tab">
+            <div class="code-tab__label">Mixed - hot-swap via binding</div>
+            <div class="code-block">
+              <div class="code-block__lang">html</div>
+              <pre><code class="language-html">&lt;!-- Changing currentSrc triggers automatic hot-swap --&gt;
+&lt;ngx-sp-player
+  [config]="baseConfig"
+  [src]="currentSrc"&gt;
+&lt;/ngx-sp-player&gt;</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
