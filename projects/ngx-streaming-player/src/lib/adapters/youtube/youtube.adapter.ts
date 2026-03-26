@@ -234,6 +234,12 @@ export class YouTubeAdapter implements IPlayerAdapter {
         onReady: (event: any) => this.onPlayerReady(event),
         onStateChange: (event: any) => this.onPlayerStateChange(event),
         onPlaybackQualityChange: (event: any) => {
+          // While a two-phase quality change is in flight, the first event
+          // carries the OLD quality (from loadVideoById starting). Ignore it
+          // so the optimistic UI update is not overwritten. Phase 2 clears
+          // pendingYtQuality before calling setPlaybackQuality, so the
+          // authoritative confirmation event always passes this guard.
+          if (this.pendingYtQuality) return;
           const ytQ = event.data as string;
           const readable = ytQ === 'default' || ytQ === 'auto' ? 'auto' : QUALITY_MAP[ytQ] || ytQ;
           this.stateService.setQuality(readable);
@@ -343,8 +349,12 @@ export class YouTubeAdapter implements IPlayerAdapter {
           // PLAYING state. YouTube's bandwidth probe during BUFFERING may
           // downgrade the suggestedQuality set in Phase 1; asserting here
           // overrides that before new segments are fetched.
-          this.ytPlayer.setPlaybackQuality(this.pendingYtQuality);
+          // IMPORTANT: clear pendingYtQuality BEFORE calling setPlaybackQuality
+          // so the resulting onPlaybackQualityChange event is NOT skipped by
+          // the guard in the event handler — that event carries the confirmed quality.
+          const q = this.pendingYtQuality;
           this.pendingYtQuality = null;
+          this.ytPlayer.setPlaybackQuality(q);
         } else {
           this.updateAvailableQualities();
         }
@@ -362,6 +372,7 @@ export class YouTubeAdapter implements IPlayerAdapter {
 
       case YT.PlayerState.ENDED:
         this.stateService.setPlaying(false);
+        this.stateService.setEnded(true);
         this.stopTimePolling();
         break;
     }
