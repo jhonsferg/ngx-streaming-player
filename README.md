@@ -154,10 +154,10 @@ import { providePlayer, withTheme, withDefaults, withTranslations } from 'ngx-st
 export const appConfig: ApplicationConfig = {
   providers: [
     providePlayer(
-      // Global theme — applied as the lowest-priority layer for every player
+      // Global theme - applied as the lowest-priority layer for every player
       withTheme({ primaryColor: '#E76F51', borderRadius: '12px' }),
 
-      // Global config defaults — overridden by any per-player [config] input
+      // Global config defaults - overridden by any per-player [config] input
       withDefaults({ autoplay: false, enablePiP: true, enableKeyboard: true }),
 
       // UI string translations (any key you omit falls back to the English default)
@@ -550,7 +550,7 @@ export class PlayerStatus {
 
 ```typescript
 onReady(): void {
-  // Player fully initialised — safe to issue commands
+  // Player fully initialised - safe to issue commands
   this.ctrl.play('main');
 }
 
@@ -603,7 +603,7 @@ onError(err: unknown): void {
 }
 
 onState(state: PlayerState): void {
-  // Full state snapshot — useful for debugging or external state sync
+  // Full state snapshot - useful for debugging or external state sync
   this.playerState = state;
 }
 ```
@@ -728,19 +728,19 @@ Configure the library globally in `ApplicationConfig.providers` (standalone) or 
 import { providePlayer, withTheme, withDefaults, withTranslations } from 'ngx-streaming-player';
 
 providePlayer(
-  withTheme(theme),        // Partial<PlayerTheme>  — global baseline theme
-  withDefaults(config),    // Partial<PlayerConfig> — global config defaults
-  withTranslations(map),   // Partial<PlayerTranslations> — UI string overrides
-)
+  withTheme(theme), // Partial<PlayerTheme>  - global baseline theme
+  withDefaults(config), // Partial<PlayerConfig> - global config defaults
+  withTranslations(map), // Partial<PlayerTranslations> - UI string overrides
+);
 ```
 
 **Priority rules:**
 
-| Layer | Wins over |
-|---|---|
+| Layer                                   | Wins over                        |
+| --------------------------------------- | -------------------------------- |
 | Per-player `[theme]` / `[config]` input | `withTheme()` / `withDefaults()` |
-| `config.theme` object | `withTheme()` |
-| `withTheme()` | Component stylesheet defaults |
+| `config.theme` object                   | `withTheme()`                    |
+| `withTheme()`                           | Component stylesheet defaults    |
 
 ---
 
@@ -748,24 +748,24 @@ providePlayer(
 
 All keys are optional in `withTranslations()`. Missing keys fall back to English defaults.
 
-| Key | Default | Description |
-|---|---|---|
-| `play` | `'Play (k)'` | Play button tooltip |
-| `pause` | `'Pause (k)'` | Pause button tooltip |
-| `subtitles` | `'Subtitles (c)'` | Subtitles toggle tooltip |
-| `pip` | `'Picture in picture (i)'` | PiP button tooltip |
-| `fullscreen` | `'Fullscreen (f)'` | Enter-fullscreen tooltip |
-| `exitFullscreen` | `'Exit fullscreen (f)'` | Exit-fullscreen tooltip |
-| `watchOnYouTube` | `'Watch on YouTube'` | YouTube link title |
-| `live` | `'LIVE'` | Live-stream badge text |
-| `settings` | `'Settings'` | Settings panel header |
-| `quality` | `'Quality'` | Quality row / sub-panel heading |
-| `speed` | `'Speed'` | Speed row / sub-panel heading |
-| `captionsTracks` | `'Subtitles'` | Captions row / sub-panel heading |
-| `auto` | `'Auto'` | ABR quality option label |
-| `normalSpeed` | `'Normal'` | 1× speed option label |
-| `subtitlesOff` | `'Off'` | Subtitles disabled option |
-| `subtitlesEnabled` | `'On'` | Fallback when track has no label |
+| Key                | Default                    | Description                      |
+| ------------------ | -------------------------- | -------------------------------- |
+| `play`             | `'Play (k)'`               | Play button tooltip              |
+| `pause`            | `'Pause (k)'`              | Pause button tooltip             |
+| `subtitles`        | `'Subtitles (c)'`          | Subtitles toggle tooltip         |
+| `pip`              | `'Picture in picture (i)'` | PiP button tooltip               |
+| `fullscreen`       | `'Fullscreen (f)'`         | Enter-fullscreen tooltip         |
+| `exitFullscreen`   | `'Exit fullscreen (f)'`    | Exit-fullscreen tooltip          |
+| `watchOnYouTube`   | `'Watch on YouTube'`       | YouTube link title               |
+| `live`             | `'LIVE'`                   | Live-stream badge text           |
+| `settings`         | `'Settings'`               | Settings panel header            |
+| `quality`          | `'Quality'`                | Quality row / sub-panel heading  |
+| `speed`            | `'Speed'`                  | Speed row / sub-panel heading    |
+| `captionsTracks`   | `'Subtitles'`              | Captions row / sub-panel heading |
+| `auto`             | `'Auto'`                   | ABR quality option label         |
+| `normalSpeed`      | `'Normal'`                 | 1× speed option label            |
+| `subtitlesOff`     | `'Off'`                    | Subtitles disabled option        |
+| `subtitlesEnabled` | `'On'`                     | Fallback when track has no label |
 
 ---
 
@@ -784,22 +784,22 @@ All keys are optional in `withTranslations()`. Missing keys fall back to English
 
 ### `<ngx-sp-player>` Outputs
 
-| Output             | Payload                              | When                                                          |
-| ------------------ | ------------------------------------ | ------------------------------------------------------------- |
-| `ready`            | `void`                               | Player finished initialising and is ready to play             |
-| `stateChange`      | `PlayerState`                        | Any state change — full snapshot on every mutation            |
-| `playerError`      | `unknown`                            | Fatal or recoverable adapter error                            |
-| `played`           | `void`                               | Playback starts or resumes                                    |
-| `paused`           | `void`                               | Playback pauses                                               |
-| `videoEnded`       | `void`                               | Media reaches its natural end                                 |
-| `timeUpdate`       | `number`                             | Current position in seconds (≈ every 250 ms while playing)    |
-| `durationChange`   | `number`                             | Total duration detected or changed (seconds)                  |
-| `volumeChange`     | `{ volume: number; muted: boolean }` | Volume level or mute state changed                            |
-| `qualityChange`    | `string`                             | Active quality label changed (e.g. `'1080p'`, `'auto'`)       |
-| `bufferingChange`  | `boolean`                            | `true` when buffering starts, `false` when it ends            |
-| `subtitleChange`   | `string \| number \| null`           | Active subtitle track changed (`null` = disabled)             |
-| `fullscreenChange` | `boolean`                            | Player enters (`true`) or exits (`false`) fullscreen          |
-| `pipChange`        | `boolean`                            | Player enters (`true`) or exits (`false`) Picture-in-Picture  |
+| Output             | Payload                              | When                                                         |
+| ------------------ | ------------------------------------ | ------------------------------------------------------------ |
+| `ready`            | `void`                               | Player finished initialising and is ready to play            |
+| `stateChange`      | `PlayerState`                        | Any state change - full snapshot on every mutation           |
+| `playerError`      | `unknown`                            | Fatal or recoverable adapter error                           |
+| `played`           | `void`                               | Playback starts or resumes                                   |
+| `paused`           | `void`                               | Playback pauses                                              |
+| `videoEnded`       | `void`                               | Media reaches its natural end                                |
+| `timeUpdate`       | `number`                             | Current position in seconds (≈ every 250 ms while playing)   |
+| `durationChange`   | `number`                             | Total duration detected or changed (seconds)                 |
+| `volumeChange`     | `{ volume: number; muted: boolean }` | Volume level or mute state changed                           |
+| `qualityChange`    | `string`                             | Active quality label changed (e.g. `'1080p'`, `'auto'`)      |
+| `bufferingChange`  | `boolean`                            | `true` when buffering starts, `false` when it ends           |
+| `subtitleChange`   | `string \| number \| null`           | Active subtitle track changed (`null` = disabled)            |
+| `fullscreenChange` | `boolean`                            | Player enters (`true`) or exits (`false`) fullscreen         |
+| `pipChange`        | `boolean`                            | Player enters (`true`) or exits (`false`) Picture-in-Picture |
 
 ### `PlayerEvents` Callback API
 
@@ -1033,17 +1033,17 @@ npm run type-check    # TypeScript type-check without emitting
 
 The showcase app (`projects/app`) enforces Angular build budgets to catch bundle bloat early:
 
-| Budget type         | Warning threshold | Error threshold |
-|---------------------|:-----------------:|:---------------:|
-| `initial` (total JS+CSS) | 3 MB         | 5 MB            |
-| `anyComponentStyle` | 40 kB             | 80 kB           |
+| Budget type              | Warning threshold | Error threshold |
+| ------------------------ | :---------------: | :-------------: |
+| `initial` (total JS+CSS) |       3 MB        |      5 MB       |
+| `anyComponentStyle`      |       40 kB       |      80 kB      |
 
 Current production output (approximate):
 
 | Chunk        | Raw size | Transferred (gzip) |
-|--------------|:--------:|:------------------:|
-| `main.js`    | ~2.06 MB | ~506 kB            |
-| `styles.css` | ~16 kB   | ~1.2 kB            |
+| ------------ | :------: | :----------------: |
+| `main.js`    | ~2.06 MB |      ~506 kB       |
+| `styles.css` |  ~16 kB  |      ~1.2 kB       |
 
 Budgets are configured in `angular.json` under `projects › showcase › architect › build › configurations › production › budgets`.
 
@@ -1065,7 +1065,7 @@ push to main
        └─ actions/deploy-pages@v4   → GitHub Pages
 ```
 
-- Pull requests run only the `ci` job (build + lint + type-check) — no deployment.
+- Pull requests run only the `ci` job (build + lint + type-check) - no deployment.
 - The `concurrency` group cancels any in-progress run for the same ref, so rapid pushes never queue duplicate deployments.
 
 ### Adding a New Adapter

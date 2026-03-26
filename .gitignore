@@ -11,7 +11,7 @@
 npm-debug.log
 yarn-error.log
 
-# Lock files (keep only one — uncommit the one you don't use)
+# Lock files (keep only one - uncommit the one you don't use)
 # bun.lockb
 bun.lock
 
