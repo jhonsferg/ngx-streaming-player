@@ -287,6 +287,8 @@ export interface PlayerState {
   isLive: boolean;
   /** Whether subtitles or captions are currently rendering. */
   subtitlesEnabled: boolean;
+  /** `true` when the media has reached its natural end. */
+  isEnded: boolean;
   /** Last error object or message; `null` when no error has occurred. */
   error: any | null;
 }
@@ -343,6 +345,21 @@ export interface PlayerEvents {
    * @param isPiP - `true` on enter, `false` on exit.
    */
   onPiPChange?: (isPiP: boolean) => void;
+  /**
+   * Called when the total media duration is first determined or changes.
+   * @param duration - Duration in seconds.
+   */
+  onDurationChange?: (duration: number) => void;
+  /**
+   * Called when the buffering state transitions.
+   * @param buffering - `true` when buffering starts, `false` when it ends.
+   */
+  onBufferingChange?: (buffering: boolean) => void;
+  /**
+   * Called when the active subtitle track changes.
+   * @param id - The track ID that was activated, or `null` when subtitles are disabled.
+   */
+  onSubtitleChange?: (id: string | number | null) => void;
   /**
    * Called when a recoverable or fatal error occurs.
    * @param error - Underlying error object or descriptive string.
