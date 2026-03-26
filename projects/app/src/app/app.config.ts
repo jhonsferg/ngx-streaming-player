@@ -1,5 +1,5 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
-import { providePlayer, withTheme, withDefaults, withTranslations } from '@jhonsferg/ngx-streaming-player';
+import { providePlayer, withTheme, withDefaults, withTranslations } from 'ngx-streaming-player';
 
 export const appConfig: ApplicationConfig = {
   providers: [

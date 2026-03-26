@@ -11,7 +11,7 @@ import {
   StreamingPlayerComponent,
   PlayerConfig,
   NgxPlayerControlService,
-} from '@jhonsferg/ngx-streaming-player';
+} from 'ngx-streaming-player';
 import { LazyPlayerDirective } from '../../lazy-player.directive';
 
 export interface PlayerEntry {

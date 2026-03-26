@@ -3,7 +3,7 @@ import {
   StreamingPlayerComponent,
   PlayerConfig,
   NgxPlayerControlService,
-} from '@jhonsferg/ngx-streaming-player';
+} from 'ngx-streaming-player';
 
 @Component({
   selector: 'app-demo',

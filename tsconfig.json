@@ -8,7 +8,7 @@
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "paths": {
-      "@jhonsferg/ngx-streaming-player": [
+      "ngx-streaming-player": [
         "./projects/ngx-streaming-player/src/public-api"
       ]
     },
