@@ -1,0 +1,114 @@
+<section class="section" id="features">
+  <div class="section__header">
+    <h2 class="section__title">Features</h2>
+  </div>
+  <div class="features-grid">
+    <div class="feat-card">
+      <div class="feat-card__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.82a16 16 0 0 0 6 6l.98-.98a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z" />
+        </svg>
+      </div>
+      <h3>HLS &amp; DASH</h3>
+      <p>
+        Adaptive streaming via hls.js and dash.js. Supports live streams and VOD. Automatic
+        protocol detection by URL extension.
+      </p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-card__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <circle cx="12" cy="12" r="10" />
+          <circle cx="12" cy="12" r="3" fill="currentColor" stroke="none" />
+        </svg>
+      </div>
+      <h3>Live Detection</h3>
+      <p>
+        Automatically detects live streams via <code>LEVEL_LOADED</code> (HLS),
+        <code>isDynamic()</code> (DASH). Shows animated LIVE badge and hides irrelevant
+        controls.
+      </p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-card__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M23 7l-7 5 7 5V7z" />
+          <rect x="1" y="5" width="15" height="14" rx="2" />
+        </svg>
+      </div>
+      <h3>Picture-in-Picture</h3>
+      <p>
+        Native browser PiP support. Automatically disabled for YouTube (iframe API
+        restriction). Guards <code>readyState >= 1</code> before requesting PiP.
+      </p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-card__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M17 1l4 4-4 4" />
+          <path d="M3 11V9a4 4 0 0 1 4-4h14" />
+          <path d="M7 23l-4-4 4-4" />
+          <path d="M21 13v2a4 4 0 0 1-4 4H3" />
+        </svg>
+      </div>
+      <h3>Hot-swap Source</h3>
+      <p>
+        Change <code>src</code> binding or call <code>NgxPlayerControlService.load()</code> to
+        swap the source live. Prior state is cleared; volume and mute are preserved.
+      </p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-card__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M12 20h9" />
+          <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+        </svg>
+      </div>
+      <h3>CSS Theming</h3>
+      <p>
+        CSS custom properties with <code>--ngx-sp-*</code> prefix. Change colors, radius, and
+        control size via the <code>theme</code> input or directly in CSS.
+      </p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-card__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+        </svg>
+      </div>
+      <h3>Angular Signals</h3>
+      <p>
+        Fully reactive API with <code>input()</code>, <code>output()</code>,
+        <code>computed()</code> and <code>effect()</code> from Angular 17+. OnPush change
+        detection throughout.
+      </p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-card__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <rect x="2" y="3" width="9" height="7" rx="1" />
+          <rect x="13" y="3" width="9" height="7" rx="1" />
+          <rect x="2" y="14" width="9" height="7" rx="1" />
+          <rect x="13" y="14" width="9" height="7" rx="1" />
+        </svg>
+      </div>
+      <h3>Multi-player</h3>
+      <p>
+        Multiple simultaneous instances via unique <code>playerId</code>. Each instance gets
+        its own isolated <code>PlayerService</code> and <code>PlayerStateService</code>.
+      </p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-card__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+        </svg>
+      </div>
+      <h3>Subtitles</h3>
+      <p>
+        Subtitle support for HLS, DASH and native MP4. Automatic track detection. Language
+        selector in the settings menu.
+      </p>
+    </div>
+  </div>
+</section>
