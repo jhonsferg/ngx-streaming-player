@@ -128,6 +128,18 @@ export class NativeAdapter implements IPlayerAdapter {
    * Every listener uses the shared `AbortController` signal so that calling
    * `abortController.abort()` in `destroy()` removes them all at once,
    * preventing any stale callbacks from firing after the adapter is torn down.
+   *
+   * Event mappings include:
+   * - `play` → `setPlaying(true)`
+   * - `pause` → `setPlaying(false)`
+   * - `waiting` → `setBuffering(true)`
+   * - `playing` / `canplay` → `setBuffering(false)`
+   * - `timeupdate` → `setCurrentTime()`
+   * - `durationchange` → `setDuration()` + `setLive()` for infinite streams
+   * - `volumechange` → `setVolume()` + `setMuted()`
+   * - `ratechange` → `setPlaybackRate()`
+   * - `ended` → `setPlaying(false)` + `setEnded(true)`
+   * - `error` → `setError()`
    */
   private setupEventListeners(): void {
     const v = this.videoElement;
