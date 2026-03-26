@@ -7,7 +7,7 @@
  * `DEFAULT_PLAYER_TRANSLATIONS`.
  *
  * @example
- * // app.config.ts — Spanish locale
+ * // app.config.ts - Spanish locale
  * export const appConfig: ApplicationConfig = {
  *   providers: [
  *     providePlayer(
@@ -33,10 +33,10 @@
  *
  * Every property maps to a visible label, tooltip, or status string rendered
  * by one of the player sub-components.  Supply a `Partial<PlayerTranslations>`
- * to `withTranslations()` — missing keys fall back to `DEFAULT_PLAYER_TRANSLATIONS`.
+ * to `withTranslations()` - missing keys fall back to `DEFAULT_PLAYER_TRANSLATIONS`.
  */
 export interface PlayerTranslations {
-  // ── Controls bar — button tooltips ─────────────────────────────────────────
+  // ── Controls bar - button tooltips ─────────────────────────────────────────
 
   /** Tooltip shown on the play button when the player is paused. */
   play: string;
@@ -59,7 +59,7 @@ export interface PlayerTranslations {
   /** Title / tooltip for the "Watch on YouTube" link shown during YT playback. */
   watchOnYouTube: string;
 
-  // ── Controls bar — status labels ───────────────────────────────────────────
+  // ── Controls bar - status labels ───────────────────────────────────────────
 
   /** Text of the live-stream badge shown in place of the time display. */
   live: string;

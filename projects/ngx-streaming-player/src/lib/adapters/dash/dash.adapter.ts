@@ -102,7 +102,7 @@ export class DashAdapter implements IPlayerAdapter {
             this.stateService.setLive(true);
           }
         } catch {
-          // intentionally swallowed — dash.js may throw on unavailable APIs
+          // intentionally swallowed - dash.js may throw on unavailable APIs
         }
 
         // Detect available subtitle / text tracks.
@@ -116,7 +116,7 @@ export class DashAdapter implements IPlayerAdapter {
           this.stateService.setSupportsSubtitles(subtitleTracks.length > 0);
           this.stateService.setAvailableSubtitles(subtitleTracks);
         } catch {
-          // intentionally swallowed — dash.js may throw on unavailable APIs
+          // intentionally swallowed - dash.js may throw on unavailable APIs
         }
       });
 
@@ -139,7 +139,7 @@ export class DashAdapter implements IPlayerAdapter {
       );
 
       this.dash.on(dashjs.MediaPlayer.events['ERROR'], (e: any) => {
-        // Skip transient download errors (fragment fetch failures) —
+        // Skip transient download errors (fragment fetch failures) -
         // dash.js recovers automatically from these.
         if (e?.error === 'download') return;
         this.stateService.setError(e?.error || e);
@@ -198,10 +198,14 @@ export class DashAdapter implements IPlayerAdapter {
       o,
     );
     v.addEventListener('ratechange', () => this.stateService.setPlaybackRate(v.playbackRate), o);
-    v.addEventListener('ended', () => {
-      this.stateService.setPlaying(false);
-      this.stateService.setEnded(true);
-    }, o);
+    v.addEventListener(
+      'ended',
+      () => {
+        this.stateService.setPlaying(false);
+        this.stateService.setEnded(true);
+      },
+      o,
+    );
     v.addEventListener('error', (e) => this.stateService.setError(e), o);
   }
 
@@ -296,7 +300,7 @@ export class DashAdapter implements IPlayerAdapter {
       try {
         this.dash.setTextTrack(-1);
       } catch {
-        // intentionally swallowed — dash.js may throw on unavailable APIs
+        // intentionally swallowed - dash.js may throw on unavailable APIs
       }
       this.stateService.setSubtitles(false);
       this.stateService.setActiveSubtitleId(null);
@@ -307,7 +311,7 @@ export class DashAdapter implements IPlayerAdapter {
         if (target) this.dash.setCurrentTrack(target);
         this.dash.setTextTrack(0);
       } catch {
-        // intentionally swallowed — dash.js may throw on unavailable APIs
+        // intentionally swallowed - dash.js may throw on unavailable APIs
       }
       this.stateService.setSubtitles(true);
       this.stateService.setActiveSubtitleId(id);

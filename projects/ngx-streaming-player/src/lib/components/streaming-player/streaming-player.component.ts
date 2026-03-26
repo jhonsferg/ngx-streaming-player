@@ -1,7 +1,7 @@
 /**
  * @fileoverview Main entry-point component for ngx-streaming-player.
  *
- * Re-exports nothing — this file contains only the `StreamingPlayerComponent`
+ * Re-exports nothing - this file contains only the `StreamingPlayerComponent`
  * class. Import from `ngx-streaming-player` (the public API barrel) instead
  * of from this path directly.
  */
@@ -32,16 +32,16 @@ import { PlayerControlsComponent } from '../player-controls/player-controls.comp
 import { PLAYER_DEFAULTS, PLAYER_THEME } from '../../tokens/player.tokens';
 
 /**
- * Main streaming player component — the only element a consumer needs to add
+ * Main streaming player component - the only element a consumer needs to add
  * to a template to embed a fully-featured video player.
  *
  * `StreamingPlayerComponent` orchestrates three sub-systems:
- * - **Adapter selection** — delegates protocol detection and media loading to
+ * - **Adapter selection** - delegates protocol detection and media loading to
  *   `PlayerService`, which creates the appropriate `IPlayerAdapter`.
- * - **Reactive state** — all UI signals (`showControls`, `isHovering`,
+ * - **Reactive state** - all UI signals (`showControls`, `isHovering`,
  *   `showRipple`) are Angular `signal()` instances updated in response to
  *   user interactions.
- * - **Public API** — exposes `play()`, `pause()`, `seek()`, `load()`,
+ * - **Public API** - exposes `play()`, `pause()`, `seek()`, `load()`,
  *   `toggleFullscreen()`, and `togglePiP()` for imperative control via
  *   `@ViewChild`.  The same capabilities are also available globally via
  *   `NgxPlayerControlService`.
@@ -294,16 +294,16 @@ export class StreamingPlayerComponent implements OnInit, AfterViewInit, OnDestro
    */
   private readonly _skipFirst = new Set<string>();
 
-  /** Previous `isPlaying` value — used to distinguish play from pause. */
+  /** Previous `isPlaying` value - used to distinguish play from pause. */
   private _prevPlaying: boolean | null = null;
 
-  /** Previous `isBuffering` value — used to emit transitions only. */
+  /** Previous `isBuffering` value - used to emit transitions only. */
   private _prevBuffering: boolean | null = null;
 
-  /** Previous `isFullscreen` value — used to emit transitions only. */
+  /** Previous `isFullscreen` value - used to emit transitions only. */
   private _prevFullscreen: boolean | null = null;
 
-  /** Previous `isPiP` value — used to emit transitions only. */
+  /** Previous `isPiP` value - used to emit transitions only. */
   private _prevPiP: boolean | null = null;
 
   /**
@@ -326,14 +326,14 @@ export class StreamingPlayerComponent implements OnInit, AfterViewInit, OnDestro
 
   /**
    * Optional global theme baseline provided via `withTheme()` inside
-   * `providePlayer()`.  Merged as the lowest-priority layer — component-level
+   * `providePlayer()`.  Merged as the lowest-priority layer - component-level
    * `[theme]` inputs and `config.theme` always override these global values.
    */
   private readonly globalTheme = inject(PLAYER_THEME, { optional: true });
 
   /**
    * Optional global config defaults provided via `withDefaults()` inside
-   * `providePlayer()`.  Merged as the lowest-priority layer — component-level
+   * `providePlayer()`.  Merged as the lowest-priority layer - component-level
    * `[config]` bindings and shorthand inputs always take precedence.
    */
   private readonly globalDefaults = inject(PLAYER_DEFAULTS, { optional: true });
@@ -420,10 +420,13 @@ export class StreamingPlayerComponent implements OnInit, AfterViewInit, OnDestro
       this.playerService.loadSource(cfg.src, cfg);
     });
 
-    // play / pause — emit only on actual transitions, skip initial value.
+    // play / pause - emit only on actual transitions, skip initial value.
     effect(() => {
       const playing = this.stateService.isPlaying();
-      if (this._prevPlaying === null) { this._prevPlaying = playing; return; }
+      if (this._prevPlaying === null) {
+        this._prevPlaying = playing;
+        return;
+      }
       if (playing === this._prevPlaying) return;
       this._prevPlaying = playing;
       if (playing) {
@@ -435,7 +438,7 @@ export class StreamingPlayerComponent implements OnInit, AfterViewInit, OnDestro
       }
     });
 
-    // ended — fires only when the signal transitions to true.
+    // ended - fires only when the signal transitions to true.
     effect(() => {
       if (this.stateService.isEnded()) {
         this.videoEnded.emit();
@@ -443,7 +446,7 @@ export class StreamingPlayerComponent implements OnInit, AfterViewInit, OnDestro
       }
     });
 
-    // timeUpdate — skip initial 0, emit every subsequent change.
+    // timeUpdate - skip initial 0, emit every subsequent change.
     effect(() => {
       const t = this.stateService.currentTime();
       if (t > 0) {
@@ -452,7 +455,7 @@ export class StreamingPlayerComponent implements OnInit, AfterViewInit, OnDestro
       }
     });
 
-    // durationChange — skip initial 0 (metadata not yet loaded).
+    // durationChange - skip initial 0 (metadata not yet loaded).
     effect(() => {
       const d = this.stateService.duration();
       if (d > 0) {
@@ -461,55 +464,73 @@ export class StreamingPlayerComponent implements OnInit, AfterViewInit, OnDestro
       }
     });
 
-    // volumeChange — skip the first run (initial defaults).
+    // volumeChange - skip the first run (initial defaults).
     effect(() => {
       const volume = this.stateService.volume();
       const muted = this.stateService.muted();
-      if (!this._skipFirst.has('volume')) { this._skipFirst.add('volume'); return; }
+      if (!this._skipFirst.has('volume')) {
+        this._skipFirst.add('volume');
+        return;
+      }
       this.volumeChange.emit({ volume, muted });
       this.events()?.onVolumeChange?.(volume);
     });
 
-    // qualityChange — skip the first run ('auto' default).
+    // qualityChange - skip the first run ('auto' default).
     effect(() => {
       const q = this.stateService.quality();
-      if (!this._skipFirst.has('quality')) { this._skipFirst.add('quality'); return; }
+      if (!this._skipFirst.has('quality')) {
+        this._skipFirst.add('quality');
+        return;
+      }
       this.qualityChange.emit(q);
       this.events()?.onQualityChange?.(q);
     });
 
-    // bufferingChange — emit only on transitions, skip initial value.
+    // bufferingChange - emit only on transitions, skip initial value.
     effect(() => {
       const buffering = this.stateService.isBuffering();
-      if (this._prevBuffering === null) { this._prevBuffering = buffering; return; }
+      if (this._prevBuffering === null) {
+        this._prevBuffering = buffering;
+        return;
+      }
       if (buffering === this._prevBuffering) return;
       this._prevBuffering = buffering;
       this.bufferingChange.emit(buffering);
       this.events()?.onBufferingChange?.(buffering);
     });
 
-    // subtitleChange — skip first run (null default).
+    // subtitleChange - skip first run (null default).
     effect(() => {
       const id = this.stateService.activeSubtitleId();
-      if (!this._skipFirst.has('subtitle')) { this._skipFirst.add('subtitle'); return; }
+      if (!this._skipFirst.has('subtitle')) {
+        this._skipFirst.add('subtitle');
+        return;
+      }
       this.subtitleChange.emit(id);
       this.events()?.onSubtitleChange?.(id);
     });
 
-    // fullscreenChange — emit only on transitions, skip initial false.
+    // fullscreenChange - emit only on transitions, skip initial false.
     effect(() => {
       const fs = this.stateService.isFullscreen();
-      if (this._prevFullscreen === null) { this._prevFullscreen = fs; return; }
+      if (this._prevFullscreen === null) {
+        this._prevFullscreen = fs;
+        return;
+      }
       if (fs === this._prevFullscreen) return;
       this._prevFullscreen = fs;
       this.fullscreenChange.emit(fs);
       this.events()?.onFullscreenChange?.(fs);
     });
 
-    // pipChange — emit only on transitions, skip initial false.
+    // pipChange - emit only on transitions, skip initial false.
     effect(() => {
       const pip = this.stateService.isPiP();
-      if (this._prevPiP === null) { this._prevPiP = pip; return; }
+      if (this._prevPiP === null) {
+        this._prevPiP = pip;
+        return;
+      }
       if (pip === this._prevPiP) return;
       this._prevPiP = pip;
       this.pipChange.emit(pip);
@@ -519,7 +540,10 @@ export class StreamingPlayerComponent implements OnInit, AfterViewInit, OnDestro
 
   /** @internal Returns `true` on the first call for a given key, `false` thereafter. */
   private skipFirst(key: string): boolean {
-    if (!this._skipFirst.has(key)) { this._skipFirst.add(key); return true; }
+    if (!this._skipFirst.has(key)) {
+      this._skipFirst.add(key);
+      return true;
+    }
     return false;
   }
 
@@ -672,7 +696,7 @@ export class StreamingPlayerComponent implements OnInit, AfterViewInit, OnDestro
 
   /**
    * Clears the hovering flag when the cursor leaves the player boundary.
-   * Does **not** immediately hide the controls — the auto-hide timer handles that.
+   * Does **not** immediately hide the controls - the auto-hide timer handles that.
    */
   onMouseLeave(): void {
     this.isHovering.set(false);

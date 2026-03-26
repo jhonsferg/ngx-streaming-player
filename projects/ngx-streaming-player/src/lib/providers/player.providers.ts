@@ -7,7 +7,7 @@
  * `AppModule` providers array.
  *
  * @example
- * // app.config.ts — standalone app
+ * // app.config.ts - standalone app
  * import { providePlayer, withTranslations, withTheme, withDefaults } from 'ngx-streaming-player';
  *
  * export const appConfig: ApplicationConfig = {
@@ -21,7 +21,7 @@
  * };
  *
  * @example
- * // app.module.ts — NgModule app
+ * // app.module.ts - NgModule app
  * import { providePlayer, withTheme } from 'ngx-streaming-player';
  *
  * @NgModule({
@@ -61,7 +61,7 @@ export enum PlayerFeatureKind {
  * Opaque token returned by every `withXxx()` feature function.
  *
  * Pass one or more instances to `providePlayer()`.  Consumers should never
- * construct this type directly — always use the dedicated factory functions.
+ * construct this type directly - always use the dedicated factory functions.
  *
  * The `ɵ`-prefixed fields are intentionally not documented in public-facing
  * docs and must not be accessed at runtime.
@@ -90,7 +90,7 @@ export interface PlayerFeature<K extends PlayerFeatureKind = PlayerFeatureKind> 
  * @returns An `EnvironmentProviders` bundle compatible with Angular's DI.
  *
  * @example
- * // Minimal — English defaults, no customisation
+ * // Minimal - English defaults, no customisation
  * providePlayer()
  *
  * @example
@@ -101,9 +101,7 @@ export interface PlayerFeature<K extends PlayerFeatureKind = PlayerFeatureKind> 
  *   withDefaults({ enableKeyboard: true, enablePiP: true, autoplay: false }),
  * )
  */
-export function providePlayer(
-  ...features: PlayerFeature[]
-): EnvironmentProviders {
+export function providePlayer(...features: PlayerFeature[]): EnvironmentProviders {
   const providers: Provider[] = [];
   for (const feature of features) {
     providers.push(...feature.ɵproviders);
@@ -165,9 +163,7 @@ export function withTranslations(
  *   borderRadius:   '8px',
  * })
  */
-export function withTheme(
-  theme: Partial<PlayerTheme>,
-): PlayerFeature<PlayerFeatureKind.Theme> {
+export function withTheme(theme: Partial<PlayerTheme>): PlayerFeature<PlayerFeatureKind.Theme> {
   return {
     ɵkind: PlayerFeatureKind.Theme,
     ɵproviders: [{ provide: PLAYER_THEME, useValue: theme }],

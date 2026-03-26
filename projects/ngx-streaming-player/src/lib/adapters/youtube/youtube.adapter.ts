@@ -34,23 +34,23 @@ const QUALITY_MAP: Record<string, string> = {
  *
  * ### Key design decisions
  *
- * **API loading strategy** — The YouTube IFrame API script is injected into
+ * **API loading strategy** - The YouTube IFrame API script is injected into
  * the document once. A chain-safe `onYouTubeIframeAPIReady` callback is used
  * (it preserves any previously registered handler) so that multiple player
  * instances on the same page do not race each other.
  *
- * **Container / API race condition** — `setContainer()` and `initialize()` can
+ * **Container / API race condition** - `setContainer()` and `initialize()` can
  * arrive in any order. Each one checks whether the other pre-condition is met
  * and calls `createPlayer()` when both are available.
  *
- * **Time polling** — The IFrame API does not fire DOM-style `timeupdate`
+ * **Time polling** - The IFrame API does not fire DOM-style `timeupdate`
  * events. A 250 ms `setInterval` polls `getCurrentTime()` and
  * `getVideoLoadedFraction()` while the player is in the PLAYING state.
  *
  * ### Two-phase quality change
  *
  * YouTube does not honour quality requests made while the player is in BUFFERING
- * state — its adaptive bandwidth probe during buffering will silently downgrade
+ * state - its adaptive bandwidth probe during buffering will silently downgrade
  * the `suggestedQuality` set in Phase 1.  The fix is a two-phase protocol:
  *
  * - **Phase 1** (`setQuality`): calls `loadVideoById` with `suggestedQuality`
@@ -65,11 +65,11 @@ const QUALITY_MAP: Record<string, string> = {
  * overwritten.  After Phase 2 clears the flag, the next `onPlaybackQualityChange`
  * event carries the confirmed quality and updates the state correctly.
  *
- * **PiP** — The YouTube iframe renders in a sandboxed `<iframe>`. The browser
+ * **PiP** - The YouTube iframe renders in a sandboxed `<iframe>`. The browser
  * PiP API is not available for iframe content, so `setSupportsPiP(false)` is
  * called unconditionally.
  *
- * **Subtitles** — Subtitle tracks are discovered by loading the `'captions'`
+ * **Subtitles** - Subtitle tracks are discovered by loading the `'captions'`
  * module and querying `getOption('captions', 'tracklist')` after a 1 500 ms
  * delay (the module populates the tracklist asynchronously). The module is
  * unloaded again if subtitles are currently off to avoid showing the YouTube
@@ -129,7 +129,7 @@ export class YouTubeAdapter implements IPlayerAdapter {
    *
    * This method is called by `PlayerService.setYouTubeContainer()` after
    * `ngAfterViewInit`. If the IFrame API has already loaded by the time this
-   * is called, `createPlayer()` is triggered immediately — solving the race
+   * is called, `createPlayer()` is triggered immediately - solving the race
    * condition where `initialize()` fires before the container is in the DOM.
    *
    * @param container - Host element for the YouTube iframe.
@@ -157,7 +157,7 @@ export class YouTubeAdapter implements IPlayerAdapter {
   initialize(config: PlayerConfig): void {
     this.config = config;
     this.stateService.setYouTube(true);
-    // YouTube renders in an iframe — browser PiP API is not available.
+    // YouTube renders in an iframe - browser PiP API is not available.
     this.stateService.setSupportsPiP(false);
 
     const videoId = this.extractYouTubeId(config.src);
@@ -297,7 +297,7 @@ export class YouTubeAdapter implements IPlayerAdapter {
     try {
       this.ytPlayer.loadModule('captions');
     } catch {
-      // intentionally swallowed — YouTube IFrame API may throw on unavailable methods
+      // intentionally swallowed - YouTube IFrame API may throw on unavailable methods
     }
 
     setTimeout(() => {
@@ -323,7 +323,7 @@ export class YouTubeAdapter implements IPlayerAdapter {
         try {
           this.ytPlayer?.unloadModule('captions');
         } catch {
-          // intentionally swallowed — YouTube IFrame API may throw on unavailable methods
+          // intentionally swallowed - YouTube IFrame API may throw on unavailable methods
         }
       }
     }, 1500);
@@ -361,7 +361,7 @@ export class YouTubeAdapter implements IPlayerAdapter {
           // overrides that before new segments are fetched.
           // IMPORTANT: clear pendingYtQuality BEFORE calling setPlaybackQuality
           // so the resulting onPlaybackQualityChange event is NOT skipped by
-          // the guard in the event handler — that event carries the confirmed quality.
+          // the guard in the event handler - that event carries the confirmed quality.
           const q = this.pendingYtQuality;
           this.pendingYtQuality = null;
           this.ytPlayer.setPlaybackQuality(q);
@@ -422,7 +422,7 @@ export class YouTubeAdapter implements IPlayerAdapter {
    *
    * `'auto'` and `'default'` keys are filtered out from the raw level list
    * and `'auto'` is prepended as the first option. The current quality is
-   * intentionally **not** read here — `onPlaybackQualityChange` is the sole
+   * intentionally **not** read here - `onPlaybackQualityChange` is the sole
    * authority on the active quality to avoid race conditions with Phase 2 of
    * the quality-change flow.
    */
@@ -443,7 +443,7 @@ export class YouTubeAdapter implements IPlayerAdapter {
   /**
    * Starts or resumes YouTube video playback.
    *
-   * @returns Always resolves immediately — the IFrame API does not return a
+   * @returns Always resolves immediately - the IFrame API does not return a
    *   Promise from `playVideo()`.
    */
   play(): Promise<void> {
@@ -527,7 +527,7 @@ export class YouTubeAdapter implements IPlayerAdapter {
    * - Calls `loadVideoById` with `suggestedQuality` to flush the buffer and
    *   reload from the current position at the requested quality.
    *
-   * **Phase 2** (`onPlayerStateChange` — PLAYING case):
+   * **Phase 2** (`onPlayerStateChange` - PLAYING case):
    * - Asserts `setPlaybackQuality` once the player enters PLAYING state to
    *   override any downgrade that YouTube's bandwidth probe may have applied
    *   during the BUFFERING phase.
@@ -587,7 +587,7 @@ export class YouTubeAdapter implements IPlayerAdapter {
       try {
         this.ytPlayer.unloadModule('captions');
       } catch {
-        // intentionally swallowed — YouTube IFrame API may throw on unavailable methods
+        // intentionally swallowed - YouTube IFrame API may throw on unavailable methods
       }
       this.stateService.setSubtitles(false);
       this.stateService.setActiveSubtitleId(null);
@@ -596,7 +596,7 @@ export class YouTubeAdapter implements IPlayerAdapter {
         this.ytPlayer.loadModule('captions');
         this.ytPlayer.setOption('captions', 'track', { languageCode: String(id) });
       } catch {
-        // intentionally swallowed — YouTube IFrame API may throw on unavailable methods
+        // intentionally swallowed - YouTube IFrame API may throw on unavailable methods
       }
       this.stateService.setSubtitles(true);
       this.stateService.setActiveSubtitleId(id);

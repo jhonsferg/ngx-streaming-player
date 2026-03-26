@@ -15,7 +15,7 @@ import { PlayerState, SubtitleTrack } from '../models/player.models';
  *   counterparts (`readonly quality`, `readonly currentQuality`, …) are derived
  *   with `.asReadonly()` so consumers can never write to them directly.
  * - The `state` computed signal aggregates all fields into a single
- *   `PlayerState` snapshot — useful for emitting the `stateChange` output or
+ *   `PlayerState` snapshot - useful for emitting the `stateChange` output or
  *   persisting the full snapshot to external stores.
  * - `reset()` restores every playback-related signal to its initial value
  *   while **preserving** `volume` and `muted` across hot-swaps so the user's
@@ -95,7 +95,7 @@ export class PlayerStateService {
   readonly quality = this._quality.asReadonly();
 
   /**
-   * Alias for {@link quality} — provided for semantic clarity in code that
+   * Alias for {@link quality} - provided for semantic clarity in code that
    * refers to the "current quality" rather than the concept of "quality".
    */
   readonly currentQuality = this._quality.asReadonly();

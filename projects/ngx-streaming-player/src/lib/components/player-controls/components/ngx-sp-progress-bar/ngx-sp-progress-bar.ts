@@ -14,10 +14,10 @@ import { CommonModule } from '@angular/common';
  * Seekable progress bar with a hover-time tooltip and a buffered indicator.
  *
  * The bar consists of three stacked layers:
- * 1. **Buffered track** — grey fill representing pre-loaded data.
- * 2. **Played track** — primary-colour fill for the portion already watched.
- * 3. **Ghost track** — semi-transparent preview of the cursor position.
- * 4. **Drag handle** — small circle at the current play position.
+ * 1. **Buffered track** - grey fill representing pre-loaded data.
+ * 2. **Played track** - primary-colour fill for the portion already watched.
+ * 3. **Ghost track** - semi-transparent preview of the cursor position.
+ * 4. **Drag handle** - small circle at the current play position.
  *
  * ### Drag behaviour
  * Drag is initiated on `mousedown` inside the bar and continues even if the

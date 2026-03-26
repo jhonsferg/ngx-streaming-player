@@ -143,7 +143,7 @@ export class HlsAdapter implements IPlayerAdapter {
               this.hls.recoverMediaError();
               break;
             default:
-              // Unrecoverable error — surface it to the UI.
+              // Unrecoverable error - surface it to the UI.
               this.stateService.setError(data);
               break;
           }
@@ -215,10 +215,14 @@ export class HlsAdapter implements IPlayerAdapter {
       o,
     );
     v.addEventListener('ratechange', () => this.stateService.setPlaybackRate(v.playbackRate), o);
-    v.addEventListener('ended', () => {
-      this.stateService.setPlaying(false);
-      this.stateService.setEnded(true);
-    }, o);
+    v.addEventListener(
+      'ended',
+      () => {
+        this.stateService.setPlaying(false);
+        this.stateService.setEnded(true);
+      },
+      o,
+    );
     v.addEventListener('error', (e) => this.stateService.setError(e), o);
   }
 

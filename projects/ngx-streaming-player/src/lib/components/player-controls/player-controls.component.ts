@@ -30,11 +30,11 @@ import {
  * Full-featured controls bar rendered inside `<ngx-sp-player>`.
  *
  * This component orchestrates all player-control sub-components:
- * - `<ngx-sp-progress-bar>` — seekable timeline with buffered indicator.
- * - `<ngx-sp-button>` — play/pause, skip, subtitle, PiP, fullscreen buttons.
- * - `<ngx-sp-volume-control>` — mute button + volume slider.
- * - `<ngx-sp-time-display>` — current time / total duration.
- * - `<ngx-sp-settings-menu>` — gear menu for speed, quality, and subtitles.
+ * - `<ngx-sp-progress-bar>` - seekable timeline with buffered indicator.
+ * - `<ngx-sp-button>` - play/pause, skip, subtitle, PiP, fullscreen buttons.
+ * - `<ngx-sp-volume-control>` - mute button + volume slider.
+ * - `<ngx-sp-time-display>` - current time / total duration.
+ * - `<ngx-sp-settings-menu>` - gear menu for speed, quality, and subtitles.
  *
  * `PlayerService` and `PlayerStateService` are injected directly (not passed
  * as `@Input`) because this component is always rendered inside the
@@ -47,7 +47,7 @@ import {
  * stays declarative.
  *
  * @example
- * <!-- Rendered automatically inside <ngx-sp-player> — do not use standalone -->
+ * <!-- Rendered automatically inside <ngx-sp-player> - do not use standalone -->
  * <ngx-sp-player-controls [config]="resolvedConfig"></ngx-sp-player-controls>
  */
 @Component({

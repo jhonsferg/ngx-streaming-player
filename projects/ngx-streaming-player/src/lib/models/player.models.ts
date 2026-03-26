@@ -12,10 +12,10 @@
  *
  * Individual component inputs (e.g. `[src]`, `[autoplay]`) take precedence
  * over the matching fields in this object when both are supplied at the same
- * time — they are merged inside `resolvedConfig`.
+ * time - they are merged inside `resolvedConfig`.
  *
  * @example
- * // Minimal — only `src` is required
+ * // Minimal - only `src` is required
  * const config: PlayerConfig = {
  *   src: 'https://example.com/stream.m3u8',
  * };
@@ -143,7 +143,7 @@ export interface PlayerConfig {
  * Every field defaults to `true` / enabled when omitted.
  *
  * @example
- * // Minimal bar — only play/pause and fullscreen visible
+ * // Minimal bar - only play/pause and fullscreen visible
  * const layout: PlayerControlsLayout = {
  *   showVolume: false,
  *   showProgress: false,
@@ -205,19 +205,19 @@ export interface PlayerControlsLayout {
  * };
  */
 export interface PlayerTheme {
-  /** `--ngx-sp-primary` — progress-bar fill and active-state highlight. */
+  /** `--ngx-sp-primary` - progress-bar fill and active-state highlight. */
   primaryColor?: string;
-  /** `--ngx-sp-secondary` — secondary interactive elements. */
+  /** `--ngx-sp-secondary` - secondary interactive elements. */
   secondaryColor?: string;
-  /** `--ngx-sp-accent` — hover highlights and tooltip backgrounds. */
+  /** `--ngx-sp-accent` - hover highlights and tooltip backgrounds. */
   accentColor?: string;
-  /** `--ngx-sp-bg-dark` — controls bar background. */
+  /** `--ngx-sp-bg-dark` - controls bar background. */
   backgroundColor?: string;
-  /** `--ngx-sp-text-light` — icon and label colour. */
+  /** `--ngx-sp-text-light` - icon and label colour. */
   textColor?: string;
-  /** `--ngx-sp-radius` — border-radius of the player container. */
+  /** `--ngx-sp-radius` - border-radius of the player container. */
   borderRadius?: string;
-  /** `--ngx-sp-control-size` — width and height of icon buttons. */
+  /** `--ngx-sp-control-size` - width and height of icon buttons. */
   controlSize?: string;
 }
 
@@ -225,10 +225,10 @@ export interface PlayerTheme {
  * Represents a single subtitle or caption track detected by an adapter.
  *
  * Track identifiers are adapter-specific:
- * - **NativeAdapter** — numeric index into `HTMLVideoElement.textTracks`.
- * - **HlsAdapter** — numeric `id` from the HLS.js subtitle track object.
- * - **DashAdapter** — the `id` string from the dash.js text-track object.
- * - **YouTubeAdapter** — the BCP-47 language code (e.g. `'en'`, `'es'`).
+ * - **NativeAdapter** - numeric index into `HTMLVideoElement.textTracks`.
+ * - **HlsAdapter** - numeric `id` from the HLS.js subtitle track object.
+ * - **DashAdapter** - the `id` string from the dash.js text-track object.
+ * - **YouTubeAdapter** - the BCP-47 language code (e.g. `'en'`, `'es'`).
  *
  * @example
  * const track: SubtitleTrack = {
@@ -465,7 +465,7 @@ export interface IPlayerAdapter {
    * Switches to the specified quality level.
    *
    * Adapters that do not support quality switching (e.g. `NativeAdapter`)
-   * **must** implement this as a no-op — never throw.
+   * **must** implement this as a no-op - never throw.
    *
    * @param quality - Quality label string as surfaced by
    *   `PlayerStateService.availableQualities()`, or `'auto'` to re-enable
@@ -494,7 +494,7 @@ export interface IPlayerAdapter {
    * instance, and removes all event listeners.
    *
    * Called by `PlayerService` before a hot-swap and during component
-   * destruction. Implementations must be idempotent — calling `destroy()`
+   * destruction. Implementations must be idempotent - calling `destroy()`
    * on an already-destroyed adapter must not throw.
    */
   destroy(): void;

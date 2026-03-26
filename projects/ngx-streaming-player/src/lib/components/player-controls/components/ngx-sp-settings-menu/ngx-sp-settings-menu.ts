@@ -10,10 +10,10 @@ import {
  * Settings (gear) menu with hierarchical sub-panels.
  *
  * The menu is a two-level panel:
- * - **Main panel** — shows rows for playback speed, quality, and (when
+ * - **Main panel** - shows rows for playback speed, quality, and (when
  *   available) subtitles. Each row displays the current selection and a
  *   chevron to navigate to the corresponding sub-panel.
- * - **Sub-panels** — `'speed'`, `'quality'`, `'subtitles'` — show a list of
+ * - **Sub-panels** - `'speed'`, `'quality'`, `'subtitles'` - show a list of
  *   options; selecting one emits the appropriate output and navigates back to
  *   `'main'`.
  *
@@ -308,7 +308,7 @@ export class NgxSpSettingsMenu {
   }
 
   /**
-   * Alias for `onNavigateMenu` — provides explicit typing at call sites
+   * Alias for `onNavigateMenu` - provides explicit typing at call sites
    * where the menu name is inferred from a string literal.
    *
    * @param menu - Target panel identifier.

@@ -9,7 +9,7 @@ import { Component, input } from '@angular/core';
  * `PlayerControlsComponent` as required inputs.
  *
  * The current-time value is displayed at full opacity; the duration is
- * rendered at 45 % opacity to create a visual hierarchy — matching the
+ * rendered at 45 % opacity to create a visual hierarchy - matching the
  * convention used by YouTube and other major video players.
  *
  * @example

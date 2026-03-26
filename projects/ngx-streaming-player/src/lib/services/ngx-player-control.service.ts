@@ -19,7 +19,7 @@ import { PlayerStateService } from './player-state.service';
  *
  * ### Single player (default ID)
  * When only one player is on the page the `playerId` parameter can be omitted
- * everywhere — it defaults to `'default'`.
+ * everywhere - it defaults to `'default'`.
  *
  * @example
  * // -- app.component.ts -----------------------------------------------------

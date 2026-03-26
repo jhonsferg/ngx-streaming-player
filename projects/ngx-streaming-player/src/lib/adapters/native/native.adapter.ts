@@ -11,7 +11,7 @@ import { IPlayerAdapter, PlayerConfig, SubtitleTrack } from '../../models/player
  *
  * All native DOM event listeners are registered with a shared
  * `AbortController` signal so that a single `abort()` call removes every
- * listener atomically — avoiding the "zombie listener" problem that can
+ * listener atomically - avoiding the "zombie listener" problem that can
  * trigger spurious state updates after `destroy()` is called.
  *
  * @implements {IPlayerAdapter}
@@ -171,10 +171,14 @@ export class NativeAdapter implements IPlayerAdapter {
       o,
     );
     v.addEventListener('ratechange', () => this.stateService.setPlaybackRate(v.playbackRate), o);
-    v.addEventListener('ended', () => {
-      this.stateService.setPlaying(false);
-      this.stateService.setEnded(true);
-    }, o);
+    v.addEventListener(
+      'ended',
+      () => {
+        this.stateService.setPlaying(false);
+        this.stateService.setEnded(true);
+      },
+      o,
+    );
     v.addEventListener('error', (e) => this.stateService.setError(e), o);
   }
 
@@ -248,7 +252,7 @@ export class NativeAdapter implements IPlayerAdapter {
   }
 
   /**
-   * No-op — native `<video>` does not support adaptive quality switching.
+   * No-op - native `<video>` does not support adaptive quality switching.
    *
    * @param _quality - Ignored.
    */

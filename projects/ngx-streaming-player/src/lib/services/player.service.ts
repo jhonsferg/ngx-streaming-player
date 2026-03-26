@@ -11,15 +11,15 @@ import { IPlayerAdapter, PlayerConfig, PlayerTheme } from '../models/player.mode
  * adapters.
  *
  * `PlayerService` is responsible for:
- * - **Adapter lifecycle** — detecting the streaming protocol, creating the
+ * - **Adapter lifecycle** - detecting the streaming protocol, creating the
  *   correct adapter, initialising it, and destroying it on hot-swap or
  *   component teardown.
- * - **Theme application** — converting `PlayerTheme` fields to CSS custom
+ * - **Theme application** - converting `PlayerTheme` fields to CSS custom
  *   properties set on the container element.
- * - **Unified playback API** — delegating `play`, `pause`, `seek`, volume,
+ * - **Unified playback API** - delegating `play`, `pause`, `seek`, volume,
  *   muted, playback rate, quality, subtitle, fullscreen, and PiP commands to
  *   the currently active adapter.
- * - **Hot-swap** — replacing the source at runtime without recreating the
+ * - **Hot-swap** - replacing the source at runtime without recreating the
  *   Angular component tree (see {@link loadSource}).
  *
  * ### Provided scope
