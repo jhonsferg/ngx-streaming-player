@@ -1,0 +1,110 @@
+<section class="section playground-section" id="playground">
+  <div class="section__header">
+    <h2 class="section__title">Playground</h2>
+    <p class="section__sub">
+      Paste any URL - the player appears instantly. Add more to see them arranged in an
+      adaptive gallery grid.
+    </p>
+  </div>
+
+  <div class="url-input-area">
+    <div class="url-input-wrapper">
+      <svg
+        class="url-input-icon"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+      </svg>
+      <input
+        class="url-input"
+        type="url"
+        placeholder="Paste a URL here · .m3u8 · .mpd · .mp4 · youtube.com · …"
+        [(ngModel)]="urlInput"
+        (keyup.enter)="addPlayer()"
+        autocomplete="off"
+        spellcheck="false"
+      />
+      <button class="url-add-btn" (click)="addPlayer()" [disabled]="!urlInput.trim()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="12" y1="5" x2="12" y2="19" />
+          <line x1="5" y1="12" x2="19" y2="12" />
+        </svg>
+        Add
+      </button>
+    </div>
+
+    <div class="preset-row">
+      <span class="preset-label">Quick examples:</span>
+      <button class="preset-btn preset-btn--hls" (click)="addPreset('hls')">
+        <span class="preset-dot"></span> HLS Live
+      </button>
+      <button class="preset-btn preset-btn--dash" (click)="addPreset('dash')">
+        <span class="preset-dot"></span> DASH VOD
+      </button>
+      <button class="preset-btn preset-btn--mp4" (click)="addPreset('mp4')">
+        <span class="preset-dot"></span> MP4 Video
+      </button>
+    </div>
+  </div>
+
+  @if (hasPlayers()) {
+    <div class="playground-toolbar">
+      <span class="toolbar-count"
+        >{{ players().length }} player{{ players().length !== 1 ? 's' : '' }}</span
+      >
+      <button class="clear-btn" (click)="clearAll()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="3 6 5 6 21 6" />
+          <path d="M19 6l-1 14H6L5 6" />
+          <path d="M10 11v6" />
+          <path d="M14 11v6" />
+        </svg>
+        Clear all
+      </button>
+    </div>
+
+    <div class="players-grid" [style.--n]="players().length">
+      @for (entry of players(); track trackById($index, entry)) {
+        <div class="player-card" appLazyPlayer #lp="appLazyPlayer">
+          <div class="player-card__header">
+            <span class="player-card__id">{{ entry.id }}</span>
+            <span class="player-card__url" [title]="entry.src">{{ entry.src }}</span>
+            <button
+              class="player-card__remove"
+              (click)="removePlayer(entry.id)"
+              title="Remove"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            </button>
+          </div>
+          @if (lp.isVisible()) {
+            <ngx-sp-player [config]="entry.config" [playerId]="entry.id"> </ngx-sp-player>
+          } @else {
+            <div class="player-offscreen">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="12" r="10" />
+                <polygon points="10 8 16 12 10 16 10 8" />
+              </svg>
+              <span>Scroll into view to play</span>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="playground-empty">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="12" cy="12" r="10" />
+        <polygon points="10 8 16 12 10 16 10 8" />
+      </svg>
+      <p>Add a URL to see the player in action</p>
+    </div>
+  }
+</section>
