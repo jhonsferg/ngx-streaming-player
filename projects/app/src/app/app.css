@@ -24,10 +24,12 @@
   --radius-sm:     8px;
   --nav-h:         60px;
   --sidebar-w:     240px;
+  --nav-bg:        rgba(13, 15, 20, 0.82);
 }
 
 /* --- Design tokens (light mode) ------------------------------------------- */
 .demo-container.light {
+  --nav-bg:        rgba(250, 251, 253, 0.88);
   --c-bg:          #fafbfd;
   --c-surface:     #ffffff;
   --c-surface2:    #f0f2f7;
@@ -46,6 +48,7 @@
 /* --- Layout --------------------------------------------------------------- */
 .demo-container {
   min-height: 100vh;
+  padding-top: var(--nav-h);
   background: var(--c-bg);
   color: var(--c-text);
   font-family: var(--font-body);
