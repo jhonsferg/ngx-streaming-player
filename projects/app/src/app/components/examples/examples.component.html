@@ -1,0 +1,552 @@
+<!-- ═══════════════════════════════════════ EXAMPLE: LIVE STREAMING -->
+<section class="section example-section" id="example-live">
+  <div class="section__header">
+    <h2 class="section__title">Live Streaming</h2>
+    <p class="section__sub">
+      The player auto-detects live streams. When detected, the progress bar and skip buttons
+      disappear, the speed control is hidden, and an animated
+      <span class="inline-badge live-badge">LIVE</span> badge appears.
+    </p>
+  </div>
+
+  <div class="example-callout example-callout--info">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="10" />
+      <line x1="12" y1="8" x2="12" y2="12" />
+      <line x1="12" y1="16" x2="12.01" y2="16" />
+    </svg>
+    <div>
+      <strong>Auto-detection method by protocol</strong>
+      <p>
+        <strong>HLS</strong> - <code>LEVEL_LOADED</code> event with
+        <code>details.live === true</code>.<br />
+        <strong>DASH</strong> - <code>isDynamic()</code> on the manifest.<br />
+        <strong>Native MP4</strong> - infinite/very large duration fallback.
+      </p>
+    </div>
+  </div>
+
+  <div class="example-grid example-grid--2col">
+    <div>
+      <div class="example-block-label">Minimal live stream config</div>
+      <div class="code-block">
+        <div class="code-block__lang">typescript</div>
+        <pre><code class="language-typescript">liveConfig: PlayerConfig = &#123;
+  src: 'https://live-stream.m3u8',
+  // Live is auto-detected - no extra config needed
+  autoplay: true,
+  muted: true,        // required for autoplay in most browsers
+  enablePiP: true,
+&#125;;</code></pre>
+      </div>
+    </div>
+    <div>
+      <div class="example-block-label">Reading the live state</div>
+      <div class="code-block">
+        <div class="code-block__lang">typescript</div>
+        <pre><code class="language-typescript">&#64;Component(&#123; ... &#125;)
+export class MyComponent &#123;
+  private ctrl = inject(NgxPlayerControlService);
+
+  get isLive(): boolean &#123;
+    return this.ctrl.getState()?.isLive() ?? false;
+  &#125;
+
+  get liveText(): string &#123;
+    return this.isLive ? '🔴 Live' : 'VOD';
+  &#125;
+&#125;</code></pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="example-callout example-callout--tip">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M9 12l2 2 4-4" />
+      <circle cx="12" cy="12" r="10" />
+    </svg>
+    <div>
+      <strong>Speed control automatically hidden for live streams</strong>
+      <p>
+        When <code>isLive()</code> is <code>true</code>, the playback speed option is removed
+        from the settings menu - changing speed has no effect on a live buffer.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════ EXAMPLE: HOT-SWAP -->
+<section class="section example-section" id="example-hotswap">
+  <div class="section__header">
+    <h2 class="section__title">Hot-swap Protocol</h2>
+    <p class="section__sub">
+      Switch between HLS, DASH, MP4, and YouTube at runtime without re-creating the component.
+      The Demo Player section above demonstrates this live.
+    </p>
+  </div>
+
+  <div class="example-grid example-grid--2col">
+    <div>
+      <div class="example-block-label">Via NgxPlayerControlService</div>
+      <div class="code-block">
+        <div class="code-block__lang">typescript</div>
+        <pre><code class="language-typescript">&#64;Component(&#123; ... &#125;)
+export class ChannelSwitcher &#123;
+  private ctrl = inject(NgxPlayerControlService);
+
+  switchTo(url: string): void &#123;
+    // Destroys current adapter, resets state,
+    // preserves volume + mute, starts new adapter
+    this.ctrl.load(url, &#123; autoplay: true &#125;, 'my-player');
+  &#125;
+&#125;</code></pre>
+      </div>
+    </div>
+    <div>
+      <div class="example-block-label">Via reactive binding</div>
+      <div class="code-block">
+        <div class="code-block__lang">typescript</div>
+        <pre><code class="language-typescript">// Changing [src] or [config] triggers hot-swap automatically
+currentSrc = signal('https://stream1.m3u8');
+
+switch(url: string): void &#123;
+  this.currentSrc.set(url); // hot-swap fires
+&#125;</code></pre>
+      </div>
+      <div class="code-block">
+        <div class="code-block__lang">html</div>
+        <pre><code class="language-html">&lt;ngx-sp-player
+  [src]="currentSrc()"
+  [config]="baseConfig"
+  playerId="channel-player"&gt;
+&lt;/ngx-sp-player&gt;</code></pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="example-callout example-callout--warning">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+      <line x1="12" y1="9" x2="12" y2="13" />
+      <line x1="12" y1="17" x2="12.01" y2="17" />
+    </svg>
+    <div>
+      <strong>What resets on hot-swap</strong>
+      <p>
+        Playback position, buffer, quality levels, live state, subtitles - all reset. What is
+        <strong>preserved</strong>: volume level and mute state.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ EXAMPLE: MULTI-PLAYER -->
+<section class="section example-section" id="example-multi">
+  <div class="section__header">
+    <h2 class="section__title">Multi-player Grid</h2>
+    <p class="section__sub">
+      Render any number of players simultaneously using unique <code>playerId</code> values.
+      Each instance gets its own isolated service scope. Use the Playground above to see this
+      live.
+    </p>
+  </div>
+
+  <div class="code-block">
+    <div class="code-block__lang">typescript</div>
+    <pre><code class="language-typescript">cameras = [
+  &#123; id: 'cam1', src: 'https://stream1.m3u8', label: 'Camera 1' &#125;,
+  &#123; id: 'cam2', src: 'https://stream2.m3u8', label: 'Camera 2' &#125;,
+  &#123; id: 'cam3', src: 'https://stream3.m3u8', label: 'Camera 3' &#125;,
+  &#123; id: 'cam4', src: 'https://stream4.m3u8', label: 'Camera 4' &#125;,
+];</code></pre>
+  </div>
+
+  <div class="example-grid example-grid--2col">
+    <div>
+      <div class="example-block-label">Template - dynamic grid</div>
+      <div class="code-block">
+        <div class="code-block__lang">html</div>
+        <pre ngNonBindable><code class="language-html">&lt;div class="cam-grid"&gt;
+  &#64;for (cam of cameras; track cam.id) &#123;
+    &lt;div class="cam-card"&gt;
+      &lt;h4&gt;&#123;&#123; cam.label &#125;&#125;&lt;/h4&gt;
+      &lt;ngx-sp-player
+        [playerId]="cam.id"
+        [src]="cam.src"
+        [config]="&#123; autoplay: true, muted: true &#125;"&gt;
+      &lt;/ngx-sp-player&gt;
+    &lt;/div&gt;
+  &#125;
+&lt;/div&gt;</code></pre>
+      </div>
+    </div>
+    <div>
+      <div class="example-block-label">Control each player by ID</div>
+      <div class="code-block">
+        <div class="code-block__lang">typescript</div>
+        <pre><code class="language-typescript">&#64;Component(&#123; ... &#125;)
+export class WallComponent &#123;
+  private ctrl = inject(NgxPlayerControlService);
+
+  muteAll(): void &#123;
+    this.cameras.forEach(c =>
+      this.ctrl.setMuted(true, c.id)
+    );
+  &#125;
+
+  pauseAll(): void &#123;
+    this.cameras.forEach(c =>
+      this.ctrl.pause(c.id)
+    );
+  &#125;
+
+  focusOn(id: string): void &#123;
+    // Pause all except the focused one
+    this.cameras.forEach(c => &#123;
+      if (c.id !== id) this.ctrl.pause(c.id);
+    &#125;);
+    this.ctrl.play(id);
+  &#125;
+&#125;</code></pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="example-callout example-callout--tip">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M9 12l2 2 4-4" />
+      <circle cx="12" cy="12" r="10" />
+    </svg>
+    <div>
+      <strong>Performance tip: lazy mounting</strong>
+      <p>
+        For large grids, use an <code>IntersectionObserver</code> to only mount players when
+        they enter the viewport. The Playground already does this - players outside the scroll
+        area are replaced with a lightweight placeholder.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════ EXAMPLE: PROGRAMMATIC CONTROL -->
+<section class="section example-section" id="example-service">
+  <div class="section__header">
+    <h2 class="section__title">Programmatic Control</h2>
+    <p class="section__sub">
+      <code>NgxPlayerControlService</code> lets you control any player from anywhere in your
+      app - a parent component, a shared service, a keyboard shortcut handler.
+    </p>
+  </div>
+
+  <div class="example-grid example-grid--2col">
+    <div>
+      <div class="example-block-label">Inject and control</div>
+      <div class="code-block">
+        <div class="code-block__lang">typescript</div>
+        <pre><code class="language-typescript">import &#123;
+  NgxPlayerControlService
+&#125; from 'ngx-streaming-player';
+
+&#64;Component(&#123; ... &#125;)
+export class VideoController &#123;
+  private ctrl = inject(NgxPlayerControlService);
+
+  // Playback control
+  play()   &#123; this.ctrl.play();   &#125;
+  pause()  &#123; this.ctrl.pause();  &#125;
+  toggle() &#123;
+    const state = this.ctrl.getState();
+    state?.isPlaying()
+      ? this.ctrl.pause()
+      : this.ctrl.play();
+  &#125;
+
+  // Navigation
+  jumpTo(seconds: number): void &#123;
+    this.ctrl.seek(seconds);
+  &#125;
+  skipForward(): void &#123;
+    const t = this.ctrl.getState()?.currentTime() ?? 0;
+    this.ctrl.seek(t + 10);
+  &#125;
+
+  // Audio
+  mute()   &#123; this.ctrl.setMuted(true);  &#125;
+  unmute() &#123; this.ctrl.setMuted(false); &#125;
+  volume(v: number) &#123; this.ctrl.setVolume(v); &#125;
+
+  // Quality / Speed
+  setHD()  &#123; this.ctrl.setQuality('1080p'); &#125;
+  halfSpeed() &#123; this.ctrl.setPlaybackRate(0.5); &#125;
+&#125;</code></pre>
+      </div>
+    </div>
+    <div>
+      <div class="example-block-label">Read reactive state</div>
+      <div class="code-block">
+        <div class="code-block__lang">typescript</div>
+        <pre ngNonBindable><code class="language-typescript">&#64;Component(&#123;
+  template: `
+    &lt;p&gt;Playing: &#123;&#123; isPlaying() &#125;&#125;&lt;/p&gt;
+    &lt;p&gt;Progress: &#123;&#123; progress() | number:'1.0-0' &#125;&#125;%&lt;/p&gt;
+    &lt;p&gt;Buffered: &#123;&#123; buffered() | number:'1.0-0' &#125;&#125;%&lt;/p&gt;
+    &lt;p&gt;Duration: &#123;&#123; duration() &#125;&#125;s&lt;/p&gt;
+    &lt;p&gt;Live: &#123;&#123; isLive() &#125;&#125;&lt;/p&gt;
+  `
+&#125;)
+export class PlayerInfo &#123;
+  private ctrl = inject(NgxPlayerControlService);
+  private state = this.ctrl.getState();
+
+  // All signals - update automatically
+  isPlaying  = this.state?.isPlaying;
+  progress   = this.state?.progress;
+  buffered   = this.state?.bufferedPercentage;
+  duration   = this.state?.duration;
+  isLive     = this.state?.isLive;
+  isBuffering= this.state?.isBuffering;
+  volume     = this.state?.volume;
+&#125;</code></pre>
+      </div>
+      <div class="example-block-label" style="margin-top: 1rem">Hot-swap with options</div>
+      <div class="code-block">
+        <div class="code-block__lang">typescript</div>
+        <pre><code class="language-typescript">// load(src, overrides?, playerId?)
+this.ctrl.load(
+  'https://new-stream.m3u8',
+  &#123; autoplay: true, muted: false &#125;,
+  'my-player'
+);
+
+// Check if a player is registered
+if (this.ctrl.isRegistered('my-player')) &#123;
+  this.ctrl.play('my-player');
+&#125;</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════ EXAMPLE: THEMING -->
+<section class="section example-section" id="example-theme">
+  <div class="section__header">
+    <h2 class="section__title">Custom Theming</h2>
+    <p class="section__sub">
+      Customize every color, border radius, and control size using the
+      <code>theme</code> input or directly with <code>--ngx-sp-*</code> CSS custom properties.
+    </p>
+  </div>
+
+  <div class="example-grid example-grid--2col">
+    <div>
+      <div class="example-block-label">Using the theme input</div>
+      <div class="code-block">
+        <div class="code-block__lang">typescript</div>
+        <pre><code class="language-typescript">playerConfig: PlayerConfig = &#123;
+  src: 'https://example.com/video.m3u8',
+  theme: &#123;
+    primaryColor:    '#7C3AED', // progress bar, active states
+    secondaryColor:  '#06B6D4', // secondary accents
+    accentColor:     '#A78BFA', // highlights, ripples
+    backgroundColor: '#1e1b4b', // player background
+    textColor:       '#EDE9FE', // text &amp; icons
+    borderRadius:    '6px',     // --ngx-sp-radius
+    controlSize:     '40px',    // button hit area
+  &#125;,
+&#125;;</code></pre>
+      </div>
+    </div>
+    <div>
+      <div class="example-block-label">Using CSS custom properties</div>
+      <div class="code-block">
+        <div class="code-block__lang">css</div>
+        <pre><code class="language-css">/* Scope to a specific player instance */
+ngx-sp-player#my-player &#123;
+  --ngx-sp-primary:   #7C3AED;
+  --ngx-sp-secondary: #06B6D4;
+  --ngx-sp-accent:    #A78BFA;
+  --ngx-sp-bg-dark:   #1e1b4b;
+  --ngx-sp-radius:    6px;
+  --ngx-sp-control-size: 40px;
+&#125;
+
+/* Or globally for all players */
+:root &#123;
+  --ngx-sp-primary: #7C3AED;
+&#125;</code></pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="theme-token-grid">
+    <div class="theme-token">
+      <code>--ngx-sp-primary</code><span>Progress bar, active buttons, seek thumb</span>
+    </div>
+    <div class="theme-token">
+      <code>--ngx-sp-secondary</code><span>Secondary accent color</span>
+    </div>
+    <div class="theme-token">
+      <code>--ngx-sp-accent</code><span>Highlights, ripple effect, hover states</span>
+    </div>
+    <div class="theme-token">
+      <code>--ngx-sp-bg-dark</code><span>Player container background</span>
+    </div>
+    <div class="theme-token">
+      <code>--ngx-sp-text-light</code><span>Primary text &amp; icon color</span>
+    </div>
+    <div class="theme-token">
+      <code>--ngx-sp-overlay-bg</code><span>Controls overlay gradient</span>
+    </div>
+    <div class="theme-token">
+      <code>--ngx-sp-radius</code><span>Container border radius</span>
+    </div>
+    <div class="theme-token">
+      <code>--ngx-sp-control-size</code><span>Button hit area size</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ EXAMPLE: YOUTUBE -->
+<section class="section example-section" id="example-youtube">
+  <div class="section__header">
+    <h2 class="section__title">YouTube Integration</h2>
+    <p class="section__sub">
+      Pass any YouTube URL - the player detects it automatically and loads the IFrame API. No
+      API key required.
+    </p>
+  </div>
+
+  <div class="example-grid example-grid--2col">
+    <div>
+      <div class="example-block-label">Auto-detected by URL</div>
+      <div class="code-block">
+        <div class="code-block__lang">typescript</div>
+        <pre><code class="language-typescript">// All of these are auto-detected as YouTube:
+// https://www.youtube.com/watch?v=dQw4w9WgXcQ
+// https://youtu.be/dQw4w9WgXcQ
+// https://www.youtube.com/embed/dQw4w9WgXcQ
+
+ytConfig: PlayerConfig = &#123;
+  src: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+  autoplay: false,
+  muted: false,
+&#125;;</code></pre>
+      </div>
+    </div>
+    <div>
+      <div class="example-block-label">Force YouTube protocol</div>
+      <div class="code-block">
+        <div class="code-block__lang">typescript</div>
+        <pre><code class="language-typescript">// Use protocol: 'youtube' to force it (e.g. for IDs)
+ytConfig: PlayerConfig = &#123;
+  src: 'dQw4w9WgXcQ', // video ID only
+  protocol: 'youtube',
+  autoplay: false,
+&#125;;</code></pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="example-callout example-callout--warning">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+      <line x1="12" y1="9" x2="12" y2="13" />
+      <line x1="12" y1="17" x2="12.01" y2="17" />
+    </svg>
+    <div>
+      <strong>YouTube API limitations</strong>
+      <p>
+        <strong>No PiP</strong> - the IFrame API prevents browser Picture-in-Picture. The PiP
+        button is hidden automatically.<br />
+        <strong>Quality</strong> - quality levels reported by the IFrame API are suggestions,
+        not guarantees.<br />
+        <strong>Autoplay</strong> - YouTube enforces muted autoplay in most browser contexts.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════ EXAMPLE: EVENTS & STATE -->
+<section class="section example-section" id="example-events">
+  <div class="section__header">
+    <h2 class="section__title">Events &amp; State</h2>
+    <p class="section__sub">
+      React to player events via <code>(ready)</code>, <code>(stateChange)</code>,
+      <code>(error)</code> outputs, or read reactive signals directly via
+      <code>NgxPlayerControlService</code>.
+    </p>
+  </div>
+
+  <div class="example-grid example-grid--2col">
+    <div>
+      <div class="example-block-label">Output events</div>
+      <div class="code-block">
+        <div class="code-block__lang">html</div>
+        <pre><code class="language-html">&lt;ngx-sp-player
+  [config]="playerConfig"
+  playerId="my-player"
+  (ready)="onReady()"
+  (stateChange)="onState($event)"
+  (error)="onError($event)"&gt;
+&lt;/ngx-sp-player&gt;</code></pre>
+      </div>
+      <div class="code-block">
+        <div class="code-block__lang">typescript</div>
+        <pre><code class="language-typescript">onReady(): void &#123;
+  console.log('Player ready');
+  this.ctrl.play();
+&#125;
+
+onState(state: PlayerState): void &#123;
+  if (state.isBuffering) &#123;
+    this.showSpinner = true;
+  &#125;
+  if (state.isLive) &#123;
+    this.showLiveBadge = true;
+  &#125;
+&#125;
+
+onError(error: unknown): void &#123;
+  console.error('Playback error:', error);
+  this.showFallback = true;
+&#125;</code></pre>
+      </div>
+    </div>
+    <div>
+      <div class="example-block-label">Reactive state signals</div>
+      <div class="code-block">
+        <div class="code-block__lang">typescript</div>
+        <pre><code class="language-typescript">&#64;Component(&#123;
+  // All state updates trigger change detection
+  // automatically - no manual subscribe() needed
+&#125;)
+export class MyComp &#123;
+  private ctrl = inject(NgxPlayerControlService);
+  readonly state = this.ctrl.getState('my-player');
+
+  // Use directly in template
+  // state?.isPlaying()        → boolean
+  // state?.isLive()           → boolean
+  // state?.isBuffering()      → boolean
+  // state?.currentTime()      → number (seconds)
+  // state?.duration()         → number (seconds, Infinity if live)
+  // state?.progress()         → number (0–100)
+  // state?.bufferedPercentage()→ number (0–100)
+  // state?.volume()           → number (0–1)
+  // state?.muted()            → boolean
+  // state?.playbackRate()     → number
+  // state?.currentQuality()   → string
+  // state?.availableQualities()→ QualityLevel[]
+  // state?.supportsPiP()      → boolean
+  // state?.isPiP()            → boolean
+  // state?.isFullscreen()     → boolean
+
+  readonly watchProgress = computed(() =&gt; &#123;
+    const p = this.state?.progress() ?? 0;
+    return `$&#123;p.toFixed(0)&#125;% watched`;
+  &#125;);
+&#125;</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
