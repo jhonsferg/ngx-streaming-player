@@ -28,6 +28,7 @@ A unified, **plug-and-play** video player component that handles **HLS**, **DASH
 - [Installation](#installation)
 - [Quick Start](#quick-start)
 - [Configuration](#configuration)
+  - [providePlayer()](#provideplayer)
   - [Individual Inputs](#individual-inputs)
   - [Config Object](#config-object)
   - [Hot-swap Binding](#hot-swap-binding)
@@ -141,6 +142,44 @@ npm install ngx-streaming-player hls.js dashjs
 
 ## Quick Start
 
+### 1. Configure the application (once)
+
+Call `providePlayer()` in your `app.config.ts` to set global defaults, theme and translations. All feature functions are optional.
+
+```typescript
+// app.config.ts
+import { ApplicationConfig } from '@angular/core';
+import { providePlayer, withTheme, withDefaults, withTranslations } from 'ngx-streaming-player';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    providePlayer(
+      // Global theme — applied as the lowest-priority layer for every player
+      withTheme({ primaryColor: '#E76F51', borderRadius: '12px' }),
+
+      // Global config defaults — overridden by any per-player [config] input
+      withDefaults({ autoplay: false, enablePiP: true, enableKeyboard: true }),
+
+      // UI string translations (any key you omit falls back to the English default)
+      withTranslations({
+        play: 'Reproducir (k)',
+        pause: 'Pausar (k)',
+        settings: 'Configuración',
+        quality: 'Calidad',
+        speed: 'Velocidad',
+        captionsTracks: 'Subtítulos',
+        auto: 'Automático',
+        normalSpeed: 'Normal',
+        subtitlesOff: 'Desactivado',
+        live: 'EN VIVO',
+      }),
+    ),
+  ],
+};
+```
+
+### 2. Use the component
+
 ```typescript
 // app.component.ts
 import { Component } from '@angular/core';
@@ -156,7 +195,7 @@ export class AppComponent {
 }
 ```
 
-That's it. The component auto-detects HLS, loads hls.js, and renders a fully featured player with controls, PiP, quality selector, settings menu, and keyboard shortcuts.
+The component auto-detects HLS, loads hls.js, and renders a fully featured player with controls, PiP, quality selector, settings menu, and keyboard shortcuts.
 
 ---
 
@@ -680,6 +719,55 @@ Enabled by default (`enableKeyboard: true`). Active when the player container is
 ---
 
 ## API Reference
+
+### `providePlayer()`
+
+Configure the library globally in `ApplicationConfig.providers` (standalone) or `NgModule.providers`:
+
+```typescript
+import { providePlayer, withTheme, withDefaults, withTranslations } from 'ngx-streaming-player';
+
+providePlayer(
+  withTheme(theme),        // Partial<PlayerTheme>  — global baseline theme
+  withDefaults(config),    // Partial<PlayerConfig> — global config defaults
+  withTranslations(map),   // Partial<PlayerTranslations> — UI string overrides
+)
+```
+
+**Priority rules:**
+
+| Layer | Wins over |
+|---|---|
+| Per-player `[theme]` / `[config]` input | `withTheme()` / `withDefaults()` |
+| `config.theme` object | `withTheme()` |
+| `withTheme()` | Component stylesheet defaults |
+
+---
+
+### `PlayerTranslations`
+
+All keys are optional in `withTranslations()`. Missing keys fall back to English defaults.
+
+| Key | Default | Description |
+|---|---|---|
+| `play` | `'Play (k)'` | Play button tooltip |
+| `pause` | `'Pause (k)'` | Pause button tooltip |
+| `subtitles` | `'Subtitles (c)'` | Subtitles toggle tooltip |
+| `pip` | `'Picture in picture (i)'` | PiP button tooltip |
+| `fullscreen` | `'Fullscreen (f)'` | Enter-fullscreen tooltip |
+| `exitFullscreen` | `'Exit fullscreen (f)'` | Exit-fullscreen tooltip |
+| `watchOnYouTube` | `'Watch on YouTube'` | YouTube link title |
+| `live` | `'LIVE'` | Live-stream badge text |
+| `settings` | `'Settings'` | Settings panel header |
+| `quality` | `'Quality'` | Quality row / sub-panel heading |
+| `speed` | `'Speed'` | Speed row / sub-panel heading |
+| `captionsTracks` | `'Subtitles'` | Captions row / sub-panel heading |
+| `auto` | `'Auto'` | ABR quality option label |
+| `normalSpeed` | `'Normal'` | 1× speed option label |
+| `subtitlesOff` | `'Off'` | Subtitles disabled option |
+| `subtitlesEnabled` | `'On'` | Fallback when track has no label |
+
+---
 
 ### `<ngx-sp-player>` Inputs
 
