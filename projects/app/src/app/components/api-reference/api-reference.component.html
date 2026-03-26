@@ -1,0 +1,363 @@
+<section class="section" id="api">
+  <div class="section__header">
+    <h2 class="section__title">API Reference</h2>
+  </div>
+
+  <!-- Component inputs -->
+  <div class="api-group">
+    <h3 class="api-group__title">
+      <span class="api-tag api-tag--input">&#64;input</span>
+      Component Inputs
+    </h3>
+    <div class="api-table-wrap">
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>Input</th>
+            <th>Type</th>
+            <th>Default</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>config</code></td>
+            <td><code>PlayerConfig</code></td>
+            <td>-</td>
+            <td>Full configuration object. Optional when using individual inputs.</td>
+          </tr>
+          <tr>
+            <td><code>src</code></td>
+            <td><code>string</code></td>
+            <td>-</td>
+            <td>
+              Media URL. Overrides <code>config.src</code>. Changing this input triggers
+              automatic hot-swap.
+            </td>
+          </tr>
+          <tr>
+            <td><code>autoplay</code></td>
+            <td><code>boolean</code></td>
+            <td><code>false</code></td>
+            <td>Start playing automatically on load.</td>
+          </tr>
+          <tr>
+            <td><code>muted</code></td>
+            <td><code>boolean</code></td>
+            <td><code>false</code></td>
+            <td>Start with audio muted.</td>
+          </tr>
+          <tr>
+            <td><code>volume</code></td>
+            <td><code>number</code></td>
+            <td><code>1.0</code></td>
+            <td>Initial volume level (0.0 – 1.0).</td>
+          </tr>
+          <tr>
+            <td><code>poster</code></td>
+            <td><code>string</code></td>
+            <td>-</td>
+            <td>Poster image URL shown before playback starts.</td>
+          </tr>
+          <tr>
+            <td><code>theme</code></td>
+            <td><code>PlayerTheme</code></td>
+            <td>-</td>
+            <td>Custom colors and dimensions. Overrides <code>config.theme</code>.</td>
+          </tr>
+          <tr>
+            <td><code>playerId</code></td>
+            <td><code>string</code></td>
+            <td><code>'default'</code></td>
+            <td>Unique player ID. Required only when using multiple instances.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Component outputs -->
+  <div class="api-group">
+    <h3 class="api-group__title">
+      <span class="api-tag api-tag--output">&#64;output</span>
+      Component Outputs
+    </h3>
+    <div class="api-table-wrap">
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>Output</th>
+            <th>Payload</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>ready</code></td>
+            <td><code>void</code></td>
+            <td>Player finished initializing and is ready to play.</td>
+          </tr>
+          <tr>
+            <td><code>stateChange</code></td>
+            <td><code>PlayerState</code></td>
+            <td>
+              Emits the full state snapshot on every change (play, pause, buffering, etc.).
+            </td>
+          </tr>
+          <tr>
+            <td><code>error</code></td>
+            <td><code>unknown</code></td>
+            <td>Fatal playback error from the adapter.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- PlayerConfig -->
+  <div class="api-group">
+    <h3 class="api-group__title">
+      <span class="api-tag api-tag--type">interface</span>
+      PlayerConfig
+    </h3>
+    <div class="api-table-wrap">
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>src</code> *</td>
+            <td><code>string</code></td>
+            <td>
+              Media URL. Auto-detected: <code>.m3u8</code> → HLS, <code>.mpd</code> → DASH,
+              youtube → YouTube, other → native.
+            </td>
+          </tr>
+          <tr>
+            <td><code>protocol</code></td>
+            <td><code>'hls'|'dash'|'native'|'youtube'</code></td>
+            <td>Force a protocol, bypassing auto-detection.</td>
+          </tr>
+          <tr>
+            <td><code>autoplay</code></td>
+            <td><code>boolean</code></td>
+            <td>Start playback automatically on load.</td>
+          </tr>
+          <tr>
+            <td><code>muted</code></td>
+            <td><code>boolean</code></td>
+            <td>Start muted (required by some browsers for autoplay).</td>
+          </tr>
+          <tr>
+            <td><code>volume</code></td>
+            <td><code>number</code></td>
+            <td>Initial volume 0.0–1.0.</td>
+          </tr>
+          <tr>
+            <td><code>poster</code></td>
+            <td><code>string</code></td>
+            <td>Image shown before play (when currentTime === 0).</td>
+          </tr>
+          <tr>
+            <td><code>playbackRates</code></td>
+            <td><code>number[]</code></td>
+            <td>
+              Speed options in the menu. E.g. <code>[0.5, 1, 1.5, 2]</code>. Hidden
+              automatically for live streams.
+            </td>
+          </tr>
+          <tr>
+            <td><code>enablePiP</code></td>
+            <td><code>boolean</code></td>
+            <td>Enable Picture-in-Picture. Auto-disabled for YouTube.</td>
+          </tr>
+          <tr>
+            <td><code>enableKeyboard</code></td>
+            <td><code>boolean</code></td>
+            <td>Keyboard shortcuts: Space, ←→ seek, ↑↓ volume, F fullscreen, M mute.</td>
+          </tr>
+          <tr>
+            <td><code>controlsLayout</code></td>
+            <td><code>PlayerControlsLayout</code></td>
+            <td>Controls visibility and auto-hide behavior.</td>
+          </tr>
+          <tr>
+            <td><code>theme</code></td>
+            <td><code>PlayerTheme</code></td>
+            <td>Color and dimension customization.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- NgxPlayerControlService -->
+  <div class="api-group">
+    <h3 class="api-group__title">
+      <span class="api-tag api-tag--service">service</span>
+      NgxPlayerControlService
+    </h3>
+    <p class="api-group__desc">
+      Injectable into any component or service. Controls any player instance at runtime by its
+      <code>playerId</code>.
+    </p>
+    <div class="api-table-wrap">
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>Method</th>
+            <th>Signature</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>load()</code></td>
+            <td><code>(src, config?, id?)</code></td>
+            <td>
+              Hot-swap the source. Destroys current adapter, resets state, initializes new
+              one.
+            </td>
+          </tr>
+          <tr>
+            <td><code>play()</code></td>
+            <td><code>(id?)</code></td>
+            <td>Start playback.</td>
+          </tr>
+          <tr>
+            <td><code>pause()</code></td>
+            <td><code>(id?)</code></td>
+            <td>Pause playback.</td>
+          </tr>
+          <tr>
+            <td><code>seek()</code></td>
+            <td><code>(time, id?)</code></td>
+            <td>Jump to the given time in seconds.</td>
+          </tr>
+          <tr>
+            <td><code>setVolume()</code></td>
+            <td><code>(vol, id?)</code></td>
+            <td>Set volume (0.0–1.0).</td>
+          </tr>
+          <tr>
+            <td><code>setMuted()</code></td>
+            <td><code>(muted, id?)</code></td>
+            <td>Mute or unmute audio.</td>
+          </tr>
+          <tr>
+            <td><code>setPlaybackRate()</code></td>
+            <td><code>(rate, id?)</code></td>
+            <td>Change playback speed (ignored on live streams).</td>
+          </tr>
+          <tr>
+            <td><code>setQuality()</code></td>
+            <td><code>(quality, id?)</code></td>
+            <td>Force a quality level (e.g. <code>'720p'</code>) or <code>'auto'</code>.</td>
+          </tr>
+          <tr>
+            <td><code>getState()</code></td>
+            <td><code>(id?)</code></td>
+            <td>Returns the <code>PlayerStateService</code> with all state signals.</td>
+          </tr>
+          <tr>
+            <td><code>isRegistered()</code></td>
+            <td><code>(id?)</code></td>
+            <td>Check if a player is registered and active.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Theming reference -->
+  <div class="api-group">
+    <h3 class="api-group__title">
+      <span class="api-tag api-tag--type">interface</span>
+      PlayerTheme - CSS Variables
+    </h3>
+    <div class="code-block">
+      <div class="code-block__lang">typescript</div>
+      <pre><code class="language-typescript">theme: PlayerTheme = &#123;
+  primaryColor:    '#E76F51', // --ngx-sp-primary
+  secondaryColor:  '#2A9D8F', // --ngx-sp-secondary
+  accentColor:     '#F4A261', // --ngx-sp-accent
+  backgroundColor: '#264653', // --ngx-sp-bg-dark
+  textColor:       '#F4F1DE', // --ngx-sp-text-light
+  borderRadius:    '10px',    // --ngx-sp-radius
+  controlSize:     '44px',    // --ngx-sp-control-size
+&#125;;</code></pre>
+    </div>
+    <p class="api-group__desc" style="margin-top: 0.75rem">
+      You can also override the variables directly in your CSS:
+    </p>
+    <div class="code-block">
+      <div class="code-block__lang">css</div>
+      <pre><code class="language-css">ngx-sp-player &#123;
+  --ngx-sp-primary: #7C3AED;
+  --ngx-sp-accent:  #A78BFA;
+  --ngx-sp-radius:  4px;
+&#125;</code></pre>
+    </div>
+  </div>
+
+  <!-- Keyboard shortcuts -->
+  <div class="api-group">
+    <h3 class="api-group__title">
+      <span class="api-tag api-tag--example">keyboard</span>
+      Keyboard Shortcuts
+    </h3>
+    <p class="api-group__desc">
+      Enable with <code>enableKeyboard: true</code> in config. Shortcuts are scoped to the
+      focused player.
+    </p>
+    <div class="api-table-wrap">
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>Key</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>Space</code> / <code>K</code></td>
+            <td>Toggle play / pause</td>
+          </tr>
+          <tr>
+            <td><code>←</code> / <code>→</code></td>
+            <td>Seek backward / forward 5 s</td>
+          </tr>
+          <tr>
+            <td><code>J</code> / <code>L</code></td>
+            <td>Seek backward / forward 10 s</td>
+          </tr>
+          <tr>
+            <td><code>↑</code> / <code>↓</code></td>
+            <td>Volume up / down 10%</td>
+          </tr>
+          <tr>
+            <td><code>M</code></td>
+            <td>Toggle mute</td>
+          </tr>
+          <tr>
+            <td><code>F</code></td>
+            <td>Toggle fullscreen</td>
+          </tr>
+          <tr>
+            <td><code>I</code></td>
+            <td>Toggle Picture-in-Picture</td>
+          </tr>
+          <tr>
+            <td><code>C</code></td>
+            <td>Toggle subtitles</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
