@@ -1,0 +1,33 @@
+:host {
+  display: block;
+}
+
+.demo-footer {
+  text-align: center;
+  padding: 3rem 1.75rem 2rem;
+  border-top: 1px solid var(--c-border);
+}
+
+.footer-links {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+
+  a {
+    color: var(--c-text-dim);
+    text-decoration: none;
+    font-size: 0.855rem;
+    transition: color 0.2s;
+
+    &:hover {
+      color: var(--c-primary);
+    }
+  }
+}
+
+.footer-credits {
+  font-size: 0.8rem;
+  color: var(--c-text-muted);
+}
