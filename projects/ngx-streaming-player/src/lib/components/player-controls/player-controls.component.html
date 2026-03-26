@@ -20,7 +20,7 @@
       <!-- Play / Pause -->
       <ngx-sp-button
         modifierClass="sp-btn--play-pause"
-        [tooltipText]="stateService.isPlaying() ? 'Pausar (k)' : 'Reproducir (k)'"
+        [tooltipText]="stateService.isPlaying() ? i18n().pause : i18n().play"
         (clicked)="togglePlay()"
       >
         @if (stateService.isPlaying()) {
@@ -92,7 +92,7 @@
       @if (stateService.isLive()) {
         <div class="controls__live-badge">
           <span class="controls__live-dot"></span>
-          LIVE
+          {{ i18n().live }}
         </div>
       } @else {
         <ngx-sp-time-display
@@ -107,7 +107,7 @@
     <div class="controls__group controls__group--right">
       <!-- YouTube link -->
       @if (stateService.isYouTube()) {
-        <a [href]="config().src" target="_blank" class="controls__yt-link" title="Ver en YouTube" rel="noopener">
+        <a [href]="config().src" target="_blank" class="controls__yt-link" [title]="i18n().watchOnYouTube" rel="noopener">
           <svg viewBox="0 0 24 24" fill="currentColor">
             <path
               d="M21.58 7.19c-.23-.86-.91-1.54-1.77-1.77C18.25 5 12 5 12 5s-6.25 0-7.81.42c-.86.23-1.54.91-1.77 1.77C2 8.75 2 12 2 12s0 3.25.42 4.81c.23.86.91 1.54 1.77 1.77C5.75 19 12 19 12 19s6.25 0 7.81-.42c.86-.23 1.54-.91 1.77-1.77C22 15.25 22 12 22 12s0-3.25-.42-4.81zM10 15V9l5.2 3-5.2 3z"
@@ -120,7 +120,7 @@
       @if (stateService.supportsSubtitles()) {
         <ngx-sp-button
           [modifierClass]="stateService.subtitlesEnabled() ? 'sp-btn--active' : ''"
-          tooltipText="Subtítulos (c)"
+          [tooltipText]="i18n().subtitles"
           (clicked)="toggleSubtitles()"
         >
           <svg viewBox="0 0 24 24" fill="currentColor">
@@ -131,30 +131,32 @@
         </ngx-sp-button>
       }
 
-      <!-- Settings -->
-      <ngx-sp-settings-menu
-        [showSettingsMenu]="showSettingsMenu()"
-        [activeMenu]="activeSettingsTab()"
-        [playbackRate]="stateService.playbackRate()"
-        [currentQuality]="currentQuality"
-        [qualityLevels]="stateService.availableQualities()"
-        [supportsSubtitles]="stateService.supportsSubtitles()"
-        [availableSubtitles]="stateService.availableSubtitles()"
-        [activeSubtitleId]="stateService.activeSubtitleId()"
-        [isLive]="stateService.isLive()"
-        (setMenuVisibility)="showSettingsMenu.set($event)"
-        (navigateMenu)="activeSettingsTab.set($event)"
-        (setSpeed)="setPlaybackRate($event)"
-        (setQuality)="setQuality($event)"
-        (setSubtitle)="setSubtitle($event)"
-      >
-      </ngx-sp-settings-menu>
+      <!-- Settings — hidden when no rows are available -->
+      @if (showControls().settings && hasSettings()) {
+        <ngx-sp-settings-menu
+          [showSettingsMenu]="showSettingsMenu()"
+          [activeMenu]="activeSettingsTab()"
+          [playbackRate]="stateService.playbackRate()"
+          [currentQuality]="currentQuality"
+          [qualityLevels]="stateService.availableQualities()"
+          [supportsSubtitles]="stateService.supportsSubtitles()"
+          [availableSubtitles]="stateService.availableSubtitles()"
+          [activeSubtitleId]="stateService.activeSubtitleId()"
+          [isLive]="stateService.isLive()"
+          (setMenuVisibility)="showSettingsMenu.set($event)"
+          (navigateMenu)="activeSettingsTab.set($event)"
+          (setSpeed)="setPlaybackRate($event)"
+          (setQuality)="setQuality($event)"
+          (setSubtitle)="setSubtitle($event)"
+        >
+        </ngx-sp-settings-menu>
+      }
 
       <!-- PiP (hidden when not supported by current adapter) -->
       @if (stateService.supportsPiP()) {
         <ngx-sp-button
           [modifierClass]="stateService.isPiP() ? 'sp-btn--pip-active' : ''"
-          tooltipText="Mini reproductor (i)"
+          [tooltipText]="i18n().pip"
           (clicked)="togglePiP()"
         >
           <svg viewBox="0 0 24 24" fill="currentColor">
@@ -166,7 +168,10 @@
       }
 
       <!-- Fullscreen -->
-      <ngx-sp-button tooltipText="Pantalla completa (f)" (clicked)="toggleFullscreen()">
+      <ngx-sp-button
+        [tooltipText]="stateService.isFullscreen() ? i18n().exitFullscreen : i18n().fullscreen"
+        (clicked)="toggleFullscreen()"
+      >
         @if (stateService.isFullscreen()) {
           <svg viewBox="0 0 24 24" fill="currentColor">
             <path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z" />
