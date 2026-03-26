@@ -9,7 +9,7 @@
 [![Angular](https://img.shields.io/badge/Angular-17+-DD0031?style=flat-square&logo=angular&logoColor=white)](https://angular.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-F4A261?style=flat-square)](LICENSE)
-[![npm](https://img.shields.io/badge/npm-1.0.0-E76F51?style=flat-square&logo=npm&logoColor=white)](https://www.npmjs.com/package/ngx-streaming-player)
+[![npm](https://img.shields.io/badge/npm-1.0.0-E76F51?style=flat-square&logo=npm&logoColor=white)](https://github.com/jhonsferg/ngx-streaming-player/pkgs/npm/ngx-streaming-player)
 [![Angular Signals](https://img.shields.io/badge/Angular-Signals-7C3AED?style=flat-square&logo=angular)](https://angular.dev/guide/signals)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-2A9D8F?style=flat-square)](CONTRIBUTING.md)
 
@@ -138,7 +138,7 @@ flowchart LR
 ## Installation
 
 ```bash
-npm install ngx-streaming-player hls.js dashjs
+npm install @jhonsferg/ngx-streaming-player hls.js dashjs
 ```
 
 > **Peer dependencies** - `@angular/core ^21`, `@angular/common ^21`, `hls.js ^1`, `dashjs ^4`
@@ -154,7 +154,7 @@ Call `providePlayer()` in your `app.config.ts` to set global defaults, theme and
 ```typescript
 // app.config.ts
 import { ApplicationConfig } from '@angular/core';
-import { providePlayer, withTheme, withDefaults, withTranslations } from 'ngx-streaming-player';
+import { providePlayer, withTheme, withDefaults, withTranslations } from '@jhonsferg/ngx-streaming-player';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -188,7 +188,7 @@ export const appConfig: ApplicationConfig = {
 ```typescript
 // app.component.ts
 import { Component } from '@angular/core';
-import { StreamingPlayerComponent } from 'ngx-streaming-player';
+import { StreamingPlayerComponent } from '@jhonsferg/ngx-streaming-player';
 
 @Component({
   standalone: true,
@@ -226,7 +226,7 @@ The simplest API - pass only what you need:
 For full control, use a `PlayerConfig` object:
 
 ```typescript
-import { PlayerConfig } from 'ngx-streaming-player';
+import { PlayerConfig } from '@jhonsferg/ngx-streaming-player';
 
 playerConfig: PlayerConfig = {
   src: 'https://example.com/stream.m3u8',
@@ -469,7 +469,7 @@ replaceStream(id: string, newUrl: string): void {
 `NgxPlayerControlService` is injectable anywhere in your application tree:
 
 ```typescript
-import { NgxPlayerControlService } from 'ngx-streaming-player';
+import { NgxPlayerControlService } from '@jhonsferg/ngx-streaming-player';
 
 @Component({ ... })
 export class VideoController {
@@ -730,7 +730,7 @@ Enabled by default (`enableKeyboard: true`). Active when the player container is
 Configure the library globally in `ApplicationConfig.providers` (standalone) or `NgModule.providers`:
 
 ```typescript
-import { providePlayer, withTheme, withDefaults, withTranslations } from 'ngx-streaming-player';
+import { providePlayer, withTheme, withDefaults, withTranslations } from '@jhonsferg/ngx-streaming-player';
 
 providePlayer(
   withTheme(theme), // Partial<PlayerTheme>  - global baseline theme
@@ -811,7 +811,7 @@ All keys are optional in `withTranslations()`. Missing keys fall back to English
 As an alternative to Angular output bindings, pass a plain object via `[events]`:
 
 ```typescript
-import { PlayerEvents } from 'ngx-streaming-player';
+import { PlayerEvents } from '@jhonsferg/ngx-streaming-player';
 
 readonly playerEvents: PlayerEvents = {
   onPlay:            () => analytics.track('play'),
