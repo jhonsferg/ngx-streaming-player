@@ -20,6 +20,11 @@ import { NgxSpTimeDisplay } from './components/ngx-sp-time-display/ngx-sp-time-d
 import { NgxSpVolumeControl } from './components/ngx-sp-volume-control/ngx-sp-volume-control';
 import { NgxSpProgressBar } from './components/ngx-sp-progress-bar/ngx-sp-progress-bar';
 import { NgxSpSettingsMenu } from './components/ngx-sp-settings-menu/ngx-sp-settings-menu';
+import { PLAYER_TRANSLATIONS } from '../../tokens/player.tokens';
+import {
+  DEFAULT_PLAYER_TRANSLATIONS,
+  PlayerTranslations,
+} from '../../models/player-translations.model';
 
 /**
  * Full-featured controls bar rendered inside `<ngx-sp-player>`.
@@ -73,6 +78,30 @@ export class PlayerControlsComponent {
 
   /** @internal Player service injected from the parent scope. */
   readonly playerService = inject(PlayerService);
+
+  /** @internal Optional translation overrides from `withTranslations()`. */
+  private readonly customTranslations = inject(PLAYER_TRANSLATIONS, { optional: true });
+
+  /**
+   * Merged translation map used in the controls template.
+   * English defaults are overridden by any keys provided via `withTranslations()`.
+   */
+  readonly i18n = computed<PlayerTranslations>(() => ({
+    ...DEFAULT_PLAYER_TRANSLATIONS,
+    ...(this.customTranslations ?? {}),
+  }));
+
+  /**
+   * `true` when the settings menu has at least one visible row.
+   * Hides the gear button entirely when quality, subtitles, and speed
+   * are all unavailable (e.g. a native MP4 on a live stream with no tracks).
+   */
+  readonly hasSettings = computed(() => {
+    const hasQuality = this.stateService.availableQualities().length > 0;
+    const hasSubtitles = this.stateService.supportsSubtitles();
+    const hasSpeed = !this.stateService.isLive();
+    return hasQuality || hasSubtitles || hasSpeed;
+  });
 
   // -- UI state signals ------------------------------------------------------
 
