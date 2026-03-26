@@ -25,25 +25,28 @@
                 d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.06-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.73,8.87C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.06,0.94l-2.03,1.58c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.43-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.49-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"
               />
             </svg>
-            Configuración
+            {{ i18n().settings }}
           </div>
 
-          <button class="settings-panel__row" (click)="onNavigateMenu('quality')">
-            <span class="settings-panel__row-left">
-              <svg viewBox="0 0 24 24" fill="currentColor" class="settings-panel__row-icon">
-                <path
-                  d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"
-                />
-              </svg>
-              Calidad
-            </span>
-            <span class="settings-panel__row-value">
-              {{ getQualityLabel(currentQuality()) }}
-              <svg viewBox="0 0 24 24" fill="currentColor" class="settings-panel__chevron">
-                <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
-              </svg>
-            </span>
-          </button>
+          <!-- Quality row — hidden when no quality levels are available -->
+          @if (qualityLevels().length > 0) {
+            <button class="settings-panel__row" (click)="onNavigateMenu('quality')">
+              <span class="settings-panel__row-left">
+                <svg viewBox="0 0 24 24" fill="currentColor" class="settings-panel__row-icon">
+                  <path
+                    d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"
+                  />
+                </svg>
+                {{ i18n().quality }}
+              </span>
+              <span class="settings-panel__row-value">
+                {{ getQualityLabel(currentQuality()) }}
+                <svg viewBox="0 0 24 24" fill="currentColor" class="settings-panel__chevron">
+                  <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
+                </svg>
+              </span>
+            </button>
+          }
 
           @if (supportsSubtitles()) {
             <button class="settings-panel__row" (click)="onNavigateMenu('subtitles')">
@@ -53,7 +56,7 @@
                     d="M19 4H5c-1.11 0-2 .9-2 2v12c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 7H9.5v-.5h-2v3h2V13H11v1.5c0 .28-.22.5-.5.5h-3c-.28 0-.5-.22-.5-.5v-4c0-.28.22-.5.5-.5h3c.28 0 .5.22.5.5V11zm7 0h-1.5v-.5h-2v3h2V13H18v1.5c0 .28-.22.5-.5.5h-3c-.28 0-.5-.22-.5-.5v-4c0-.28.22-.5.5-.5h3c.28 0 .5.22.5.5V11z"
                   />
                 </svg>
-                Subtítulos
+                {{ i18n().captionsTracks }}
               </span>
               <span class="settings-panel__row-value">
                 {{ getSubtitleLabel() }}
@@ -72,10 +75,10 @@
                     d="M20.38 8.57l-1.23 1.85a8 8 0 0 1-.22 7.58H5.07A8 8 0 0 1 15.58 6.85l1.85-1.23A10 10 0 0 0 3.35 19a2 2 0 0 0 1.72 1h13.85a2 2 0 0 0 1.74-1 10 10 0 0 0-.27-10.44zm-9.79 6.84a2 2 0 0 0 2.83 0l5.66-8.49-8.49 5.66a2 2 0 0 0 0 2.83z"
                   />
                 </svg>
-                Velocidad
+                {{ i18n().speed }}
               </span>
               <span class="settings-panel__row-value">
-                {{ playbackRate() === 1 ? 'Normal' : playbackRate() + 'x' }}
+                {{ playbackRate() === 1 ? i18n().normalSpeed : playbackRate() + 'x' }}
                 <svg viewBox="0 0 24 24" fill="currentColor" class="settings-panel__chevron">
                   <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
                 </svg>
@@ -92,7 +95,7 @@
             <svg viewBox="0 0 24 24" fill="currentColor">
               <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
             </svg>
-            Calidad
+            {{ i18n().quality }}
           </button>
 
           <div class="settings-panel__options">
@@ -121,7 +124,7 @@
             <svg viewBox="0 0 24 24" fill="currentColor">
               <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
             </svg>
-            Velocidad
+            {{ i18n().speed }}
           </button>
 
           <div class="settings-panel__options">
@@ -131,7 +134,7 @@
                 [class.settings-panel__option--active]="playbackRate() === speed"
                 (click)="onSetSpeed(speed)"
               >
-                <span>{{ speed === 1 ? 'Normal' : speed + 'x' }}</span>
+                <span>{{ speed === 1 ? i18n().normalSpeed : speed + 'x' }}</span>
                 @if (playbackRate() === speed) {
                   <svg viewBox="0 0 24 24" fill="currentColor" class="settings-panel__check">
                     <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
@@ -150,7 +153,7 @@
             <svg viewBox="0 0 24 24" fill="currentColor">
               <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
             </svg>
-            Subtítulos
+            {{ i18n().captionsTracks }}
           </button>
 
           <div class="settings-panel__options">
@@ -160,7 +163,7 @@
               [class.settings-panel__option--active]="activeSubtitleId() === null"
               (click)="onSetSubtitle(null)"
             >
-              <span>Desactivado</span>
+              <span>{{ i18n().subtitlesOff }}</span>
               @if (activeSubtitleId() === null) {
                 <svg viewBox="0 0 24 24" fill="currentColor" class="settings-panel__check">
                   <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
