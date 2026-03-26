@@ -29,6 +29,7 @@ import { PlayerStateService } from '../../services/player-state.service';
 import { NgxPlayerControlService } from '../../services/ngx-player-control.service';
 import { YouTubeAdapter } from '../../adapters/youtube/youtube.adapter';
 import { PlayerControlsComponent } from '../player-controls/player-controls.component';
+import { PLAYER_DEFAULTS, PLAYER_THEME } from '../../tokens/player.tokens';
 
 /**
  * Main streaming player component — the only element a consumer needs to add
@@ -323,6 +324,20 @@ export class StreamingPlayerComponent implements OnInit, AfterViewInit, OnDestro
   /** @internal Global control service used to register / unregister this player. */
   private readonly controlService = inject(NgxPlayerControlService);
 
+  /**
+   * Optional global theme baseline provided via `withTheme()` inside
+   * `providePlayer()`.  Merged as the lowest-priority layer — component-level
+   * `[theme]` inputs and `config.theme` always override these global values.
+   */
+  private readonly globalTheme = inject(PLAYER_THEME, { optional: true });
+
+  /**
+   * Optional global config defaults provided via `withDefaults()` inside
+   * `providePlayer()`.  Merged as the lowest-priority layer — component-level
+   * `[config]` bindings and shorthand inputs always take precedence.
+   */
+  private readonly globalDefaults = inject(PLAYER_DEFAULTS, { optional: true });
+
   // -- Computed signals --------------------------------------------------------
 
   /**
@@ -338,7 +353,14 @@ export class StreamingPlayerComponent implements OnInit, AfterViewInit, OnDestro
    * // → resolvedConfig.volume === 0.8  (shorthand wins)
    */
   readonly resolvedConfig = computed<PlayerConfig>(() => {
-    const base = this.config() ?? ({} as PlayerConfig);
+    // Priority (lowest → highest):
+    // 1. Global defaults from withDefaults()
+    // 2. [config] object
+    // 3. Shorthand inputs ([src], [autoplay], …)
+    const base: PlayerConfig = {
+      ...(this.globalDefaults ?? {}),
+      ...(this.config() ?? {}),
+    } as PlayerConfig;
     const resolved: PlayerConfig = { ...base };
 
     const src = this.src();
@@ -356,8 +378,18 @@ export class StreamingPlayerComponent implements OnInit, AfterViewInit, OnDestro
     const poster = this.poster();
     if (poster !== undefined) resolved.poster = poster;
 
-    const theme = this.theme();
-    if (theme !== undefined) resolved.theme = theme;
+    // Theme priority (lowest → highest):
+    // 1. Global theme from withTheme()
+    // 2. config.theme
+    // 3. [theme] input
+    const inputTheme = this.theme();
+    const configTheme = this.config()?.theme;
+    const mergedTheme: PlayerTheme | undefined =
+      this.globalTheme || configTheme || inputTheme
+        ? { ...(this.globalTheme ?? {}), ...(configTheme ?? {}), ...(inputTheme ?? {}) }
+        : undefined;
+
+    if (mergedTheme) resolved.theme = mergedTheme;
 
     return resolved;
   });
