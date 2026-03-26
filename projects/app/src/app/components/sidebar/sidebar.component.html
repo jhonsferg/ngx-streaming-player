@@ -1,0 +1,172 @@
+<aside class="sidebar" [class.sidebar--open]="state.sidebarOpen()">
+  <div class="sidebar__overlay" (click)="state.closeSidebar()"></div>
+  <div class="sidebar__panel">
+    <nav class="sidebar-nav">
+      <div class="sidebar-nav__group">
+        <span class="sidebar-nav__label">Try it</span>
+        <a
+          class="sidebar-nav__link"
+          href="#playground"
+          [class.active]="state.activeSection() === 'playground'"
+          (click)="state.closeSidebar()"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <polygon points="5 3 19 12 5 21 5 3" />
+          </svg>
+          Playground
+        </a>
+        <a
+          class="sidebar-nav__link"
+          href="#demo"
+          [class.active]="state.activeSection() === 'demo'"
+          (click)="state.closeSidebar()"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="2" y="3" width="20" height="14" rx="2" />
+            <line x1="8" y1="21" x2="16" y2="21" />
+            <line x1="12" y1="17" x2="12" y2="21" />
+          </svg>
+          Demo Player
+        </a>
+      </div>
+
+      <div class="sidebar-nav__group">
+        <span class="sidebar-nav__label">Overview</span>
+        <a
+          class="sidebar-nav__link"
+          href="#features"
+          [class.active]="state.activeSection() === 'features'"
+          (click)="state.closeSidebar()"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+          </svg>
+          Features
+        </a>
+        <a
+          class="sidebar-nav__link"
+          href="#getting-started"
+          [class.active]="state.activeSection() === 'getting-started'"
+          (click)="state.closeSidebar()"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+          </svg>
+          Getting Started
+        </a>
+      </div>
+
+      <div class="sidebar-nav__group">
+        <span class="sidebar-nav__label">Examples</span>
+        <a
+          class="sidebar-nav__link"
+          href="#example-live"
+          [class.active]="state.activeSection() === 'example-live'"
+          (click)="state.closeSidebar()"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <circle cx="12" cy="12" r="10" />
+            <circle cx="12" cy="12" r="3" fill="currentColor" />
+          </svg>
+          Live Streaming
+        </a>
+        <a
+          class="sidebar-nav__link"
+          href="#example-hotswap"
+          [class.active]="state.activeSection() === 'example-hotswap'"
+          (click)="state.closeSidebar()"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M17 1l4 4-4 4" />
+            <path d="M3 11V9a4 4 0 0 1 4-4h14" />
+            <path d="M7 23l-4-4 4-4" />
+            <path d="M21 13v2a4 4 0 0 1-4 4H3" />
+          </svg>
+          Hot-swap
+        </a>
+        <a
+          class="sidebar-nav__link"
+          href="#example-multi"
+          [class.active]="state.activeSection() === 'example-multi'"
+          (click)="state.closeSidebar()"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="2" y="3" width="9" height="7" rx="1" />
+            <rect x="13" y="3" width="9" height="7" rx="1" />
+            <rect x="2" y="14" width="9" height="7" rx="1" />
+            <rect x="13" y="14" width="9" height="7" rx="1" />
+          </svg>
+          Multi-player
+        </a>
+        <a
+          class="sidebar-nav__link"
+          href="#example-service"
+          [class.active]="state.activeSection() === 'example-service'"
+          (click)="state.closeSidebar()"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <polyline points="16 18 22 12 16 6" />
+            <polyline points="8 6 2 12 8 18" />
+          </svg>
+          Programmatic Control
+        </a>
+        <a
+          class="sidebar-nav__link"
+          href="#example-theme"
+          [class.active]="state.activeSection() === 'example-theme'"
+          (click)="state.closeSidebar()"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <circle cx="13.5" cy="6.5" r="2.5" />
+            <circle cx="17.5" cy="10.5" r="2.5" />
+            <circle cx="8.5" cy="7.5" r="2.5" />
+            <circle cx="6.5" cy="12.5" r="2.5" />
+            <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.47-1.125a1.647 1.647 0 0 1-.425-1.125c0-.926.75-1.687 1.672-1.687H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8z" />
+          </svg>
+          Theming
+        </a>
+        <a
+          class="sidebar-nav__link"
+          href="#example-youtube"
+          [class.active]="state.activeSection() === 'example-youtube'"
+          (click)="state.closeSidebar()"
+        >
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M21.58 7.19c-.23-.86-.91-1.54-1.77-1.77C18.25 5 12 5 12 5s-6.25 0-7.81.42c-.86.23-1.54.91-1.77 1.77C2 8.75 2 12 2 12s0 3.25.42 4.81c.23.86.91 1.54 1.77 1.77C5.75 19 12 19 12 19s6.25 0 7.81-.42c.86-.23 1.54-.91 1.77-1.77C22 15.25 22 12 22 12s0-3.25-.42-4.81zM10 15V9l5.2 3-5.2 3z" />
+          </svg>
+          YouTube
+        </a>
+        <a
+          class="sidebar-nav__link"
+          href="#example-events"
+          [class.active]="state.activeSection() === 'example-events'"
+          (click)="state.closeSidebar()"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M18 20V10" />
+            <path d="M12 20V4" />
+            <path d="M6 20v-6" />
+          </svg>
+          Events &amp; State
+        </a>
+      </div>
+
+      <div class="sidebar-nav__group">
+        <span class="sidebar-nav__label">Reference</span>
+        <a
+          class="sidebar-nav__link"
+          href="#api"
+          [class.active]="state.activeSection() === 'api'"
+          (click)="state.closeSidebar()"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+          </svg>
+          API Reference
+        </a>
+      </div>
+    </nav>
+  </div>
+</aside>
