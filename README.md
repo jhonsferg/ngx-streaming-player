@@ -1022,11 +1022,51 @@ Contributions are welcome. Please follow these steps:
 ### Development Commands
 
 ```bash
-npm start            # Start demo app with library in watch mode
-npm run build:lib    # Build library → dist/ngx-streaming-player
-npm run build:demo   # Build demo app for production
-npm test             # Run unit tests
+npm start             # Start showcase app with library source in watch mode
+npm run build:lib     # Build library → dist/ngx-streaming-player
+npm run build:showcase # Build showcase app for production
+npm run lint          # Run ESLint across the workspace
+npm run type-check    # TypeScript type-check without emitting
 ```
+
+### Build Budgets
+
+The showcase app (`projects/app`) enforces Angular build budgets to catch bundle bloat early:
+
+| Budget type         | Warning threshold | Error threshold |
+|---------------------|:-----------------:|:---------------:|
+| `initial` (total JS+CSS) | 3 MB         | 5 MB            |
+| `anyComponentStyle` | 40 kB             | 80 kB           |
+
+Current production output (approximate):
+
+| Chunk        | Raw size | Transferred (gzip) |
+|--------------|:--------:|:------------------:|
+| `main.js`    | ~2.06 MB | ~506 kB            |
+| `styles.css` | ~16 kB   | ~1.2 kB            |
+
+Budgets are configured in `angular.json` under `projects › showcase › architect › build › configurations › production › budgets`.
+
+### CI / CD Pipeline
+
+Every push to `main` runs the **CI / Deploy** workflow (`.github/workflows/ci.yml`):
+
+```
+push to main
+  └─ ci job
+       ├─ npm ci
+       ├─ npm run lint
+       ├─ npm run type-check
+       ├─ npm run build:lib          → dist/ngx-streaming-player/
+       ├─ npm run build:showcase     → dist/showcase/browser/
+       ├─ touch .nojekyll            (prevent Jekyll processing)
+       └─ cp index.html 404.html     (SPA fallback for deep links)
+  └─ deploy job (main push only)
+       └─ actions/deploy-pages@v4   → GitHub Pages
+```
+
+- Pull requests run only the `ci` job (build + lint + type-check) — no deployment.
+- The `concurrency` group cancels any in-progress run for the same ref, so rapid pushes never queue duplicate deployments.
 
 ### Adding a New Adapter
 
