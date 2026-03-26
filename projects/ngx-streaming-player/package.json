@@ -1,5 +1,5 @@
 {
-  "name": "ngx-streaming-player",
+  "name": "@jhonsferg/ngx-streaming-player",
   "version": "1.0.0",
   "description": "Feature-rich Angular video player supporting HLS, DASH, MP4 and YouTube with a polished customisable UI built on Angular Signals.",
   "license": "MIT",
@@ -23,10 +23,17 @@
     "ngx",
     "angular-signals",
     "angular-component",
-    "adaptive-streaming"
+    "adaptive-streaming",
+    "picture-in-picture",
+    "subtitles",
+    "live-streaming",
+    "typescript"
   ],
   "engines": {
     "node": ">=18.0.0"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
   },
   "peerDependencies": {
     "@angular/common": ">=17.0.0",

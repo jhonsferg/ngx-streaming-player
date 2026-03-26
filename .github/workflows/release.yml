@@ -7,10 +7,11 @@ on:
 
 permissions:
   contents: write
+  packages: write
 
 jobs:
   release:
-    name: Build & Publish Release
+    name: Build, Package & Publish
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -19,6 +20,8 @@ jobs:
         with:
           node-version: 22
           cache: npm
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@jhonsferg'
 
       - name: Install dependencies
         run: npm ci
@@ -32,14 +35,14 @@ jobs:
       - name: Build library
         run: npm run build:lib
 
-      - name: Pack library
+      - name: Pack library tarball
         id: pack
         run: |
           VERSION="${GITHUB_REF_NAME#v}"
           cd dist/ngx-streaming-player
           npm pack
           TARBALL="ngx-streaming-player-${VERSION}.tgz"
-          mv "ngx-streaming-player-${VERSION}.tgz" "../../${TARBALL}"
+          mv "@jhonsferg-ngx-streaming-player-${VERSION}.tgz" "../../${TARBALL}"
           echo "tarball=${TARBALL}" >> "$GITHUB_OUTPUT"
           echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
 
@@ -47,12 +50,8 @@ jobs:
         id: notes
         run: |
           VERSION="${{ steps.pack.outputs.version }}"
-          # Extract content between ## [VERSION] and the next ## [
           awk "/^## \[${VERSION}\]/{found=1; next} found && /^## \[/{exit} found{print}" CHANGELOG.md > release_notes.md
-          # Strip leading/trailing blank lines
           sed -i '/./,$!d' release_notes.md
-          echo "Generated release notes:"
-          cat release_notes.md
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -63,3 +62,9 @@ jobs:
           draft: false
           prerelease: false
           make_latest: true
+
+      - name: Publish to GitHub Packages
+        run: npm publish
+        working-directory: dist/ngx-streaming-player
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
