@@ -192,6 +192,60 @@ export class StreamingPlayerComponent implements OnInit, AfterViewInit, OnDestro
    */
   playerError = output<any>();
 
+  /** Emitted when playback starts or resumes after a pause. */
+  played = output<void>();
+
+  /** Emitted when playback is paused. */
+  paused = output<void>();
+
+  /** Emitted when the media reaches its natural end. */
+  videoEnded = output<void>();
+
+  /**
+   * Emitted on every `timeupdate` event (≈ 250 ms while playing).
+   * Carries the current playback position in seconds.
+   */
+  timeUpdate = output<number>();
+
+  /**
+   * Emitted when the total media duration is first determined or changes.
+   * Carries the duration in seconds.
+   */
+  durationChange = output<number>();
+
+  /**
+   * Emitted when the volume level or mute state changes.
+   * Carries both `volume` (0–1) and `muted` so consumers need only one handler.
+   */
+  volumeChange = output<{ volume: number; muted: boolean }>();
+
+  /**
+   * Emitted when the active quality level changes.
+   * Carries the human-readable label (e.g. `'1080p'`, `'auto'`).
+   */
+  qualityChange = output<string>();
+
+  /**
+   * Emitted when buffering starts (`true`) or ends (`false`).
+   */
+  bufferingChange = output<boolean>();
+
+  /**
+   * Emitted when the active subtitle track changes.
+   * Carries the track ID, or `null` when subtitles are disabled.
+   */
+  subtitleChange = output<string | number | null>();
+
+  /**
+   * Emitted when the player enters (`true`) or exits (`false`) fullscreen.
+   */
+  fullscreenChange = output<boolean>();
+
+  /**
+   * Emitted when the player enters (`true`) or exits (`false`) Picture-in-Picture.
+   */
+  pipChange = output<boolean>();
+
   // -- UI state signals --------------------------------------------------------
 
   /**
@@ -232,6 +286,24 @@ export class StreamingPlayerComponent implements OnInit, AfterViewInit, OnDestro
    * first render (before `ngAfterViewInit` has set `lastLoadedSrc`).
    */
   private initialized = false;
+
+  /**
+   * Tracks which granular-event effects have already fired once so the
+   * "skip-first-run" guard works without extra signal overhead.
+   */
+  private readonly _skipFirst = new Set<string>();
+
+  /** Previous `isPlaying` value — used to distinguish play from pause. */
+  private _prevPlaying: boolean | null = null;
+
+  /** Previous `isBuffering` value — used to emit transitions only. */
+  private _prevBuffering: boolean | null = null;
+
+  /** Previous `isFullscreen` value — used to emit transitions only. */
+  private _prevFullscreen: boolean | null = null;
+
+  /** Previous `isPiP` value — used to emit transitions only. */
+  private _prevPiP: boolean | null = null;
 
   /**
    * Tracks the last `src` value that was passed to `loadSource()` so the
@@ -299,21 +371,124 @@ export class StreamingPlayerComponent implements OnInit, AfterViewInit, OnDestro
       this.stateChange.emit(state);
     });
 
-    // Forward errors to the `error` output.
+    // Forward errors to playerError output + PlayerEvents callback.
     effect(() => {
       const err = this.stateService.error();
-      if (err) this.playerError.emit(err);
+      if (err) {
+        this.playerError.emit(err);
+        this.events()?.onError?.(err);
+      }
     });
 
     // Hot-swap: reload when src changes after initial load.
-    // Guards against double-load: ngAfterViewInit sets lastLoadedSrc before
-    // this effect can run (both happen in the same first CD flush).
     effect(() => {
       const cfg = this.resolvedConfig();
       if (!this.initialized || cfg.src === this.lastLoadedSrc) return;
       this.lastLoadedSrc = cfg.src;
       this.playerService.loadSource(cfg.src, cfg);
     });
+
+    // play / pause — emit only on actual transitions, skip initial value.
+    effect(() => {
+      const playing = this.stateService.isPlaying();
+      if (this._prevPlaying === null) { this._prevPlaying = playing; return; }
+      if (playing === this._prevPlaying) return;
+      this._prevPlaying = playing;
+      if (playing) {
+        this.played.emit();
+        this.events()?.onPlay?.();
+      } else {
+        this.paused.emit();
+        this.events()?.onPause?.();
+      }
+    });
+
+    // ended — fires only when the signal transitions to true.
+    effect(() => {
+      if (this.stateService.isEnded()) {
+        this.videoEnded.emit();
+        this.events()?.onEnded?.();
+      }
+    });
+
+    // timeUpdate — skip initial 0, emit every subsequent change.
+    effect(() => {
+      const t = this.stateService.currentTime();
+      if (t > 0) {
+        this.timeUpdate.emit(t);
+        this.events()?.onTimeUpdate?.(t);
+      }
+    });
+
+    // durationChange — skip initial 0 (metadata not yet loaded).
+    effect(() => {
+      const d = this.stateService.duration();
+      if (d > 0) {
+        this.durationChange.emit(d);
+        this.events()?.onDurationChange?.(d);
+      }
+    });
+
+    // volumeChange — skip the first run (initial defaults).
+    effect(() => {
+      const volume = this.stateService.volume();
+      const muted = this.stateService.muted();
+      if (!this._skipFirst.has('volume')) { this._skipFirst.add('volume'); return; }
+      this.volumeChange.emit({ volume, muted });
+      this.events()?.onVolumeChange?.(volume);
+    });
+
+    // qualityChange — skip the first run ('auto' default).
+    effect(() => {
+      const q = this.stateService.quality();
+      if (!this._skipFirst.has('quality')) { this._skipFirst.add('quality'); return; }
+      this.qualityChange.emit(q);
+      this.events()?.onQualityChange?.(q);
+    });
+
+    // bufferingChange — emit only on transitions, skip initial value.
+    effect(() => {
+      const buffering = this.stateService.isBuffering();
+      if (this._prevBuffering === null) { this._prevBuffering = buffering; return; }
+      if (buffering === this._prevBuffering) return;
+      this._prevBuffering = buffering;
+      this.bufferingChange.emit(buffering);
+      this.events()?.onBufferingChange?.(buffering);
+    });
+
+    // subtitleChange — skip first run (null default).
+    effect(() => {
+      const id = this.stateService.activeSubtitleId();
+      if (!this._skipFirst.has('subtitle')) { this._skipFirst.add('subtitle'); return; }
+      this.subtitleChange.emit(id);
+      this.events()?.onSubtitleChange?.(id);
+    });
+
+    // fullscreenChange — emit only on transitions, skip initial false.
+    effect(() => {
+      const fs = this.stateService.isFullscreen();
+      if (this._prevFullscreen === null) { this._prevFullscreen = fs; return; }
+      if (fs === this._prevFullscreen) return;
+      this._prevFullscreen = fs;
+      this.fullscreenChange.emit(fs);
+      this.events()?.onFullscreenChange?.(fs);
+    });
+
+    // pipChange — emit only on transitions, skip initial false.
+    effect(() => {
+      const pip = this.stateService.isPiP();
+      if (this._prevPiP === null) { this._prevPiP = pip; return; }
+      if (pip === this._prevPiP) return;
+      this._prevPiP = pip;
+      this.pipChange.emit(pip);
+      this.events()?.onPiPChange?.(pip);
+    });
+  }
+
+  /** @internal Returns `true` on the first call for a given key, `false` thereafter. */
+  private skipFirst(key: string): boolean {
+    if (!this._skipFirst.has(key)) { this._skipFirst.add(key); return true; }
+    return false;
   }
 
   // -- Lifecycle hooks ---------------------------------------------------------
