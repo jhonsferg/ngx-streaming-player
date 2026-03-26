@@ -47,13 +47,23 @@ const QUALITY_MAP: Record<string, string> = {
  * events. A 250 ms `setInterval` polls `getCurrentTime()` and
  * `getVideoLoadedFraction()` while the player is in the PLAYING state.
  *
- * **Two-phase quality change** — YouTube's bandwidth probe during the BUFFERING
- * state can silently downgrade a user-selected quality. The adapter uses a
- * two-phase approach:
- * 1. Phase 1 (`setQuality`): calls `loadVideoById` with `suggestedQuality`
- *    and stores the target key in `pendingYtQuality`.
- * 2. Phase 2 (`onPlayerStateChange / PLAYING`): asserts `setPlaybackQuality`
- *    again once the player enters the PLAYING state, overriding any downgrade.
+ * ### Two-phase quality change
+ *
+ * YouTube does not honour quality requests made while the player is in BUFFERING
+ * state — its adaptive bandwidth probe during buffering will silently downgrade
+ * the `suggestedQuality` set in Phase 1.  The fix is a two-phase protocol:
+ *
+ * - **Phase 1** (`setQuality`): calls `loadVideoById` with `suggestedQuality`
+ *   and stores the raw YT key in `pendingYtQuality`.
+ * - **Phase 2** (`onPlayerStateChange → PLAYING`): clears `pendingYtQuality`
+ *   first, then calls `setPlaybackQuality` to assert the quality now that the
+ *   player has left BUFFERING.
+ *
+ * The `onPlaybackQualityChange` event handler is guarded by `pendingYtQuality`:
+ * while it is set, the first event (which carries the *old* quality from
+ * `loadVideoById` starting) is ignored so the optimistic UI update is not
+ * overwritten.  After Phase 2 clears the flag, the next `onPlaybackQualityChange`
+ * event carries the confirmed quality and updates the state correctly.
  *
  * **PiP** — The YouTube iframe renders in a sandboxed `<iframe>`. The browser
  * PiP API is not available for iframe content, so `setSupportsPiP(false)` is
