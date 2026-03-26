@@ -159,6 +159,10 @@ export class NativeAdapter implements IPlayerAdapter {
       o,
     );
     v.addEventListener('ratechange', () => this.stateService.setPlaybackRate(v.playbackRate), o);
+    v.addEventListener('ended', () => {
+      this.stateService.setPlaying(false);
+      this.stateService.setEnded(true);
+    }, o);
     v.addEventListener('error', (e) => this.stateService.setError(e), o);
   }
 
