@@ -226,7 +226,12 @@ playerConfig: PlayerConfig = {
   playerId="main-player"
   (ready)="onReady()"
   (stateChange)="onState($event)"
-  (error)="onError($event)"
+  (playerError)="onError($event)"
+  (played)="onPlay()"
+  (paused)="onPause()"
+  (videoEnded)="onEnded()"
+  (timeUpdate)="onTime($event)"
+  (qualityChange)="onQuality($event)"
 >
 </ngx-sp-player>
 ```
@@ -488,25 +493,79 @@ export class PlayerStatus {
   playerId="main"
   (ready)="onReady()"
   (stateChange)="onState($event)"
-  (error)="onError($event)"
+  (playerError)="onError($event)"
+  (played)="onPlay()"
+  (paused)="onPause()"
+  (videoEnded)="onEnded()"
+  (timeUpdate)="onTime($event)"
+  (durationChange)="onDuration($event)"
+  (volumeChange)="onVolume($event)"
+  (qualityChange)="onQuality($event)"
+  (bufferingChange)="onBuffering($event)"
+  (subtitleChange)="onSubtitle($event)"
+  (fullscreenChange)="onFullscreen($event)"
+  (pipChange)="onPiP($event)"
 >
 </ngx-sp-player>
 ```
 
 ```typescript
 onReady(): void {
-  // Player has finished initialising - safe to call ctrl.play() here
+  // Player fully initialised — safe to issue commands
   this.ctrl.play('main');
 }
 
-onState(state: PlayerState): void {
-  if (state.isLive)      this.showLiveBadge = true;
-  if (state.isBuffering) this.spinnerVisible = true;
+onPlay(): void {
+  analytics.track('play');
+}
+
+onPause(): void {
+  analytics.track('pause');
+}
+
+onEnded(): void {
+  this.showNextEpisode = true;
+}
+
+onTime(seconds: number): void {
+  this.currentProgress = seconds;
+}
+
+onDuration(seconds: number): void {
+  this.totalDuration = seconds;
+}
+
+onVolume(payload: { volume: number; muted: boolean }): void {
+  this.userVolume = payload.volume;
+}
+
+onQuality(label: string): void {
+  console.log('Quality changed to', label);
+}
+
+onBuffering(isBuffering: boolean): void {
+  this.spinnerVisible = isBuffering;
+}
+
+onSubtitle(id: string | number | null): void {
+  this.activeSubtitle = id;
+}
+
+onFullscreen(active: boolean): void {
+  this.isFullscreen = active;
+}
+
+onPiP(active: boolean): void {
+  this.isPiP = active;
 }
 
 onError(err: unknown): void {
   console.error('Playback error:', err);
-  this.showFallback = true;
+}
+
+onState(state: PlayerState): void {
+  // Full state snapshot — useful for debugging or external state sync
+  this.playerState = state;
 }
 ```
 
@@ -535,6 +594,7 @@ onError(err: unknown): void {
 | `activeSubtitleId()`     | `string\|number\|null` | Active subtitle track ID, or `null`             |
 | `supportsPiP()`          | `boolean`              | Whether PiP is available (false for YouTube)    |
 | `isYouTube()`            | `boolean`              | Whether the active adapter is YouTube           |
+| `isEnded()`              | `boolean`              | Whether the media has reached its natural end   |
 
 ---
 
@@ -636,11 +696,49 @@ Enabled by default (`enableKeyboard: true`). Active when the player container is
 
 ### `<ngx-sp-player>` Outputs
 
-| Output        | Payload       | When                                                          |
-| ------------- | ------------- | ------------------------------------------------------------- |
-| `ready`       | `void`        | Player finished initialising and is ready to play             |
-| `stateChange` | `PlayerState` | Any state change (play, pause, buffer, seek, error recovery…) |
-| `error`       | `unknown`     | Fatal playback error from the adapter                         |
+| Output             | Payload                              | When                                                          |
+| ------------------ | ------------------------------------ | ------------------------------------------------------------- |
+| `ready`            | `void`                               | Player finished initialising and is ready to play             |
+| `stateChange`      | `PlayerState`                        | Any state change — full snapshot on every mutation            |
+| `playerError`      | `unknown`                            | Fatal or recoverable adapter error                            |
+| `played`           | `void`                               | Playback starts or resumes                                    |
+| `paused`           | `void`                               | Playback pauses                                               |
+| `videoEnded`       | `void`                               | Media reaches its natural end                                 |
+| `timeUpdate`       | `number`                             | Current position in seconds (≈ every 250 ms while playing)    |
+| `durationChange`   | `number`                             | Total duration detected or changed (seconds)                  |
+| `volumeChange`     | `{ volume: number; muted: boolean }` | Volume level or mute state changed                            |
+| `qualityChange`    | `string`                             | Active quality label changed (e.g. `'1080p'`, `'auto'`)       |
+| `bufferingChange`  | `boolean`                            | `true` when buffering starts, `false` when it ends            |
+| `subtitleChange`   | `string \| number \| null`           | Active subtitle track changed (`null` = disabled)             |
+| `fullscreenChange` | `boolean`                            | Player enters (`true`) or exits (`false`) fullscreen          |
+| `pipChange`        | `boolean`                            | Player enters (`true`) or exits (`false`) Picture-in-Picture  |
+
+### `PlayerEvents` Callback API
+
+As an alternative to Angular output bindings, pass a plain object via `[events]`:
+
+```typescript
+import { PlayerEvents } from 'ngx-streaming-player';
+
+readonly playerEvents: PlayerEvents = {
+  onPlay:            () => analytics.track('play'),
+  onPause:           () => analytics.track('pause'),
+  onEnded:           () => (this.showNextEpisode = true),
+  onTimeUpdate:      (t) => (this.progress = t),
+  onDurationChange:  (d) => (this.duration = d),
+  onVolumeChange:    (v) => (this.volume = v),
+  onQualityChange:   (q) => console.log('quality →', q),
+  onBufferingChange: (b) => (this.spinner = b),
+  onSubtitleChange:  (id) => (this.subtitle = id),
+  onFullscreenChange:(fs) => (this.fullscreen = fs),
+  onPiPChange:       (pip) => (this.pip = pip),
+  onError:           (err) => console.error(err),
+};
+```
+
+```html
+<ngx-sp-player [config]="config" [events]="playerEvents" />
+```
 
 ### `PlayerConfig` Interface
 
