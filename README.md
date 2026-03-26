@@ -4,18 +4,18 @@
 
 **Professional adaptive streaming player for Angular 17+**
 
-[![Angular](https://img.shields.io/badge/Angular-21+-DD0031?style=flat-square&logo=angular&logoColor=white)](https://angular.dev)
+[![CI](https://img.shields.io/github/actions/workflow/status/jhonsferg/ngx-streaming-player/ci.yml?branch=main&style=flat-square&label=CI)](https://github.com/jhonsferg/ngx-streaming-player/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/jhonsferg/ngx-streaming-player?style=flat-square&color=E76F51)](https://github.com/jhonsferg/ngx-streaming-player/releases)
+[![Angular](https://img.shields.io/badge/Angular-17+-DD0031?style=flat-square&logo=angular&logoColor=white)](https://angular.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
-[![HLS.js](https://img.shields.io/badge/HLS.js-1.x-FF6B6B?style=flat-square)](https://github.com/video-dev/hls.js)
-[![dash.js](https://img.shields.io/badge/dash.js-4.x-4ECDC4?style=flat-square)](https://github.com/Dash-IF/dash.js)
 [![License: MIT](https://img.shields.io/badge/License-MIT-F4A261?style=flat-square)](LICENSE)
-[![npm](https://img.shields.io/badge/npm-0.0.1-E76F51?style=flat-square&logo=npm&logoColor=white)](https://www.npmjs.com/package/ngx-streaming-player)
-[![Standalone](https://img.shields.io/badge/Angular-Standalone-DD0031?style=flat-square&logo=angular)](https://angular.dev/guide/components/importing)
-[![Signals](https://img.shields.io/badge/Angular-Signals-7C3AED?style=flat-square&logo=angular)](https://angular.dev/guide/signals)
+[![npm](https://img.shields.io/badge/npm-1.0.0-E76F51?style=flat-square&logo=npm&logoColor=white)](https://www.npmjs.com/package/ngx-streaming-player)
+[![Angular Signals](https://img.shields.io/badge/Angular-Signals-7C3AED?style=flat-square&logo=angular)](https://angular.dev/guide/signals)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-2A9D8F?style=flat-square)](CONTRIBUTING.md)
 
 A unified, **plug-and-play** video player component that handles **HLS**, **DASH**, **MP4**, and **YouTube** through a single API - with hot-swap source switching, live stream detection, multi-player support, PiP, subtitles, and full CSS theming.
 
-[**Live Demo →**](https://jhonsferg.github.io/ngx-streaming-player)&nbsp;&nbsp;·&nbsp;&nbsp;[Report Bug](https://github.com/jhonsferg/ngx-streaming-player/issues)&nbsp;&nbsp;·&nbsp;&nbsp;[Request Feature](https://github.com/jhonsferg/ngx-streaming-player/issues)
+[**Live Demo →**](https://jhonsferg.github.io/ngx-streaming-player)&nbsp;&nbsp;·&nbsp;&nbsp;[Report Bug](https://github.com/jhonsferg/ngx-streaming-player/issues/new?template=bug_report.yml)&nbsp;&nbsp;·&nbsp;&nbsp;[Request Feature](https://github.com/jhonsferg/ngx-streaming-player/issues/new?template=feature_request.yml)&nbsp;&nbsp;·&nbsp;&nbsp;[Changelog](CHANGELOG.md)
 
 </div>
 
@@ -48,6 +48,11 @@ A unified, **plug-and-play** video player component that handles **HLS**, **DASH
 - [Browser Support](#browser-support)
 - [Project Structure](#project-structure)
 - [Contributing](#contributing)
+  - [Development Commands](#development-commands)
+  - [Build Budgets](#build-budgets)
+  - [CI / CD Pipeline](#ci--cd-pipeline)
+- [Community](#community)
+- [Changelog](#changelog)
 - [License](#license)
 
 ---
@@ -1072,14 +1077,36 @@ push to main
 
 1. Create `projects/ngx-streaming-player/src/lib/adapters/myprotocol/myprotocol.adapter.ts`
 2. Implement `IPlayerAdapter`
-3. Add detection logic in `player.service.ts` → `detectProtocol()` and `createAdapter()`
+3. Add detection logic in `player.service.ts` - `detectProtocol()` and `createAdapter()`
 4. Export from `src/public-api.ts` if it needs to be injectable externally
+5. Document in README and add an example to the showcase app
+
+---
+
+## Community
+
+| Resource | Link |
+|----------|------|
+| Contributing guide | [CONTRIBUTING.md](CONTRIBUTING.md) |
+| Code of Conduct | [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) |
+| Security policy | [SECURITY.md](SECURITY.md) |
+| Bug reports | [Issue tracker](https://github.com/jhonsferg/ngx-streaming-player/issues/new?template=bug_report.yml) |
+| Feature requests | [Issue tracker](https://github.com/jhonsferg/ngx-streaming-player/issues/new?template=feature_request.yml) |
+| Releases | [GitHub Releases](https://github.com/jhonsferg/ngx-streaming-player/releases) |
+
+All contributions, issues, and feature requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) to get started.
+
+---
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for the full list of changes per version.
 
 ---
 
 ## License
 
-MIT © [jhonsferg](https://github.com/jhonsferg)
+[MIT](LICENSE)
 
 ---
 
