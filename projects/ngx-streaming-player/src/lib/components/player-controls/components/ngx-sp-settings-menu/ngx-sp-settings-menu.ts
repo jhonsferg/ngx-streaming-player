@@ -1,5 +1,10 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input, output, inject, computed } from '@angular/core';
 import { SubtitleTrack } from '../../../../models/player.models';
+import { PLAYER_TRANSLATIONS } from '../../../../tokens/player.tokens';
+import {
+  DEFAULT_PLAYER_TRANSLATIONS,
+  PlayerTranslations,
+} from '../../../../models/player-translations.model';
 
 /**
  * Settings (gear) menu with hierarchical sub-panels.
@@ -135,6 +140,20 @@ export class NgxSpSettingsMenu {
    */
   setSubtitle = output<string | number | null>();
 
+  // -- Translations ------------------------------------------------------------
+
+  /** @internal Optional translation overrides injected from `withTranslations()`. */
+  private readonly customTranslations = inject(PLAYER_TRANSLATIONS, { optional: true });
+
+  /**
+   * Merged translation map: English defaults overridden by any keys supplied
+   * via `withTranslations()`.  Use `i18n().xxx` in the template.
+   */
+  readonly i18n = computed<PlayerTranslations>(() => ({
+    ...DEFAULT_PLAYER_TRANSLATIONS,
+    ...(this.customTranslations ?? {}),
+  }));
+
   // -- Static data -------------------------------------------------------------
 
   /**
@@ -190,7 +209,7 @@ export class NgxSpSettingsMenu {
    * @param level - Quality level value from `qualityLevels`.
    */
   getLevelLabel(level: any): string {
-    if (level === 'auto') return 'Automático';
+    if (level === 'auto') return this.i18n().auto;
     if (typeof level === 'string') return level;
     if (level.height) return `${level.height}p`;
     if (level.bitrate) return `${Math.round(level.bitrate / 1000)}kbps`;
@@ -264,9 +283,9 @@ export class NgxSpSettingsMenu {
    */
   getSubtitleLabel(): string {
     const id = this.activeSubtitleId();
-    if (id === null) return 'Desactivado';
+    if (id === null) return this.i18n().subtitlesOff;
     const track = this.availableSubtitles().find((t) => String(t.id) === String(id));
-    return track?.label || 'Activado';
+    return track?.label || this.i18n().subtitlesEnabled;
   }
 
   /**
