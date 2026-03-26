@@ -7,6 +7,13 @@ export * from './lib/components/streaming-player/streaming-player.component';
 
 // Models and interfaces
 export * from './lib/models/player.models';
+export * from './lib/models/player-translations.model';
+
+// Provider function and feature functions
+export * from './lib/providers/player.providers';
+
+// Injection tokens (for advanced consumers that want to inject them directly)
+export * from './lib/tokens/player.tokens';
 
 // Services
 export * from './lib/services/player.service';
