@@ -11,6 +11,12 @@
   <div
     class="progress-bar"
     #progressBar
+    role="slider"
+    tabindex="0"
+    aria-label="Seek"
+    [attr.aria-valuemin]="0"
+    [attr.aria-valuemax]="100"
+    [attr.aria-valuenow]="progressPercentage()"
     [class.progress-bar--dragging]="isDragging()"
     [class.progress-bar--hovering]="isHovering()"
     (click)="onSeek($event)"
@@ -19,6 +25,7 @@
     (mousemove)="onMouseMove($event)"
     (mouseenter)="onMouseEnter()"
     (mouseleave)="onMouseLeave()"
+    (keydown)="onKeyDown($event)"
   >
     <!-- Buffered layer -->
     <div class="progress-bar__buffered" [style.width.%]="bufferedPercentage()"></div>

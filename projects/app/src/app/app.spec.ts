@@ -1,11 +1,18 @@
 import { TestBed } from '@angular/core/testing';
 import { App } from './app';
+import { DemoComponent } from './components/demo/demo.component';
 
 describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [App],
-    }).compileComponents();
+    })
+      // DemoComponent renders a real ngx-sp-player pointed at a remote HLS
+      // stream. Initializing it here leaves pending zone macrotasks (network
+      // retries) that never stabilize under jsdom, hanging whenStable().
+      // App-level tests only care that the shell renders, so stub it out.
+      .overrideComponent(DemoComponent, { set: { template: '' } })
+      .compileComponents();
   });
 
   it('should create the app', () => {
