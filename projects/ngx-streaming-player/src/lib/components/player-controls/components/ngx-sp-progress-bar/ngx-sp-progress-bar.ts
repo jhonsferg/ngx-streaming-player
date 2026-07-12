@@ -45,6 +45,7 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
   templateUrl: './ngx-sp-progress-bar.html',
   styleUrls: ['./ngx-sp-progress-bar.scss'],
+  host: { 'data-testid': 'ngx-sp-progress-bar' },
 })
 export class NgxSpProgressBar {
   /**

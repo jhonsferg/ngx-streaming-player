@@ -66,6 +66,15 @@ export class NgxSpButton {
   tooltipText = input<string>('');
 
   /**
+   * Value rendered as `data-testid` on the host `<button>` element, for
+   * end-to-end and component tests to target a specific action reliably
+   * without depending on CSS classes or DOM order.
+   *
+   * @default ''
+   */
+  testId = input<string>('');
+
+  /**
    * Emitted when the button is clicked, after the ripple animation is
    * triggered. The native `MouseEvent` is forwarded unchanged.
    */
