@@ -1,15 +1,13 @@
 <button
   class="sp-btn"
   [class]="modifierClass()"
-  (click)="handleClick($event)">
-
+  [attr.data-testid]="testId() || null"
+  [attr.aria-label]="tooltipText() || null"
+  (click)="handleClick($event)"
+>
   <!-- Ripple effect -->
   @if (rippleActive()) {
-    <span
-      class="sp-btn__ripple"
-      [style.left.px]="ripplePos().x"
-      [style.top.px]="ripplePos().y">
-    </span>
+    <span class="sp-btn__ripple" [style.left.px]="ripplePos().x" [style.top.px]="ripplePos().y"> </span>
   }
 
   <!-- Icon content slot -->

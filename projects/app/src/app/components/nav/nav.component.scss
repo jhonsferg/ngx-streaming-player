@@ -17,7 +17,9 @@
   background: var(--nav-bg, rgba(13, 15, 20, 0.82));
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  transition: background 0.3s ease, border-color 0.3s ease;
+  transition:
+    background 0.3s ease,
+    border-color 0.3s ease;
 }
 
 .nav-left {

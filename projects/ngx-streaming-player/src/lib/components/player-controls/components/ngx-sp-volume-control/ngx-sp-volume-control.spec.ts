@@ -8,12 +8,13 @@ describe('NgxSpVolumeControl', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NgxSpVolumeControl]
-    })
-    .compileComponents();
+      imports: [NgxSpVolumeControl],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(NgxSpVolumeControl);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput('volume', 1);
+    fixture.componentRef.setInput('isMuted', false);
     await fixture.whenStable();
   });
 

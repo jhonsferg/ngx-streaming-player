@@ -30,6 +30,7 @@ import { Component, input, output, signal, computed } from '@angular/core';
   imports: [],
   templateUrl: './ngx-sp-volume-control.html',
   styleUrls: ['./ngx-sp-volume-control.scss'],
+  host: { 'data-testid': 'ngx-sp-volume-control' },
 })
 export class NgxSpVolumeControl {
   /**

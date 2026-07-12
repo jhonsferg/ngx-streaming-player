@@ -8,12 +8,13 @@ describe('NgxSpTimeDisplay', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NgxSpTimeDisplay]
-    })
-    .compileComponents();
+      imports: [NgxSpTimeDisplay],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(NgxSpTimeDisplay);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput('currentTime', '0:00');
+    fixture.componentRef.setInput('duration', '0:00');
     await fixture.whenStable();
   });
 

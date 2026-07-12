@@ -8,9 +8,8 @@ describe('NgxSpButton', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NgxSpButton]
-    })
-    .compileComponents();
+      imports: [NgxSpButton],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(NgxSpButton);
     component = fixture.componentInstance;

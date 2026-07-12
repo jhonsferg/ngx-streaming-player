@@ -30,6 +30,9 @@
     "format:check": "prettier --check \"projects/**/*.{ts,html,scss,css,json}\"",
     "type-check": "tsc --noEmit",
     "test": "ng test",
+    "test:coverage": "ng test --no-watch --coverage --coverage-reporters lcov --coverage-reporters text-summary",
+    "e2e": "playwright test",
+    "e2e:ui": "playwright test --ui",
     "publish:lib": "npm run build:lib:prod && cd dist/ngx-streaming-player && npm publish",
     "prepare": "husky"
   },
@@ -73,6 +76,8 @@
     "prettier": "^3.8.1",
     "typescript": "~5.9.2",
     "typescript-eslint": "^8.57.2",
-    "vitest": "^4.0.8"
+    "vitest": "^4.0.8",
+    "@vitest/coverage-v8": "^4.0.8",
+    "@playwright/test": "^1.61.1"
   }
 }

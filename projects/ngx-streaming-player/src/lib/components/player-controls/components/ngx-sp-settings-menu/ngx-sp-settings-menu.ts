@@ -48,6 +48,7 @@ import {
   standalone: true,
   templateUrl: './ngx-sp-settings-menu.html',
   styleUrls: ['./ngx-sp-settings-menu.scss'],
+  host: { 'data-testid': 'ngx-sp-settings-menu' },
 })
 export class NgxSpSettingsMenu {
   // -- Inputs ------------------------------------------------------------------

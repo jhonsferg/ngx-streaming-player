@@ -8,12 +8,13 @@ describe('NgxSpProgressBar', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NgxSpProgressBar]
-    })
-    .compileComponents();
+      imports: [NgxSpProgressBar],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(NgxSpProgressBar);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput('progressPercentage', 0);
+    fixture.componentRef.setInput('bufferedPercentage', 0);
     await fixture.whenStable();
   });
 
