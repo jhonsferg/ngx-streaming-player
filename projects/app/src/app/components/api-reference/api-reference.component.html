@@ -11,8 +11,8 @@
     </h3>
     <p class="api-group__desc">
       Configures the library at the application level. Call this inside
-      <code>ApplicationConfig.providers</code> (standalone) or an
-      <code>NgModule.providers</code> array and pass any combination of feature functions.
+      <code>ApplicationConfig.providers</code> (standalone) or an <code>NgModule.providers</code> array and pass any
+      combination of feature functions.
     </p>
     <div class="code-block">
       <div class="code-block__lang">typescript</div>
@@ -28,10 +28,14 @@ export const appConfig: ApplicationConfig = &#123;
 &#125;;</code></pre>
     </div>
 
-    <div class="api-table-wrap" style="margin-top:1rem">
+    <div class="api-table-wrap" style="margin-top: 1rem">
       <table class="api-table">
         <thead>
-          <tr><th>Feature function</th><th>Argument type</th><th>Description</th></tr>
+          <tr>
+            <th>Feature function</th>
+            <th>Argument type</th>
+            <th>Description</th>
+          </tr>
         </thead>
         <tbody>
           <tr>
@@ -46,16 +50,16 @@ export const appConfig: ApplicationConfig = &#123;
             <td><code>withDefaults(config)</code></td>
             <td><code>Partial&lt;PlayerConfig&gt;</code></td>
             <td>
-              Global config defaults. Any per-player <code>[config]</code> or shorthand
-              input overrides the matching key.
+              Global config defaults. Any per-player <code>[config]</code> or shorthand input overrides the matching
+              key.
             </td>
           </tr>
           <tr>
             <td><code>withTranslations(t)</code></td>
             <td><code>Partial&lt;PlayerTranslations&gt;</code></td>
             <td>
-              Replaces UI strings (button tooltips, menu labels, live badge, etc.).
-              Missing keys fall back to the built-in English defaults.
+              Replaces UI strings (button tooltips, menu labels, live badge, etc.). Missing keys fall back to the
+              built-in English defaults.
             </td>
           </tr>
         </tbody>
@@ -76,25 +80,93 @@ export const appConfig: ApplicationConfig = &#123;
     <div class="api-table-wrap">
       <table class="api-table">
         <thead>
-          <tr><th>Key</th><th>Default (EN)</th><th>Description</th></tr>
+          <tr>
+            <th>Key</th>
+            <th>Default (EN)</th>
+            <th>Description</th>
+          </tr>
         </thead>
         <tbody>
-          <tr><td><code>play</code></td><td><code>'Play (k)'</code></td><td>Play button tooltip.</td></tr>
-          <tr><td><code>pause</code></td><td><code>'Pause (k)'</code></td><td>Pause button tooltip.</td></tr>
-          <tr><td><code>subtitles</code></td><td><code>'Subtitles (c)'</code></td><td>Subtitles toggle tooltip.</td></tr>
-          <tr><td><code>pip</code></td><td><code>'Picture in picture (i)'</code></td><td>PiP button tooltip.</td></tr>
-          <tr><td><code>fullscreen</code></td><td><code>'Fullscreen (f)'</code></td><td>Enter-fullscreen tooltip.</td></tr>
-          <tr><td><code>exitFullscreen</code></td><td><code>'Exit fullscreen (f)'</code></td><td>Exit-fullscreen tooltip.</td></tr>
-          <tr><td><code>watchOnYouTube</code></td><td><code>'Watch on YouTube'</code></td><td>YouTube link title.</td></tr>
-          <tr><td><code>live</code></td><td><code>'LIVE'</code></td><td>Live-stream badge text.</td></tr>
-          <tr><td><code>settings</code></td><td><code>'Settings'</code></td><td>Settings panel header.</td></tr>
-          <tr><td><code>quality</code></td><td><code>'Quality'</code></td><td>Quality row and sub-panel title.</td></tr>
-          <tr><td><code>speed</code></td><td><code>'Speed'</code></td><td>Speed row and sub-panel title.</td></tr>
-          <tr><td><code>captionsTracks</code></td><td><code>'Subtitles'</code></td><td>Captions row and sub-panel title.</td></tr>
-          <tr><td><code>auto</code></td><td><code>'Auto'</code></td><td>ABR quality option label.</td></tr>
-          <tr><td><code>normalSpeed</code></td><td><code>'Normal'</code></td><td>1× speed option label.</td></tr>
-          <tr><td><code>subtitlesOff</code></td><td><code>'Off'</code></td><td>Subtitles disabled option.</td></tr>
-          <tr><td><code>subtitlesEnabled</code></td><td><code>'On'</code></td><td>Fallback when track has no label.</td></tr>
+          <tr>
+            <td><code>play</code></td>
+            <td><code>'Play (k)'</code></td>
+            <td>Play button tooltip.</td>
+          </tr>
+          <tr>
+            <td><code>pause</code></td>
+            <td><code>'Pause (k)'</code></td>
+            <td>Pause button tooltip.</td>
+          </tr>
+          <tr>
+            <td><code>subtitles</code></td>
+            <td><code>'Subtitles (c)'</code></td>
+            <td>Subtitles toggle tooltip.</td>
+          </tr>
+          <tr>
+            <td><code>pip</code></td>
+            <td><code>'Picture in picture (i)'</code></td>
+            <td>PiP button tooltip.</td>
+          </tr>
+          <tr>
+            <td><code>fullscreen</code></td>
+            <td><code>'Fullscreen (f)'</code></td>
+            <td>Enter-fullscreen tooltip.</td>
+          </tr>
+          <tr>
+            <td><code>exitFullscreen</code></td>
+            <td><code>'Exit fullscreen (f)'</code></td>
+            <td>Exit-fullscreen tooltip.</td>
+          </tr>
+          <tr>
+            <td><code>watchOnYouTube</code></td>
+            <td><code>'Watch on YouTube'</code></td>
+            <td>YouTube link title.</td>
+          </tr>
+          <tr>
+            <td><code>live</code></td>
+            <td><code>'LIVE'</code></td>
+            <td>Live-stream badge text.</td>
+          </tr>
+          <tr>
+            <td><code>settings</code></td>
+            <td><code>'Settings'</code></td>
+            <td>Settings panel header.</td>
+          </tr>
+          <tr>
+            <td><code>quality</code></td>
+            <td><code>'Quality'</code></td>
+            <td>Quality row and sub-panel title.</td>
+          </tr>
+          <tr>
+            <td><code>speed</code></td>
+            <td><code>'Speed'</code></td>
+            <td>Speed row and sub-panel title.</td>
+          </tr>
+          <tr>
+            <td><code>captionsTracks</code></td>
+            <td><code>'Subtitles'</code></td>
+            <td>Captions row and sub-panel title.</td>
+          </tr>
+          <tr>
+            <td><code>auto</code></td>
+            <td><code>'Auto'</code></td>
+            <td>ABR quality option label.</td>
+          </tr>
+          <tr>
+            <td><code>normalSpeed</code></td>
+            <td><code>'Normal'</code></td>
+            <td>1× speed option label.</td>
+          </tr>
+          <tr>
+            <td><code>subtitlesOff</code></td>
+            <td><code>'Off'</code></td>
+            <td>Subtitles disabled option.</td>
+          </tr>
+          <tr>
+            <td><code>subtitlesEnabled</code></td>
+            <td><code>'On'</code></td>
+            <td>Fallback when track has no label.</td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -127,10 +199,7 @@ export const appConfig: ApplicationConfig = &#123;
             <td><code>src</code></td>
             <td><code>string</code></td>
             <td>-</td>
-            <td>
-              Media URL. Overrides <code>config.src</code>. Changing this input triggers
-              automatic hot-swap.
-            </td>
+            <td>Media URL. Overrides <code>config.src</code>. Changing this input triggers automatic hot-swap.</td>
           </tr>
           <tr>
             <td><code>autoplay</code></td>
@@ -197,9 +266,7 @@ export const appConfig: ApplicationConfig = &#123;
           <tr>
             <td><code>stateChange</code></td>
             <td><code>PlayerState</code></td>
-            <td>
-              Emits the full state snapshot on every change (play, pause, buffering, etc.).
-            </td>
+            <td>Emits the full state snapshot on every change (play, pause, buffering, etc.).</td>
           </tr>
           <tr>
             <td><code>error</code></td>
@@ -231,8 +298,8 @@ export const appConfig: ApplicationConfig = &#123;
             <td><code>src</code> *</td>
             <td><code>string</code></td>
             <td>
-              Media URL. Auto-detected: <code>.m3u8</code> → HLS, <code>.mpd</code> → DASH,
-              youtube → YouTube, other → native.
+              Media URL. Auto-detected: <code>.m3u8</code> → HLS, <code>.mpd</code> → DASH, youtube → YouTube, other →
+              native.
             </td>
           </tr>
           <tr>
@@ -264,8 +331,7 @@ export const appConfig: ApplicationConfig = &#123;
             <td><code>playbackRates</code></td>
             <td><code>number[]</code></td>
             <td>
-              Speed options in the menu. E.g. <code>[0.5, 1, 1.5, 2]</code>. Hidden
-              automatically for live streams.
+              Speed options in the menu. E.g. <code>[0.5, 1, 1.5, 2]</code>. Hidden automatically for live streams.
             </td>
           </tr>
           <tr>
@@ -316,10 +382,7 @@ export const appConfig: ApplicationConfig = &#123;
           <tr>
             <td><code>load()</code></td>
             <td><code>(src, config?, id?)</code></td>
-            <td>
-              Hot-swap the source. Destroys current adapter, resets state, initializes new
-              one.
-            </td>
+            <td>Hot-swap the source. Destroys current adapter, resets state, initializes new one.</td>
           </tr>
           <tr>
             <td><code>play()</code></td>
@@ -389,9 +452,7 @@ export const appConfig: ApplicationConfig = &#123;
   controlSize:     '44px',    // --ngx-sp-control-size
 &#125;;</code></pre>
     </div>
-    <p class="api-group__desc" style="margin-top: 0.75rem">
-      You can also override the variables directly in your CSS:
-    </p>
+    <p class="api-group__desc" style="margin-top: 0.75rem">You can also override the variables directly in your CSS:</p>
     <div class="code-block">
       <div class="code-block__lang">css</div>
       <pre><code class="language-css">ngx-sp-player &#123;
@@ -409,8 +470,7 @@ export const appConfig: ApplicationConfig = &#123;
       Keyboard Shortcuts
     </h3>
     <p class="api-group__desc">
-      Enable with <code>enableKeyboard: true</code> in config. Shortcuts are scoped to the
-      focused player.
+      Enable with <code>enableKeyboard: true</code> in config. Shortcuts are scoped to the focused player.
     </p>
     <div class="api-table-wrap">
       <table class="api-table">

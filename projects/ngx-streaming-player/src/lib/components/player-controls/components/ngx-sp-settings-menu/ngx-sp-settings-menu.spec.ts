@@ -8,9 +8,8 @@ describe('NgxSpSettingsMenu', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NgxSpSettingsMenu]
-    })
-    .compileComponents();
+      imports: [NgxSpSettingsMenu],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(NgxSpSettingsMenu);
     component = fixture.componentInstance;

@@ -76,7 +76,9 @@
   font-size: 0.76rem;
   font-weight: 500;
   color: var(--c-text-dim);
-  transition: border-color 0.2s, color 0.2s;
+  transition:
+    border-color 0.2s,
+    color 0.2s;
 
   &:hover {
     border-color: var(--c-accent);

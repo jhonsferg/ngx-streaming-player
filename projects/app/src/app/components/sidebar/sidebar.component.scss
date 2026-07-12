@@ -47,7 +47,9 @@
   font-weight: 500;
   color: var(--c-text-dim);
   text-decoration: none;
-  transition: color 0.15s, background 0.15s;
+  transition:
+    color 0.15s,
+    background 0.15s;
   line-height: 1.35;
 
   svg {

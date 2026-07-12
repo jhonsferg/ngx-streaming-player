@@ -68,7 +68,9 @@
   font-family: var(--font-mono);
   font-size: 0.88rem;
   color: var(--c-text);
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
   outline: none;
   min-width: 0;
 
@@ -95,7 +97,10 @@
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
-  transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+  transition:
+    opacity 0.2s,
+    transform 0.15s,
+    box-shadow 0.2s;
   white-space: nowrap;
   flex-shrink: 0;
 
@@ -221,7 +226,9 @@
   border: 1px solid var(--c-border);
   border-radius: var(--radius);
   overflow: hidden;
-  transition: box-shadow 0.2s, border-color 0.2s;
+  transition:
+    box-shadow 0.2s,
+    border-color 0.2s;
 
   &:hover {
     box-shadow: var(--shadow-md);
@@ -270,7 +277,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: color 0.15s, background 0.15s;
+  transition:
+    color 0.15s,
+    background 0.15s;
   flex-shrink: 0;
 
   svg {

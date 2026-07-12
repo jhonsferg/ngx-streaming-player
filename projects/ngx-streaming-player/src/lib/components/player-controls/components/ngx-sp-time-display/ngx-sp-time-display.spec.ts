@@ -8,9 +8,8 @@ describe('NgxSpTimeDisplay', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NgxSpTimeDisplay]
-    })
-    .compileComponents();
+      imports: [NgxSpTimeDisplay],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(NgxSpTimeDisplay);
     component = fixture.componentInstance;

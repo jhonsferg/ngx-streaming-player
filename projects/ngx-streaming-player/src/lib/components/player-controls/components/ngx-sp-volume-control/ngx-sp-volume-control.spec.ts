@@ -8,9 +8,8 @@ describe('NgxSpVolumeControl', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NgxSpVolumeControl]
-    })
-    .compileComponents();
+      imports: [NgxSpVolumeControl],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(NgxSpVolumeControl);
     component = fixture.componentInstance;

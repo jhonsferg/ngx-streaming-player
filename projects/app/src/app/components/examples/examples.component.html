@@ -3,8 +3,8 @@
   <div class="section__header">
     <h2 class="section__title">Live Streaming</h2>
     <p class="section__sub">
-      The player auto-detects live streams. When detected, the progress bar and skip buttons
-      disappear, the speed control is hidden, and an animated
+      The player auto-detects live streams. When detected, the progress bar and skip buttons disappear, the speed
+      control is hidden, and an animated
       <span class="inline-badge live-badge">LIVE</span> badge appears.
     </p>
   </div>
@@ -18,8 +18,7 @@
     <div>
       <strong>Auto-detection method by protocol</strong>
       <p>
-        <strong>HLS</strong> - <code>LEVEL_LOADED</code> event with
-        <code>details.live === true</code>.<br />
+        <strong>HLS</strong> - <code>LEVEL_LOADED</code> event with <code>details.live === true</code>.<br />
         <strong>DASH</strong> - <code>isDynamic()</code> on the manifest.<br />
         <strong>Native MP4</strong> - infinite/very large duration fallback.
       </p>
@@ -68,8 +67,8 @@ export class MyComponent &#123;
     <div>
       <strong>Speed control automatically hidden for live streams</strong>
       <p>
-        When <code>isLive()</code> is <code>true</code>, the playback speed option is removed
-        from the settings menu - changing speed has no effect on a live buffer.
+        When <code>isLive()</code> is <code>true</code>, the playback speed option is removed from the settings menu -
+        changing speed has no effect on a live buffer.
       </p>
     </div>
   </div>
@@ -80,8 +79,8 @@ export class MyComponent &#123;
   <div class="section__header">
     <h2 class="section__title">Hot-swap Protocol</h2>
     <p class="section__sub">
-      Switch between HLS, DASH, MP4, and YouTube at runtime without re-creating the component.
-      The Demo Player section above demonstrates this live.
+      Switch between HLS, DASH, MP4, and YouTube at runtime without re-creating the component. The Demo Player section
+      above demonstrates this live.
     </p>
   </div>
 
@@ -145,9 +144,8 @@ switch(url: string): void &#123;
   <div class="section__header">
     <h2 class="section__title">Multi-player Grid</h2>
     <p class="section__sub">
-      Render any number of players simultaneously using unique <code>playerId</code> values.
-      Each instance gets its own isolated service scope. Use the Playground above to see this
-      live.
+      Render any number of players simultaneously using unique <code>playerId</code> values. Each instance gets its own
+      isolated service scope. Use the Playground above to see this live.
     </p>
   </div>
 
@@ -220,9 +218,8 @@ export class WallComponent &#123;
     <div>
       <strong>Performance tip: lazy mounting</strong>
       <p>
-        For large grids, use an <code>IntersectionObserver</code> to only mount players when
-        they enter the viewport. The Playground already does this - players outside the scroll
-        area are replaced with a lightweight placeholder.
+        For large grids, use an <code>IntersectionObserver</code> to only mount players when they enter the viewport.
+        The Playground already does this - players outside the scroll area are replaced with a lightweight placeholder.
       </p>
     </div>
   </div>
@@ -233,8 +230,8 @@ export class WallComponent &#123;
   <div class="section__header">
     <h2 class="section__title">Programmatic Control</h2>
     <p class="section__sub">
-      <code>NgxPlayerControlService</code> lets you control any player from anywhere in your
-      app - a parent component, a shared service, a keyboard shortcut handler.
+      <code>NgxPlayerControlService</code> lets you control any player from anywhere in your app - a parent component, a
+      shared service, a keyboard shortcut handler.
     </p>
   </div>
 
@@ -379,30 +376,14 @@ ngx-sp-player#my-player &#123;
   </div>
 
   <div class="theme-token-grid">
-    <div class="theme-token">
-      <code>--ngx-sp-primary</code><span>Progress bar, active buttons, seek thumb</span>
-    </div>
-    <div class="theme-token">
-      <code>--ngx-sp-secondary</code><span>Secondary accent color</span>
-    </div>
-    <div class="theme-token">
-      <code>--ngx-sp-accent</code><span>Highlights, ripple effect, hover states</span>
-    </div>
-    <div class="theme-token">
-      <code>--ngx-sp-bg-dark</code><span>Player container background</span>
-    </div>
-    <div class="theme-token">
-      <code>--ngx-sp-text-light</code><span>Primary text &amp; icon color</span>
-    </div>
-    <div class="theme-token">
-      <code>--ngx-sp-overlay-bg</code><span>Controls overlay gradient</span>
-    </div>
-    <div class="theme-token">
-      <code>--ngx-sp-radius</code><span>Container border radius</span>
-    </div>
-    <div class="theme-token">
-      <code>--ngx-sp-control-size</code><span>Button hit area size</span>
-    </div>
+    <div class="theme-token"><code>--ngx-sp-primary</code><span>Progress bar, active buttons, seek thumb</span></div>
+    <div class="theme-token"><code>--ngx-sp-secondary</code><span>Secondary accent color</span></div>
+    <div class="theme-token"><code>--ngx-sp-accent</code><span>Highlights, ripple effect, hover states</span></div>
+    <div class="theme-token"><code>--ngx-sp-bg-dark</code><span>Player container background</span></div>
+    <div class="theme-token"><code>--ngx-sp-text-light</code><span>Primary text &amp; icon color</span></div>
+    <div class="theme-token"><code>--ngx-sp-overlay-bg</code><span>Controls overlay gradient</span></div>
+    <div class="theme-token"><code>--ngx-sp-radius</code><span>Container border radius</span></div>
+    <div class="theme-token"><code>--ngx-sp-control-size</code><span>Button hit area size</span></div>
   </div>
 </section>
 
@@ -411,8 +392,7 @@ ngx-sp-player#my-player &#123;
   <div class="section__header">
     <h2 class="section__title">YouTube Integration</h2>
     <p class="section__sub">
-      Pass any YouTube URL - the player detects it automatically and loads the IFrame API. No
-      API key required.
+      Pass any YouTube URL - the player detects it automatically and loads the IFrame API. No API key required.
     </p>
   </div>
 
@@ -456,10 +436,9 @@ ytConfig: PlayerConfig = &#123;
     <div>
       <strong>YouTube API limitations</strong>
       <p>
-        <strong>No PiP</strong> - the IFrame API prevents browser Picture-in-Picture. The PiP
-        button is hidden automatically.<br />
-        <strong>Quality</strong> - quality levels reported by the IFrame API are suggestions,
-        not guarantees.<br />
+        <strong>No PiP</strong> - the IFrame API prevents browser Picture-in-Picture. The PiP button is hidden
+        automatically.<br />
+        <strong>Quality</strong> - quality levels reported by the IFrame API are suggestions, not guarantees.<br />
         <strong>Autoplay</strong> - YouTube enforces muted autoplay in most browser contexts.
       </p>
     </div>
@@ -471,9 +450,8 @@ ytConfig: PlayerConfig = &#123;
   <div class="section__header">
     <h2 class="section__title">Events &amp; State</h2>
     <p class="section__sub">
-      React to player events via <code>(ready)</code>, <code>(stateChange)</code>,
-      <code>(error)</code> outputs, or read reactive signals directly via
-      <code>NgxPlayerControlService</code>.
+      React to player events via <code>(ready)</code>, <code>(stateChange)</code>, <code>(error)</code> outputs, or read
+      reactive signals directly via <code>NgxPlayerControlService</code>.
     </p>
   </div>
 

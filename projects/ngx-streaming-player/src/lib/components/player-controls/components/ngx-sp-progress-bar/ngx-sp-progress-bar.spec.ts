@@ -8,9 +8,8 @@ describe('NgxSpProgressBar', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NgxSpProgressBar]
-    })
-    .compileComponents();
+      imports: [NgxSpProgressBar],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(NgxSpProgressBar);
     component = fixture.componentInstance;
