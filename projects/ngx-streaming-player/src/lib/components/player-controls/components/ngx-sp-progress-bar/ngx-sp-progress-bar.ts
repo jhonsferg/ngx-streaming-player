@@ -192,6 +192,43 @@ export class NgxSpProgressBar {
     this.doubleClick.emit();
   }
 
+  /**
+   * Keyboard equivalent of the mouse-driven seek interactions.
+   *
+   * `ArrowLeft` / `ArrowDown` step the position back, `ArrowRight` / `ArrowUp`
+   * step it forward, and `Home` / `End` jump to the start / end. Matches the
+   * `role="slider"` semantics applied to the bar in the template.
+   *
+   * @param event - The native `KeyboardEvent` from the progress bar.
+   */
+  onKeyDown(event: KeyboardEvent): void {
+    const step = 0.05;
+    const current = this.progressPercentage() / 100;
+    let next: number | null = null;
+
+    switch (event.key) {
+      case 'ArrowLeft':
+      case 'ArrowDown':
+        next = Math.max(0, current - step);
+        break;
+      case 'ArrowRight':
+      case 'ArrowUp':
+        next = Math.min(1, current + step);
+        break;
+      case 'Home':
+        next = 0;
+        break;
+      case 'End':
+        next = 1;
+        break;
+      default:
+        return;
+    }
+
+    event.preventDefault();
+    this.seek.emit(next);
+  }
+
   // -- Private helpers -------------------------------------------------------
 
   /**
