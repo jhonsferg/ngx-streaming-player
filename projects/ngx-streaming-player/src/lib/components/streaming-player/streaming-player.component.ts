@@ -631,6 +631,22 @@ export class StreamingPlayerComponent implements OnInit, AfterViewInit, OnDestro
   }
 
   /**
+   * Keyboard equivalent of {@link onVideoClick} for the video element and its
+   * click-to-toggle overlays (YouTube overlay, play overlay).
+   *
+   * Triggered by `Enter` or `Space` so keyboard users who tab onto these
+   * elements can toggle play / pause without a mouse.
+   *
+   * @param event - The native `KeyboardEvent` from the element.
+   */
+  onVideoKeyDown(event: KeyboardEvent): void {
+    if (event.key === 'Enter' || event.key === ' ' || event.code === 'Space') {
+      event.preventDefault();
+      this.onVideoClick();
+    }
+  }
+
+  /**
    * Seeks ±10 seconds on a double-click, split by the horizontal centre of
    * the video. Triggers the seek-ripple animation on the appropriate side.
    *
