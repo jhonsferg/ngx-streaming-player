@@ -49,6 +49,15 @@ testem.log
 /typings
 __screenshots__/
 
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+# Generated reports (local scanning tools)
+eslint-report.json
+
 # System files
 .DS_Store
 Thumbs.db
