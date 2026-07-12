@@ -13,6 +13,8 @@ describe('NgxSpVolumeControl', () => {
 
     fixture = TestBed.createComponent(NgxSpVolumeControl);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput('volume', 1);
+    fixture.componentRef.setInput('isMuted', false);
     await fixture.whenStable();
   });
 
