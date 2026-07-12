@@ -1,5 +1,13 @@
 <aside class="sidebar" [class.sidebar--open]="state.sidebarOpen()">
-  <div class="sidebar__overlay" (click)="state.closeSidebar()"></div>
+  <div
+    class="sidebar__overlay"
+    role="button"
+    tabindex="0"
+    aria-label="Close sidebar"
+    (click)="state.closeSidebar()"
+    (keydown.enter)="state.closeSidebar()"
+    (keydown.space)="state.closeSidebar()"
+  ></div>
   <div class="sidebar__panel">
     <nav class="sidebar-nav">
       <div class="sidebar-nav__group">
