@@ -32,15 +32,13 @@
 
   <!-- YouTube Interaction Overlay -->
   @if (stateService.isYouTube()) {
-    <div
+    <button
+      type="button"
       class="ngx-sp__youtube-overlay"
-      role="button"
-      tabindex="0"
       aria-label="Toggle playback"
       (click)="onVideoClick()"
       (dblclick)="onVideoDoubleClick($event)"
-      (keydown)="onVideoKeyDown($event)"
-    ></div>
+    ></button>
   }
 
   <!-- Seek Ripple Feedback -->
@@ -90,16 +88,14 @@
 
   <!-- Play Overlay (paused state) -->
   @if (!stateService.isPlaying() && !stateService.isBuffering() && stateService.error() === null) {
-    <div
-      class="ngx-sp__play-overlay"
-      data-testid="ngx-sp-play-overlay"
-      role="button"
-      tabindex="0"
-      aria-label="Play"
-      (click)="onVideoClick()"
-      (keydown)="onVideoKeyDown($event)"
-    >
-      <button class="play-button" data-testid="ngx-sp-play-button" aria-label="Play">
+    <div class="ngx-sp__play-overlay" data-testid="ngx-sp-play-overlay">
+      <button
+        type="button"
+        class="play-button"
+        data-testid="ngx-sp-play-button"
+        aria-label="Play"
+        (click)="onVideoClick()"
+      >
         <svg viewBox="0 0 24 24" fill="currentColor">
           <path d="M8 5v14l11-7z" />
         </svg>
