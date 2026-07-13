@@ -16,6 +16,13 @@
 
 .sidebar__overlay {
   display: none;
+  appearance: none;
+  -webkit-appearance: none;
+  border: none;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  font: inherit;
 }
 
 .sidebar__panel {
