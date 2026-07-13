@@ -217,5 +217,165 @@ describe('PlayerService', () => {
       service.exitFullscreen();
       expect(spy).toHaveBeenCalled();
     });
+
+    it('requestFullscreen() falls back to the video element when no container was set', () => {
+      service.initialize(video, { src: 'https://example.com/video.mp4' });
+      video.requestFullscreen = vi.fn().mockResolvedValue(undefined);
+      service.requestFullscreen();
+      expect(video.requestFullscreen).toHaveBeenCalled();
+    });
+
+    it('requestFullscreen() falls back to webkitRequestFullscreen', () => {
+      service.setContainer(container);
+      (container as any).requestFullscreen = undefined;
+      const webkitSpy = vi.fn();
+      (container as any).webkitRequestFullscreen = webkitSpy;
+      service.requestFullscreen();
+      expect(webkitSpy).toHaveBeenCalled();
+    });
+
+    it('requestFullscreen() falls back to msRequestFullscreen', () => {
+      service.setContainer(container);
+      (container as any).requestFullscreen = undefined;
+      (container as any).webkitRequestFullscreen = undefined;
+      const msSpy = vi.fn();
+      (container as any).msRequestFullscreen = msSpy;
+      service.requestFullscreen();
+      expect(msSpy).toHaveBeenCalled();
+    });
+
+    it('exitFullscreen() falls back to webkitExitFullscreen', () => {
+      Object.defineProperty(document, 'exitFullscreen', { value: undefined, configurable: true });
+      const webkitSpy = vi.fn();
+      (document as any).webkitExitFullscreen = webkitSpy;
+      service.exitFullscreen();
+      expect(webkitSpy).toHaveBeenCalled();
+      delete (document as any).webkitExitFullscreen;
+    });
+
+    it('exitFullscreen() falls back to msExitFullscreen', () => {
+      Object.defineProperty(document, 'exitFullscreen', { value: undefined, configurable: true });
+      (document as any).webkitExitFullscreen = undefined;
+      const msSpy = vi.fn();
+      (document as any).msExitFullscreen = msSpy;
+      service.exitFullscreen();
+      expect(msSpy).toHaveBeenCalled();
+      delete (document as any).msExitFullscreen;
+    });
+  });
+
+  describe('picture-in-picture', () => {
+    beforeEach(() => {
+      service.initialize(video, { src: 'https://example.com/video.mp4' });
+    });
+
+    it('requestPiP() is a no-op when supportsPiP is false', () => {
+      const stateService = TestBed.inject(PlayerStateService);
+      stateService.setSupportsPiP(false);
+      video.requestPictureInPicture = vi.fn().mockResolvedValue(undefined);
+      service.requestPiP();
+      expect(video.requestPictureInPicture).not.toHaveBeenCalled();
+    });
+
+    it('requestPiP() is a no-op when the video is already the PiP element', () => {
+      const stateService = TestBed.inject(PlayerStateService);
+      stateService.setSupportsPiP(true);
+      Object.defineProperty(document, 'pictureInPictureElement', {
+        value: video,
+        configurable: true,
+      });
+      video.requestPictureInPicture = vi.fn().mockResolvedValue(undefined);
+      service.requestPiP();
+      expect(video.requestPictureInPicture).not.toHaveBeenCalled();
+      Object.defineProperty(document, 'pictureInPictureElement', {
+        value: null,
+        configurable: true,
+      });
+    });
+
+    it('requestPiP() calls requestPictureInPicture immediately when metadata is loaded', () => {
+      const stateService = TestBed.inject(PlayerStateService);
+      stateService.setSupportsPiP(true);
+      Object.defineProperty(video, 'readyState', { value: 1, configurable: true });
+      video.requestPictureInPicture = vi.fn().mockResolvedValue(undefined);
+      service.requestPiP();
+      expect(video.requestPictureInPicture).toHaveBeenCalled();
+    });
+
+    it('requestPiP() defers until loadedmetadata when not yet ready', () => {
+      const stateService = TestBed.inject(PlayerStateService);
+      stateService.setSupportsPiP(true);
+      Object.defineProperty(video, 'readyState', { value: 0, configurable: true });
+      video.requestPictureInPicture = vi.fn().mockResolvedValue(undefined);
+      service.requestPiP();
+      expect(video.requestPictureInPicture).not.toHaveBeenCalled();
+
+      video.dispatchEvent(new Event('loadedmetadata'));
+      expect(video.requestPictureInPicture).toHaveBeenCalled();
+    });
+
+    it('requestPiP() warns when requestPictureInPicture rejects', async () => {
+      const stateService = TestBed.inject(PlayerStateService);
+      stateService.setSupportsPiP(true);
+      Object.defineProperty(video, 'readyState', { value: 1, configurable: true });
+      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      video.requestPictureInPicture = vi.fn().mockRejectedValue(new Error('denied'));
+
+      service.requestPiP();
+      await Promise.resolve();
+      await Promise.resolve();
+
+      expect(warnSpy).toHaveBeenCalled();
+      warnSpy.mockRestore();
+    });
+
+    it('exitPiP() calls document.exitPictureInPicture when a PiP element is active', () => {
+      const exitSpy = vi.fn().mockResolvedValue(undefined);
+      Object.defineProperty(document, 'pictureInPictureElement', {
+        value: video,
+        configurable: true,
+      });
+      Object.defineProperty(document, 'exitPictureInPicture', {
+        value: exitSpy,
+        configurable: true,
+      });
+      service.exitPiP();
+      expect(exitSpy).toHaveBeenCalled();
+      Object.defineProperty(document, 'pictureInPictureElement', {
+        value: null,
+        configurable: true,
+      });
+    });
+
+    it('exitPiP() is a no-op when nothing is in PiP', () => {
+      Object.defineProperty(document, 'pictureInPictureElement', {
+        value: null,
+        configurable: true,
+      });
+      expect(() => service.exitPiP()).not.toThrow();
+    });
+
+    it('exitPiP() forwards rejection to stateService.setError', async () => {
+      const stateService = TestBed.inject(PlayerStateService);
+      const error = new Error('exit failed');
+      Object.defineProperty(document, 'pictureInPictureElement', {
+        value: video,
+        configurable: true,
+      });
+      Object.defineProperty(document, 'exitPictureInPicture', {
+        value: vi.fn().mockRejectedValue(error),
+        configurable: true,
+      });
+
+      service.exitPiP();
+      await Promise.resolve();
+      await Promise.resolve();
+
+      expect(stateService.error()).toBe(error);
+      Object.defineProperty(document, 'pictureInPictureElement', {
+        value: null,
+        configurable: true,
+      });
+    });
   });
 });
