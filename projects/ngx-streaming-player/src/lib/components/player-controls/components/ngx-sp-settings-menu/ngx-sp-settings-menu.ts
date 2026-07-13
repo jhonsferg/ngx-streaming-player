@@ -6,6 +6,12 @@ import {
   PlayerTranslations,
 } from '../../../../models/player-translations.model';
 
+/** Identifies which settings sub-panel is currently displayed. */
+export type SettingsMenuPanel = 'main' | 'speed' | 'quality' | 'subtitles';
+
+/** `SubtitleTrack.id` of the active track, or `null` when subtitles are disabled. */
+export type ActiveSubtitleId = string | number | null;
+
 /**
  * Settings (gear) menu with hierarchical sub-panels.
  *
@@ -66,7 +72,7 @@ export class NgxSpSettingsMenu {
    * | `'quality'`    | Quality level options list      |
    * | `'subtitles'`  | Subtitle track options list     |
    */
-  activeMenu = input.required<'main' | 'speed' | 'quality' | 'subtitles'>();
+  activeMenu = input.required<SettingsMenuPanel>();
 
   /** Currently active playback rate (e.g. `1`, `1.5`). */
   playbackRate = input.required<number>();
@@ -100,7 +106,7 @@ export class NgxSpSettingsMenu {
    * subtitles are disabled.
    * @default null
    */
-  activeSubtitleId = input<string | number | null>(null);
+  activeSubtitleId = input<ActiveSubtitleId>(null);
 
   /**
    * When `true`, hides the playback-speed row and sub-panel because speed
@@ -121,7 +127,7 @@ export class NgxSpSettingsMenu {
    * Emitted when the user clicks a row to navigate to a sub-panel, or the
    * back-chevron to return to `'main'`.
    */
-  navigateMenu = output<'main' | 'speed' | 'quality' | 'subtitles'>();
+  navigateMenu = output<SettingsMenuPanel>();
 
   /**
    * Emitted when the user selects a playback speed in the speed sub-panel.
@@ -139,7 +145,7 @@ export class NgxSpSettingsMenu {
    * Emitted when the user selects a subtitle track (or disables subtitles).
    * Payload is the `SubtitleTrack.id` or `null` to disable.
    */
-  setSubtitle = output<string | number | null>();
+  setSubtitle = output<ActiveSubtitleId>();
 
   // -- Translations ------------------------------------------------------------
 
@@ -247,7 +253,7 @@ export class NgxSpSettingsMenu {
    *
    * @param menu - Target panel identifier.
    */
-  onNavigateMenu(menu: 'main' | 'speed' | 'quality' | 'subtitles'): void {
+  onNavigateMenu(menu: SettingsMenuPanel): void {
     this.navigateMenu.emit(menu);
   }
 
@@ -286,7 +292,7 @@ export class NgxSpSettingsMenu {
     const id = this.activeSubtitleId();
     if (id === null) return this.i18n().subtitlesOff;
     const track = this.availableSubtitles().find((t) => String(t.id) === String(id));
-    return track?.label || this.i18n().subtitlesEnabled;
+    return track?.label ?? this.i18n().subtitlesEnabled;
   }
 
   /**
@@ -304,7 +310,7 @@ export class NgxSpSettingsMenu {
    *
    * @param id - Track ID to activate, or `null` to disable.
    */
-  onSetSubtitle(id: string | number | null): void {
+  onSetSubtitle(id: ActiveSubtitleId): void {
     this.setSubtitle.emit(id);
   }
 
@@ -314,7 +320,7 @@ export class NgxSpSettingsMenu {
    *
    * @param menu - Target panel identifier.
    */
-  onNavigateMenuTyped(menu: 'main' | 'speed' | 'quality' | 'subtitles'): void {
+  onNavigateMenuTyped(menu: SettingsMenuPanel): void {
     this.navigateMenu.emit(menu);
   }
 }
