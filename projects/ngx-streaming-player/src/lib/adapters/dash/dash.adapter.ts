@@ -61,12 +61,28 @@ export class DashAdapter implements IPlayerAdapter {
   ) {}
 
   /**
+   * Returns `true` when the current environment supports Media Source
+   * Extensions, the browser API that dash.js requires to demux and feed DASH
+   * segments to the `<video>` element.
+   *
+   * Unlike HLS, DASH has no native `<video>` fallback, so this guard is the
+   * only thing standing between an unsupported environment (e.g. a
+   * server-side render, a test runner without MSE, or an old browser) and an
+   * uncaught exception from `dashjs.MediaPlayer().create()`.
+   */
+  static isSupported(): boolean {
+    return typeof window !== 'undefined' && typeof window.MediaSource !== 'undefined';
+  }
+
+  /**
    * Initialises the DASH adapter.
    *
    * Steps performed:
    * 1. Registers native `<video>` listeners via `AbortController`.
-   * 2. Creates a `dashjs.MediaPlayer` instance and initialises it with the
-   *    manifest URL and the `<video>` element.
+   * 2. When {@link DashAdapter.isSupported} is `true`, creates a
+   *    `dashjs.MediaPlayer` instance and initialises it with the manifest
+   *    URL and the `<video>` element. Otherwise surfaces an error - DASH has
+   *    no native playback fallback.
    * 3. On `STREAM_INITIALIZED`:
    *    - Extracts quality labels from `getBitrateInfoListFor('video')`.
    *    - Detects live streams via `isDynamic()`.
@@ -84,7 +100,7 @@ export class DashAdapter implements IPlayerAdapter {
     );
     this.setupNativeEventListeners();
 
-    if (dashjs) {
+    if (DashAdapter.isSupported()) {
       this.dash = dashjs.MediaPlayer().create();
       this.dash.initialize(this.videoElement, config.src, config.autoplay);
 
